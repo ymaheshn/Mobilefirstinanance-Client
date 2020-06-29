@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dashboard Page Color-->
+    <color name="colorFooter">#EEEEEE</color>
+
+    <color name="colorText">#080A0E</color>
+</resources>

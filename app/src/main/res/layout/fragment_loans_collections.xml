@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+
+    <LinearLayout
+        android:id="@+id/container_loan_profile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_layout"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:src="@drawable/default_profile"
+                app:civ_border_color="#575757"
+                app:civ_border_width="2dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:id="@+id/nameTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/text_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Individual"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/text_no_repayments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="No Repayments available at this Moment!" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rc_installments"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_10dp"
+                android:background="@color/colorLiteGray"
+                android:padding="@dimen/_10dp"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_10dp"
+        android:orientation="vertical">
+
+        <!--<TextView-->
+        <!--android:id="@+id/text_collection_principal"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:text="@string/next_collection_principal"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:textSize="18sp" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/text_collection_interest"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginTop="@dimen/_10dp"-->
+        <!--android:text="@string/next_collection_interest"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:textSize="18sp" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/text_collection_total"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginTop="@dimen/_10dp"-->
+        <!--android:text="@string/next_total_collection"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:textSize="18sp" />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginBottom="@dimen/_10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/pay"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/edit_loan_amount"
+                style="@style/EditText_Wrap"
+                android:layout_width="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/edittext_line_bg"
+                android:editable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="0"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <!--<TextView-->
+        <!--android:id="@+id/text_collection_balance"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginTop="@dimen/_10dp"-->
+        <!--android:text="@string/balance"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:textSize="18sp" />-->
+
+        <Button
+            android:id="@+id/btn_collect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_print"
+            android:layout_marginBottom="@dimen/_10dp"
+            android:background="@drawable/save_btn_bg_inactive"
+            android:gravity="center"
+            android:text="@string/collection"
+            android:textColor="@color/colorWhite" />
+
+        <Button
+            android:id="@+id/btn_print"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/_10dp"
+            android:background="@drawable/save_btn_bg_inactive"
+            android:gravity="center"
+            android:text="@string/print_receipt"
+            android:textColor="@color/colorWhite" />
+
+    </LinearLayout>
+</RelativeLayout>

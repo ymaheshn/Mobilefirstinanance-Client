@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context="onboard.OnBoardFragment">
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/toolbar_color"
+        android:padding="@dimen/_10dp">
+
+        <TextView
+            android:id="@+id/text_load_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/calendar"
+            android:drawablePadding="@dimen/_5dp"
+            android:gravity="center_vertical"
+            android:padding="@dimen/_10dp"
+            android:text="12-25-2019"
+            android:textColor="@color/colorWhite" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_pending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/pending"
+            android:textColor="@color/colorWhite"
+            android:theme="@style/Switch_Style_Theme"
+            app:switchPadding="@dimen/_5dp"
+            app:trackTint="@color/textColorHint" />
+    </RelativeLayout>
+
+
+    <RadioGroup
+        android:id="@+id/radio_contracts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10dp"
+        android:background="@drawable/rounded_corner_white"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio_collections"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/radio_bg_selector"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:padding="@dimen/_10dp"
+            android:text="@string/collections"
+            android:textColor="@color/radio_text_selector" />
+
+        <RadioButton
+            android:id="@+id/radio_disbursals"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/radio_bg_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="@dimen/_10dp"
+            android:text="@string/disbursals"
+            android:textColor="@color/radio_text_selector" />
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider_color" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/clientsRV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <com.multilevelview.MultiLevelRecyclerView
+        android:id="@+id/rv_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/noClientsTV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No Collections Available"
+        android:textColor="@android:color/black"
+        android:visibility="gone" />
+</LinearLayout>

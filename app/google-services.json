@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "790953522016",
+    "firebase_url": "https://mffapp-206817.firebaseio.com",
+    "project_id": "mffapp-206817",
+    "storage_bucket": "mffapp-206817.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790953522016:android:ad8b772a69c5d427",
+        "android_client_info": {
+          "package_name": "com.odedtech.mff.mff_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "790953522016-kiins5nik8p5oqh07nt933otvkf0rui8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHrO_V2V4d3L39-JLBv92rgPNHzrAWVPQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

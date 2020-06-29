@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+    android:theme="@style/CardView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
+            <!--   <SearchView
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="7dp"
+                android:searchIcon="@drawable/searchvas"
+                android:layout_marginRight="7dp"
+                android:queryHint="Search Here"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="7dp"
+                android:background="@color/colorWhite" />-->
+            <LinearLayout
+                android:layout_width="55dp"
+                android:layout_height="55dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:paddingLeft="2dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="2dp"
+                    android:src="@drawable/ic_search"
+                    android:tint="@color/colorAccent"></ImageView>
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_weight="8"
+                android:gravity="center|left"
+                android:hint="Search Here......"
+                android:imeOptions="actionSearch"
+                android:paddingLeft="5dp"></EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="165dp"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal"
+                android:weightSum="8">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="165dp"
+                    android:layout_weight="4"
+                    card_view:cardCornerRadius="0dp"
+                    card_view:cardElevation="@dimen/_10dp"
+                    card_view:cardMaxElevation="@dimen/_10dp"
+                    card_view:contentPadding="@dimen/_10dp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:padding="5dp"
+                            android:paddingBottom="@dimen/_15dp"
+                            android:src="@drawable/ic_electricity" />
+
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/imageView1"
+                            android:layout_centerHorizontal="true"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="@string/vas1e"
+                            android:textAllCaps="false" />
+
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="165dp"
+                    android:layout_weight="4"
+                    card_view:cardCornerRadius="0dp"
+                    card_view:cardElevation="@dimen/_10dp"
+                    card_view:cardMaxElevation="@dimen/_10dp"
+                    card_view:contentPadding="@dimen/_10dp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:padding="5dp"
+                            android:paddingBottom="@dimen/_15dp"
+                            android:src="@drawable/ic_movie_tickets" />
+
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/imageView2"
+                            android:layout_centerHorizontal="true"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="@string/vas2m"
+                            android:textAllCaps="false" />
+
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="165dp"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal"
+                android:weightSum="8">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="165dp"
+                    android:layout_weight="4"
+                    card_view:cardCornerRadius="0dp"
+                    card_view:cardElevation="@dimen/_10dp"
+                    card_view:cardMaxElevation="@dimen/_10dp"
+                    card_view:contentPadding="@dimen/_10dp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:padding="5dp"
+                            android:paddingBottom="@dimen/_15dp"
+                            android:src="@drawable/ic_mobile_recharge" />
+
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/imageView3"
+                            android:layout_centerHorizontal="true"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="@string/vas3m"
+                            android:textAllCaps="false" />
+
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="165dp"
+                    android:layout_weight="4"
+                    card_view:cardCornerRadius="0dp"
+                    card_view:cardElevation="@dimen/_10dp"
+                    card_view:cardMaxElevation="@dimen/_10dp"
+                    card_view:contentPadding="@dimen/_10dp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:padding="5dp"
+                            android:paddingBottom="@dimen/_15dp"
+                            android:src="@drawable/ic_water_bill" />
+
+
+                        <TextView
+                            android:id="@+id/textView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/imageView4"
+                            android:layout_centerHorizontal="true"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="@string/vas4w"
+                            android:textAllCaps="false" />
+
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="165dp"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal"
+                android:weightSum="8">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="165dp"
+                    android:layout_weight="4"
+                    card_view:cardCornerRadius="0dp"
+                    card_view:cardElevation="@dimen/_10dp"
+                    card_view:cardMaxElevation="@dimen/_10dp"
+                    card_view:contentPadding="@dimen/_10dp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:padding="5dp"
+                            android:paddingBottom="@dimen/_15dp"
+                            android:src="@drawable/ic_flight" />
+
+
+                        <TextView
+                            android:id="@+id/textView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/imageView5"
+                            android:layout_centerHorizontal="true"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="@string/vas5f"
+                            android:textAllCaps="false" />
+
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="165dp"
+                    android:layout_weight="4"
+                    card_view:cardCornerRadius="0dp"
+                    card_view:cardElevation="@dimen/_10dp"
+                    card_view:cardMaxElevation="@dimen/_10dp"
+                    card_view:contentPadding="@dimen/_10dp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout6"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:padding="5dp"
+                            android:paddingBottom="@dimen/_15dp"
+                            android:src="@drawable/ic_dth" />
+
+
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/imageView6"
+                            android:layout_centerHorizontal="true"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="@string/vas6d"
+                            android:textAllCaps="false" />
+
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="165dp"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal"
+                android:weightSum="8">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="165dp"
+                    android:layout_weight="4"
+                    card_view:cardCornerRadius="0dp"
+                    card_view:cardElevation="@dimen/_10dp"
+                    card_view:cardMaxElevation="@dimen/_10dp"
+                    card_view:contentPadding="@dimen/_10dp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout7"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:padding="5dp"
+                            android:paddingBottom="@dimen/_15dp"
+                            android:src="@drawable/ic_credit_card" />
+
+
+                        <TextView
+                            android:id="@+id/textView7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/imageView7"
+                            android:layout_centerHorizontal="true"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="@string/vas7c"
+                            android:textAllCaps="false" />
+
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="165dp"
+                    android:layout_weight="4"
+                    card_view:cardCornerRadius="0dp"
+                    card_view:cardElevation="@dimen/_10dp"
+                    card_view:cardMaxElevation="@dimen/_10dp"
+                    card_view:contentPadding="@dimen/_10dp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout8"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:padding="5dp"
+                            android:paddingBottom="@dimen/_15dp"
+                            android:src="@drawable/ic_train" />
+
+
+                        <TextView
+                            android:id="@+id/textView8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/imageView8"
+                            android:layout_centerHorizontal="true"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="@string/vas8t"
+                            android:textAllCaps="false" />
+
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

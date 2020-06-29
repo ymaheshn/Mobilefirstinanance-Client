@@ -1,0 +1,159 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="addclient.AddClientFragment">
+
+    <LinearLayout
+        android:id="@+id/tablayoutLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            style="@style/MyTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/tab_color"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="2dp"
+            app:tabMode="scrollable"
+            app:tabPaddingEnd="8dp"
+            app:tabPaddingStart="8dp"
+            app:tabSelectedTextColor="@color/colorDarkPink"
+            app:tabTextColor="#D3D3D3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#313D49"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/kycTV"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:gravity="center"
+                android:text="KYC"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/cashFlowTV"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:gravity="center"
+                android:text="Cash Flow"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/creditBureauTV"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:gravity="center"
+                android:text="Credit Bureau"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/creditScoreTV"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:gravity="center"
+                android:text="Credit Score"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/ApprovalTV"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:gravity="center"
+                android:text="Approval"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-7.5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/kycIndicatorIV"
+                    android:layout_width="0dp"
+                    android:layout_height="15dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/tab_indicator_pink"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/cashFlowIndicatorIV"
+                    android:layout_width="0dp"
+                    android:layout_height="15dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/tab_indicator_pink"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/creditBureauIndicatorIV"
+                    android:layout_width="0dp"
+                    android:layout_height="15dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/tab_indicator_pink"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/creditScoreIndicatorIV"
+                    android:layout_width="0dp"
+                    android:layout_height="15dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/tab_indicator_pink"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/approvalIndicatorIV"
+                    android:layout_width="0dp"
+                    android:layout_height="15dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/tab_indicator_pink"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="visible">
+
+    </android.support.v4.view.ViewPager>
+
+    <FrameLayout
+        android:id="@+id/addClientContentFL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="gone" />
+
+</LinearLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#080A0E</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorDarkPink">#ff0080</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorGray">#D3D3D3</color>
+    <color name="colorGray_BB">#BBBBBB</color>
+
+    <color name="colorLiteGray">#EEEEEE</color>
+
+    <!-- Dashboard Page Color-->
+    <color name="textColorHint">#545454</color>
+
+    <!-- On Board Page Color-->
+    <color name="colorPageSelected">#c3c3c3</color>
+
+    <!--Credit Bureau-->
+    <color name="colorTabSelected">#d62246</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="semi_trans">#80000000</color>
+    <color name="toolbar_color">#1b1e24</color>
+
+    <color name="divider_color">#301b1e24</color>
+
+    <color name="loan_pending">#f11734</color>
+    <color name="loan_completed">#05ff9b</color>
+    <color name="ripple">#4f4f4f</color>
+
+    <color name="tab_color">#313D49</color>
+    <color name="error_red">#830404</color>
+</resources>

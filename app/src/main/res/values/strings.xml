@@ -1,0 +1,103 @@
+<resources>
+<!--    <string name="app_name">MFFApp</string>-->
+    <!-- Login Page-->
+    <string name="login_header_text">Partner Login</string>
+    <string name="login_sub_content_text">Please enter  your mobile number.....</string>
+    <string name="login_main_header">finance</string>
+
+    <!-- OTP -->
+    <string name="resend_text">Resend OTP</string>
+    <string name="verification_text">Verification Code</string>
+    <string name="code_text">Please type the verification code sent</string>
+    <string name="number_bundle">number</string>
+
+    <!--Dashboard-->
+    <string name="click_back">Please click again to exit</string>
+
+    <!--Kyc Fragment-->
+    <string name="spinner_title">Select Category</string>
+    <string-array name="selection_type_list">
+        <item>Individual</item>
+        <item>Group</item>
+        <item>Company</item>
+    </string-array>
+
+    <!-- Maps API Key -->
+    <string name="map_api_key">AIzaSyDUuDosYB6q1kYQDXhkggXCNd_6Exy8MKc</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Under Development</string>
+
+    <!-- Preference Connector keys-->
+    <string name="loginStatus">isLoggedIn</string>
+    <string name="accessToken">accessToken</string>
+    <string name="portNumber">portNumber</string>
+    <string name="baseURL">baseURL</string>
+    <string name="phoneNumber">phoneNumber</string>
+    <string name="pending">Pending</string>
+    <string name="collections">Collections</string>
+    <string name="disbursals">Disbursals</string>
+    <string name="select_all">Select All</string>
+    <string name="collect">Collect</string>
+    <string name="collection">Collect</string>
+    <string name="print_receipt">Print Receipt</string>
+    <string name="next_collection_principal">Next Collection Principal</string>
+    <string name="next_collection_interest">Next Collection Interest</string>
+    <string name="next_total_collection">Next Total Collection</string>
+    <string name="balance">Balance</string>
+    <string name="pay">Pay(₹)</string>
+    <string name="timeout">Timeout</string>
+    <string name="nointernet">No Internet</string>
+    <string name="generic_error">Oops!! Something went wrong</string>
+    <string name="location_rationilze">Need this permission to access the current location</string>
+    <string name="do_you_want_pay">Are you sure do you want to Pay?</string>
+    <string name="please_enter_some_amount">Please enter some amount</string>
+    <string name="print_the_reciept">Do you want to print the receipt?</string>
+
+    <!--Header Details-->
+    <string name="onboard">On-board</string>
+    <string name="contracts">Contracts</string>
+    <string name="vas">VAS</string>
+    <string name="savings">Savings</string>
+    <string name="verify">Verify</string>
+    <string name="details_are_missing">Details are missing!!</string>
+    <string name="yes">Yes</string>
+
+    <string name="vas1e">Electricity</string>
+    <string name="vas2m">Movie Tickets</string>
+    <string name="vas3m">Mobile Recharge</string>
+    <string name="vas4w">Water Bill</string>
+    <string name="vas5f">Flight Booking</string>
+    <string name="vas6d">DTH</string>
+    <string name="vas7c">Credit Card</string>
+    <string name="vas8t">Train Tickets</string>
+    <string name="login">Login</string>
+    <string name="please_enter_your_4_digit_code">Please enter your 4 digit code</string>
+    <string name="login_with">login with</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+    <string name="register">Register</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="four_digit_code">4 Digit Code</string>
+    <string name="setup_your_4_digit_code_to_login_easily">Setup your 4 digit code to login easily</string>
+    <string name="confirm_four_digit_code">Confirm 4 Digit Code</string>
+
+    <string name="sign_up">Don\'t have account yet? Sign Up</string>
+    <string name="app_name_mff_client">MFF Client</string>
+    <string name="server_client_id">48802848445-o1dk720hfb8em9gn960441vfu31f4unq.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">1835340143432268</string>
+    <string name="fb_login_protocol_scheme">fb1835340143432268</string>
+
+    <string name="please_enter_mobile">Please enter mobile number</string>
+    <string name="four_digit_code_client">Login with 4-digit pin</string>
+    <string name="four_digit_code_help_setup">Setup your 4 digit pin for easy login everytime</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="user_name">User Name</string>
+    <string name="something_went_erong">Something went wrong. Please try after some time.</string>
+
+</resources>
