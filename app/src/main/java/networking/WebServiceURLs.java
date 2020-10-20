@@ -1,19 +1,22 @@
 package networking;
 
+import com.odedtech.mff.mffapp.BuildConfig;
+
 /**
  * Created by gufran khan on 22-06-2018.
  */
 
 public class WebServiceURLs {
 
-    public static String BASE_URL = "https://test.mobilefirstfinance.com";
+    public static String BASE_URL = BuildConfig.BASE_URL;
     public static String LOGIN_URL = BASE_URL + ":5052/login";
     public static String PHONENUMBER_OTP = BASE_URL + ":5052/verify";
     public static String PORT_URL = BASE_URL + ":7181/mff/api/oauthDetails?access_token=";
     public static String ALL_DYNAMIC_FORMS_URL = "/mff/api/profiles/forms?access_token=";
     public static String SAVE_KYC_DATA_URL = "/mff/api/profiles?access_token=";
     public static String UPDATE_KYC_DATA_URL = "/mff/api/profiles/PROFILE_ID?access_token=";
-    public static String ALL_PROFILES_URL = "/mff/api/profiles?access_token=";
+    public static String ALL_PROFILES_URL = "/mff/api/profiles?pageNumber=PAGE_NUMBER&numberOfRecords=NUMBER_OF_RECORDS&access_token=";
+    public static String SEARCH_PROFILES_URL = "/mff/api/searchProfiles?name=NAME&access_token=";
     public static String GET_LINKED_PORTFOLIO_URL = "/mff/api/getLinkedportfolio?access_token=";
     public static String GET_LINKED_PORTFOLIO_PROFILE_URL = "/mff/api/getAllLinkedusertoportfolio/PROFILE_ID?access_token=";
     public static String PROFILE_LINK_STATUS_URL = "/mff/api/mobileApp/PROFILE_ID?access_token=";

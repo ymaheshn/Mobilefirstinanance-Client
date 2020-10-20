@@ -42,8 +42,9 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
     private static final String TAG = "CityList";
     private MyAdapter myAdapter;
     //    private final MyListAdapter adapter;
+    public ArrayList<RecyclerViewItem> viewItems;
 
-    public ExpandableListDialog(Context context, String titleText, EditText editText, List<BranchTree> cityList) {
+    public ExpandableListDialog(Context context, String titleText, EditText editText, List<BranchTree> cityList, ArrayList<RecyclerViewItem> viewItems) {
         super(context);
 
         /** Design the dialog in main.xml file */
@@ -64,15 +65,18 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
         filterText.addTextChangedListener(filterTextWatcher);
         list = findViewById(R.id.List);
         if (cityList != null && cityList.size() > 0) {
-            setMyAdapter();
+            setMyAdapter(viewItems);
         }
-
-
     }
 
 
-    private void setMyAdapter() {
-        List<RecyclerViewItem> items = prepareData(cityList, 0);
+    private void setMyAdapter(ArrayList<RecyclerViewItem> viewItems) {
+        List<RecyclerViewItem> items;
+        if (viewItems != null && viewItems.size() > 0) {
+            items = viewItems;
+        } else {
+            items = prepareData(cityList, 0);
+        }
         myAdapter = new MyAdapter(getContext(), items, list);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         list.addItemDecoration(dividerItemDecoration);
@@ -93,6 +97,7 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
             }
             items.add(item);
         }
+        viewItems = items;
         return items;
     }
 
@@ -273,7 +278,7 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 List values = (List) results.values;
                 if (constraint == null || constraint.length() == 0) {
-                    setMyAdapter();
+                    setMyAdapter(viewItems);
                 } else {
                     mListItems.clear();
                     mListItems.addAll(values);

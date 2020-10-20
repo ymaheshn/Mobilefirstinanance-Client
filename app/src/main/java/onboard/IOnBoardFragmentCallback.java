@@ -10,7 +10,7 @@ import base.BasePresenterCallback;
 
 public interface IOnBoardFragmentCallback extends BasePresenterCallback {
 
-    void loadRecyclerView(ArrayList<ClientDataDTO> clients);
+    void loadRecyclerView(ArrayList<ClientDataDTO> clients, boolean isFromSearch, boolean clearAll);
 
     void profileLinkStatusFromApi(boolean status, WorkFlowTemplateDto workFlowTemplateDto);
 }

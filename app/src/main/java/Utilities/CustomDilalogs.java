@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.multilevelview.models.RecyclerViewItem;
 import com.odedtech.mff.mffapp.R;
 
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ import loans.ExpandableListDialog;
 
 public class CustomDilalogs {
 
+    private static ArrayList<RecyclerViewItem> viewItems;
+
     public static void showListPop(Activity activity, String title, EditText editText, ArrayList<String> options) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(title);
@@ -36,7 +39,8 @@ public class CustomDilalogs {
     public static void showBranch(Activity activity, String title, EditText editText, List<BranchTree> options) {
 
 //        String[] optionsArray = options.toArray(new String[options.size()]);
-        ExpandableListDialog listDialog = new ExpandableListDialog(activity, title, editText, options);
+        ExpandableListDialog listDialog = new ExpandableListDialog(activity, title, editText, options, viewItems);
+        viewItems = listDialog.viewItems;
         listDialog.show();
     }
 

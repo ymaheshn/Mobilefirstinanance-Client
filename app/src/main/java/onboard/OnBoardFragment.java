@@ -2,16 +2,21 @@ package onboard;
 
 
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +25,6 @@ import com.odedtech.mff.mffapp.BuildConfig;
 import com.odedtech.mff.mffapp.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import Utilities.AlertDialogUtils;
 import Utilities.Constants;
@@ -41,19 +45,29 @@ import interfaces.IOnFragmentChangeListener;
 public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCallback,
         MaterialSearchView.OnQueryTextListener, MaterialSearchView.SearchViewListener {
 
+    private static final int PERMISSION_REQUEST_CODE = 100;
+
     @BindView(R.id.addClientLL)
-    LinearLayout addClientLL;
+    RelativeLayout addClientLL;
     @BindView(R.id.text_add_client)
     TextView textAddClient;
     @BindView(R.id.clientsRV)
     RecyclerView clientsRV;
     @BindView(R.id.noClientsTV)
     TextView noClientsTV;
+    @BindView(R.id.text_clears)
+    TextView textClear;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
     private Unbinder unbinder;
     private IOnFragmentChangeListener iOnFragmentChangeListener;
     private OnBoardPresenter onBoardPresenter;
     private ProgressDialog progressDialog = null;
     private OnBoardAdapter onBoardAdapter;
+
+
+    boolean isLoading = false;
+    private int pageIndex = 0;
 
     public OnBoardFragment() {
         // Required empty public constructor
@@ -69,20 +83,21 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         iOnFragmentChangeListener = (IOnFragmentChangeListener) getActivity();
         iOnFragmentChangeListener.onHeaderUpdate(Constants.ONBOARD_FRAGMENT, getString(R.string.onboard));
         onBoardPresenter = new OnBoardPresenter(getActivity(), this);
-        if(Constants.FLAVOR_CLIENT.equalsIgnoreCase(BuildConfig.FLAVOR)) {
+        if (Constants.FLAVOR_CLIENT.equalsIgnoreCase(BuildConfig.FLAVOR)) {
             textAddClient.setText("Add Application");
         } else {
             textAddClient.setText("Add client");
         }
         ((DashboardActivity) getActivity()).setToolBarBackVisible(false);
         if (UtilityMethods.isNetworkAvailable(getActivity())) {
-            onBoardPresenter.getAllClients();
+            onBoardPresenter.getAllClients(pageIndex, true);
         } else {
             Toast.makeText(getActivity(), "Please check your internet", Toast.LENGTH_SHORT).show();
         }
@@ -95,13 +110,17 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
         unbinder.unbind();
     }
 
-    @OnClick({R.id.addClientLL})
+    @OnClick({R.id.addClientLL, R.id.text_clears})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addClientLL:
                 Constants.clientDataDTO = null;
                 Constants.isFromAddClient = true;
                 iOnFragmentChangeListener.onFragmentChanged(Constants.ADD_CLIENT_FRAGMENT, null);
+                break;
+            case R.id.text_clears:
+                textClear.setVisibility(View.GONE);
+                ((DashboardActivity) getActivity()).clearSearch();
                 break;
         }
     }
@@ -111,7 +130,6 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
-
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
     }
@@ -135,45 +153,97 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
 
 
     @Override
-    public void loadRecyclerView(ArrayList<ClientDataDTO> clients) {
+    public void loadRecyclerView(ArrayList<ClientDataDTO> clients, boolean isFromSearch, boolean clearAll) {
         if (clients != null && clients.size() > 0) {
             if (!isVisible() || clientsRV == null) {
                 return;
             }
-            Collections.reverse(clients);
             clientsRV.setVisibility(View.VISIBLE);
             noClientsTV.setVisibility(View.GONE);
-            onBoardAdapter = new OnBoardAdapter(getActivity(), clients, clientDataDTO -> {
-                if (UtilityMethods.isNetworkAvailable(getActivity())) {
-                    Constants.clientDataDTO = clientDataDTO;
-                    Constants.isFromAddClient = false;
-                    onBoardPresenter.getIsLinkedStatusAPI(clientDataDTO.profileId);
+            if (pageIndex == 0) {
+                if (onBoardAdapter != null) {
+                    isLoading = false;
+                    progressBar.setVisibility(View.GONE);
+                    onBoardAdapter.setData(clients, clearAll);
+                    textClear.setVisibility(clearAll ? View.VISIBLE : View.GONE);
                 } else {
-                    showMessage("Please check your internet");
+                    setAdapter(clients);
                 }
-            }, noData -> {
-                noClientsTV.setVisibility(noData ? View.VISIBLE : View.GONE);
-                clientsRV.setVisibility(noData ? View.GONE : View.VISIBLE);
-            });
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(clientsRV.getContext(), DividerItemDecoration.VERTICAL);
-            clientsRV.addItemDecoration(dividerItemDecoration);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-            clientsRV.setLayoutManager(linearLayoutManager);
-            clientsRV.setAdapter(onBoardAdapter);
-
-            clientsRV.post(() -> {
-                int previousPosition = PreferenceConnector.readInteger(getContext(), "ListPosition", -1);
-                if (previousPosition >= 0) {
-                    clientsRV.scrollToPosition(previousPosition);
+            } else {
+                textClear.setVisibility(clearAll ? View.VISIBLE : View.GONE);
+                onBoardAdapter.setData(clients, clearAll);
+                if (clearAll) {
+                    isLoading = true;
+                    progressBar.setVisibility(View.GONE);
+                } else {
+                    isLoading = false;
+                    progressBar.setVisibility(View.GONE);
                 }
-            });
-
+            }
         } else {
-            noClientsTV.setVisibility(View.VISIBLE);
-            clientsRV.setVisibility(View.GONE);
+            if (pageIndex == 0) {
+                noClientsTV.setVisibility(View.VISIBLE);
+                clientsRV.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
         }
     }
 
+
+    public void setAdapter(ArrayList<ClientDataDTO> clients) {
+        onBoardAdapter = new OnBoardAdapter(getActivity(), clients, clientDataDTO -> {
+            if (UtilityMethods.isNetworkAvailable(getActivity())) {
+                Constants.clientDataDTO = clientDataDTO;
+                Constants.isFromAddClient = false;
+                onBoardPresenter.getIsLinkedStatusAPI(clientDataDTO.profileId);
+            } else {
+                showMessage("Please check your internet");
+            }
+        }, noData -> {
+            noClientsTV.setVisibility(noData ? View.VISIBLE : View.GONE);
+            clientsRV.setVisibility(noData ? View.GONE : View.VISIBLE);
+        });
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(clientsRV.getContext(), DividerItemDecoration.VERTICAL);
+        clientsRV.addItemDecoration(dividerItemDecoration);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        clientsRV.setLayoutManager(linearLayoutManager);
+        clientsRV.setAdapter(onBoardAdapter);
+        clientsRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (!isLoading) {
+                    if (linearLayoutManager != null &&
+                            linearLayoutManager.findLastCompletelyVisibleItemPosition() == onBoardAdapter.getItemCount() - 1) {
+                        //bottom of list!
+                        pageIndex++;
+                        onBoardPresenter.getAllClients(pageIndex, false);
+                        isLoading = true;
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+        clientsRV.post(() -> {
+            int previousPosition = PreferenceConnector.readInteger(getContext(), "ListPosition", -1);
+            if (previousPosition >= 0) {
+                clientsRV.scrollToPosition(previousPosition);
+            }
+        });
+    }
+
+
+    public void getAllClients() {
+        isLoading = false;
+        onBoardPresenter.getAllClients(0, true);
+    }
 
     @Override
     public void profileLinkStatusFromApi(boolean status, WorkFlowTemplateDto workFlowTemplateDto) {
@@ -195,13 +265,24 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        onBoardAdapter.getFilter().filter(query);
+        if (TextUtils.isEmpty(query)) {
+            textClear.setVisibility(View.GONE);
+            isLoading = false;
+            onBoardPresenter.getAllClients(0, true);
+        } else {
+            onBoardPresenter.getSearch(query);
+        }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        onBoardAdapter.getFilter().filter(newText);
+        //onBoardAdapter.getFilter().filter(newText);
+        if (TextUtils.isEmpty(newText)) {
+            textClear.setVisibility(View.GONE);
+            isLoading = false;
+            onBoardPresenter.getAllClients(0, true);
+        }
         return false;
     }
 

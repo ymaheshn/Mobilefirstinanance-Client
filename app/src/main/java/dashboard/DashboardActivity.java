@@ -23,10 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -341,6 +337,13 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                 .commit();
     }
 
+
+    public void clearSearch() {
+        query = null;
+        if (currentFrament instanceof OnBoardFragment) {
+            ((OnBoardFragment) currentFrament).getAllClients();
+        }
+    }
 
     private void replaceFragment(int fragmentName, Bundle intentExtra) {
         materialSearchView.closeSearch();

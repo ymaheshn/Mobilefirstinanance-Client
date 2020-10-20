@@ -7,25 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BranchTree {
-    @SerializedName("id")
+    @SerializedName("branchid")
     @Expose
     public Integer id;
-    @SerializedName("name")
+    @SerializedName("branch_name")
     @Expose
     public String name;
-    @SerializedName("branchCode")
+    @SerializedName("branch_code")
     @Expose
     public String branchCode;
-    @SerializedName("parentBranchId")
+    @SerializedName("parent_brach_id")
     @Expose
     public Integer parentBranchId;
-    @SerializedName("currentBranchId")
+    @SerializedName("current_branch_id")
     @Expose
     public Integer currentBranchId;
-    @SerializedName("treeLevel")
+    @SerializedName("tree_level")
     @Expose
     public String treeLevel;
-
     @SerializedName("children")
     @Expose
     public List<BranchTree> children;

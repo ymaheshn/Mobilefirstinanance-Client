@@ -42,11 +42,22 @@ public class OnBoardAdapter extends RecyclerView.Adapter<OnBoardAdapter.ViewMode
         return new ViewModel(view);
     }
 
+    public void setData(ArrayList<ClientDataDTO> clients, boolean clearAll) {
+        if (clients != null && clients.size() > 0) {
+            if (clearAll) {
+                this.clients.clear();
+            }
+            this.clients.addAll(clients);
+            notifyDataSetChanged();
+        }
+    }
+
     @Override
     public void onBindViewHolder(ViewModel holder, int position) {
         ClientDataDTO clientDataDTO = filteredList.get(position);
         holder.nameTV.setText(clientDataDTO.name);
         holder.textRole.setText(clientDataDTO.identifier);
+        holder.textFormLabel.setText(clientDataDTO.formLabel);
         if (!TextUtils.isEmpty(clientDataDTO.profilePicture)) {
             String imageUrl = clientDataDTO.profilePicture + "?access_token=" +
                     PreferenceConnector.readString(mContext, mContext.getString(R.string.accessToken), "");
@@ -73,11 +84,13 @@ public class OnBoardAdapter extends RecyclerView.Adapter<OnBoardAdapter.ViewMode
         TextView textRole;
         CircleImageView profile_image;
         TextView nameTV;
+        TextView textFormLabel;
 
         public ViewModel(View itemView) {
             super(itemView);
             nameTV = itemView.findViewById(R.id.nameTV);
             textRole = itemView.findViewById(R.id.text_role);
+            textFormLabel = itemView.findViewById(R.id.text_form_label);
             profile_image = itemView.findViewById(R.id.profile_image);
         }
 

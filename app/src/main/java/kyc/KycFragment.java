@@ -991,7 +991,9 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
 
     @Override
     public void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

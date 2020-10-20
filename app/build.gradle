@@ -52,10 +52,24 @@ android {
     productFlavors {
         client {
             applicationIdSuffix ".client"
+            buildConfigField("String", "BASE_URL", "\"https://gmf.mobilefirstfinance.com\"")
             dimension "version"
         }
         agent {
             applicationIdSuffix ".mff_android"
+            buildConfigField("String", "BASE_URL", "\"https://gmf.mobilefirstfinance.com\"")
+            dimension "version"
+        }
+        mig {
+            applicationIdSuffix ".mig"
+            buildConfigField("String", "BASE_URL", "\"https://mig.mobilefirstfinance.com\"")
+            manifestPlaceholders = [appLabel: "@string/app_name_mig"]
+            dimension "version"
+        }
+        gramalaya {
+            applicationIdSuffix ".gramalaya"
+            buildConfigField("String", "BASE_URL", "\"https://gramalaya.mobilefirstfinance.com\"")
+            manifestPlaceholders = [appLabel: "@string/app_name_gramalaya"]
             dimension "version"
         }
     }

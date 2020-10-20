@@ -19,4 +19,5 @@ public class ClientDataDTO implements Serializable {
 
     public String status;
     public String identifier;
+    public String formLabel;
 }

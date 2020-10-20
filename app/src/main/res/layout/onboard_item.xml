@@ -45,6 +45,13 @@
                 android:text="Individual"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/text_form_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <TextView

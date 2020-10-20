@@ -1,6 +1,7 @@
 package onboard;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.odedtech.mff.mffapp.R;
 
@@ -12,8 +13,6 @@ import org.json.JSONTokener;
 import java.util.ArrayList;
 
 import Utilities.PreferenceConnector;
-import database.dao.ClientDataDAO;
-import kyc.IKycFragmentCallback;
 import networking.WebService;
 import networking.WebServiceURLs;
 
@@ -27,18 +26,21 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
     }
 
 
-    public void getAllClients() {
-        iOnBoardFragmentCallback.showProgressBar();
+    public void getAllClients(int pageNumber, boolean clearAll) {
+        if (pageNumber == 0) {
+            iOnBoardFragmentCallback.showProgressBar();
+        }
         String url = PreferenceConnector.readString(context, "BASE_URL", "") +
                 WebServiceURLs.ALL_PROFILES_URL +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
+        url = url.replaceAll("PAGE_NUMBER", "" + pageNumber).replaceAll("NUMBER_OF_RECORDS", "10");
         WebService.getInstance().apiGetRequestCall(url,
                 new WebService.OnServiceResponseListener() {
                     @Override
                     public void onApiCallResponseSuccess(String url, String object) {
                         iOnBoardFragmentCallback.hideProgressBar();
                         ArrayList<ClientDataDTO> clients = getAndParseAllClinets(object);
-                        iOnBoardFragmentCallback.loadRecyclerView(clients);
+                        iOnBoardFragmentCallback.loadRecyclerView(clients, false, clearAll);
                     }
 
                     @Override
@@ -54,6 +56,38 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
                 });
     }
 
+
+    public void getSearch(String searchQuery) {
+        if (TextUtils.isEmpty(searchQuery)) {
+            return;
+        }
+        iOnBoardFragmentCallback.showProgressBar();
+        String url = PreferenceConnector.readString(context, "BASE_URL", "") +
+                WebServiceURLs.SEARCH_PROFILES_URL +
+                PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
+        url = url.replaceAll("NAME", "" + searchQuery);
+        WebService.getInstance().apiGetRequestCall(url,
+                new WebService.OnServiceResponseListener() {
+                    @Override
+                    public void onApiCallResponseSuccess(String url, String object) {
+                        iOnBoardFragmentCallback.hideProgressBar();
+                        ArrayList<ClientDataDTO> clients = getParseSearchResults(object);
+                        iOnBoardFragmentCallback.loadRecyclerView(clients, true, true);
+                    }
+
+                    @Override
+                    public void onApiCallResponseFailure(String errorMessage) {
+                        iOnBoardFragmentCallback.hideProgressBar();
+                        if (errorMessage.contains("AuthFailureError")) {
+                            iOnBoardFragmentCallback.showLogoutAlert();
+                        } else {
+                            iOnBoardFragmentCallback.showMessage(errorMessage);
+                        }
+                    }
+                });
+    }
+
+
     private ArrayList<ClientDataDTO> getAndParseAllClinets(String object) {
         ArrayList<ClientDataDTO> clientDataDTOS = new ArrayList<>();
         try {
@@ -63,6 +97,55 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ClientDataDTO clientDataDTO = new ClientDataDTO();
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    if (jsonObject.has("profileID")) {
+                        clientDataDTO.profileId = jsonObject.getString("profileID");
+                    }
+                    if (jsonObject.has("profileFormID")) {
+                        clientDataDTO.formId = jsonObject.getInt("profileFormID");
+                    }
+
+                    if (jsonObject.has("status")) {
+                        clientDataDTO.status = jsonObject.getString("status");
+                    }
+
+                    if (jsonObject.has("identifier")) {
+                        clientDataDTO.identifier = jsonObject.getString("identifier");
+                    }
+                    if (jsonObject.has("profileDetails")) {
+                        JSONObject jsonObj = jsonObject.getJSONObject("profileDetails");
+                        if (jsonObj.has("Name")) {
+                            clientDataDTO.name = jsonObj.getString("Name");
+                        } else if (jsonObj.has("First Name") && jsonObj.has("Last Name")) {
+                            clientDataDTO.name = jsonObj.getString("First Name") + " " + jsonObj.getString("Last Name");
+                        } else if (jsonObj.has("First Name")) {
+                            clientDataDTO.name = jsonObj.getString("First Name");
+                        }
+                        if (jsonObj.has("profilePicture")) {
+                            clientDataDTO.profilePicture = jsonObj.getString("profilePicture");
+                        }
+                        if (jsonObj.has("formLabel")) {
+                            clientDataDTO.formLabel = jsonObj.getString("formLabel");
+                        }
+                        clientDataDTO.kycData = jsonObj.toString();
+                    }
+                    clientDataDTOS.add(clientDataDTO);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return clientDataDTOS;
+    }
+
+
+    private ArrayList<ClientDataDTO> getParseSearchResults(String object) {
+        ArrayList<ClientDataDTO> clientDataDTOS = new ArrayList<>();
+        try {
+            JSONArray mainJson = new JSONArray(object);
+            if (mainJson != null) {
+                for (int i = 0; i < mainJson.length(); i++) {
+                    ClientDataDTO clientDataDTO = new ClientDataDTO();
+                    JSONObject jsonObject = mainJson.getJSONObject(i);
                     if (jsonObject.has("profileID")) {
                         clientDataDTO.profileId = jsonObject.getString("profileID");
                     }
@@ -89,6 +172,9 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
                         }
                         if (jsonObj.has("profilePicture")) {
                             clientDataDTO.profilePicture = jsonObj.getString("profilePicture");
+                        }
+                        if (jsonObj.has("formLabel")) {
+                            clientDataDTO.formLabel = jsonObj.getString("formLabel");
                         }
                         clientDataDTO.kycData = jsonObj.toString();
                     }
