@@ -50,15 +50,15 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
         Installments installments = collections.get(i);
         ProfileCollection profileCollection = installments.collectionPR;
         ProfileCollection profileCollectionNext = installments.collectionIP;
-        viewHolder.textDate.setText(profileCollection.eventTimeFormated);
-        if (profileCollection.eventType.equalsIgnoreCase("PR")) {
-            viewHolder.textPrincipal.setText(String.valueOf(profileCollection.eventValue));
-            viewHolder.textInterest.setText(String.valueOf(profileCollectionNext.eventValue));
+        viewHolder.textDate.setText(profileCollection.event_time);
+        if (profileCollection.event_type.equalsIgnoreCase("PR")) {
+            viewHolder.textPrincipal.setText(String.valueOf(profileCollection.event_value));
+            viewHolder.textInterest.setText(String.valueOf(profileCollectionNext.event_value));
         } else {
-            viewHolder.textPrincipal.setText(String.valueOf(profileCollectionNext.eventValue));
-            viewHolder.textInterest.setText(String.valueOf(profileCollection.eventValue));
+            viewHolder.textPrincipal.setText(String.valueOf(profileCollectionNext.event_value));
+            viewHolder.textInterest.setText(String.valueOf(profileCollection.event_value));
         }
-        viewHolder.textTotal.setText(String.valueOf(profileCollection.eventValue + profileCollectionNext.eventValue));
+        viewHolder.textTotal.setText(String.valueOf(Integer.parseInt(profileCollection.event_value) + Integer.parseInt(profileCollectionNext.event_value)));
         viewHolder.checkInstallment.setOnCheckedChangeListener(null);
         viewHolder.checkInstallment.setChecked(installments.isChecked);
         viewHolder.checkInstallment.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -113,7 +113,7 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
                 Installments installment = collections.get(i);
                 if (installment.isChecked) {
                     installment.isChecked = false;
-                    totalAmount = totalAmount - (installment.collectionPR.eventValue + installment.collectionIP.eventValue);
+                    totalAmount = totalAmount - (Integer.parseInt(installment.collectionPR.event_value) + Integer.parseInt(installment.collectionIP.event_value));
                 }
             }
         }
@@ -134,8 +134,47 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
         for (Installments collection : collections) {
             if (collection.isChecked) {
                 try {
-                    jsonArray.put(new JSONObject(gson.toJson(collection.collectionPR, ProfileCollection.class)));
-                    jsonArray.put(new JSONObject(gson.toJson(collection.collectionIP, ProfileCollection.class)));
+
+                    JSONObject jsonObjectFromPR = new JSONObject(gson.toJson(collection.collectionPR, ProfileCollection.class));
+                    JSONObject eventJSONPR = (JSONObject) jsonObjectFromPR.get("eventjson");
+                    JSONObject eventJSONTransPR = (JSONObject) eventJSONPR.get("Transaction");
+
+                    JSONObject jsonObjectPR = new JSONObject();
+
+                    jsonObjectPR.put("ContractUUID", jsonObjectFromPR.get("contractuuid"));
+                    jsonObjectPR.put("EventID", jsonObjectFromPR.get("eventid"));
+                    jsonObjectPR.put("EventTime", jsonObjectFromPR.get("event_time").toString().concat("T00:00"));
+                    jsonObjectPR.put("EventType", jsonObjectFromPR.get("event_type"));
+                    jsonObjectPR.put("Units", eventJSONTransPR.get("Units").toString());
+                    jsonObjectPR.put("Value", Double.parseDouble(eventJSONTransPR.get("Value").toString()));
+                    jsonObjectPR.put("DebitPaymentChannelID", eventJSONTransPR.get("DebitPaymentChannelID").toString());
+                    jsonObjectPR.put("CreditPaymentChannelID", eventJSONTransPR.get("CreditPaymentChannelID").toString());
+                    jsonObjectPR.put("PaymentMethod", eventJSONTransPR.get("PaymentMethod").toString());
+                    jsonObjectPR.put("RemainingAmount", Double.parseDouble(eventJSONTransPR.get("RemainingAmount").toString()));
+                    jsonObjectPR.put("ProcessTime", jsonObjectFromPR.get("event_time").toString().concat("T00:00"));
+                    jsonArray.put(jsonObjectPR);
+
+                    JSONObject jsonObjectIP = new JSONObject();
+
+                    JSONObject jsonObjectFromIP = new JSONObject(gson.toJson(collection.collectionIP, ProfileCollection.class));
+                    JSONObject eventJSONIP = (JSONObject) jsonObjectFromIP.get("eventjson");
+                    JSONObject eventJSONTransIP = (JSONObject) eventJSONIP.get("Transaction");
+
+
+
+                    jsonObjectIP.put("ContractUUID", jsonObjectFromIP.get("contractuuid"));
+                    jsonObjectIP.put("EventID", jsonObjectFromIP.get("eventid"));
+                    jsonObjectIP.put("EventTime", jsonObjectFromIP.get("event_time").toString().concat("T00:00"));
+                    jsonObjectIP.put("EventType", jsonObjectFromIP.get("event_type"));
+                    jsonObjectIP.put("Units", eventJSONTransIP.get("Units").toString());
+                    jsonObjectIP.put("Value", Double.parseDouble(eventJSONTransIP.get("Value").toString()));
+                    jsonObjectIP.put("DebitPaymentChannelID", eventJSONTransIP.get("DebitPaymentChannelID").toString());
+                    jsonObjectIP.put("CreditPaymentChannelID", eventJSONTransIP.get("CreditPaymentChannelID").toString());
+                    jsonObjectIP.put("PaymentMethod", eventJSONTransIP.get("PaymentMethod").toString());
+                    jsonObjectIP.put("RemainingAmount", Double.parseDouble(eventJSONTransIP.get("RemainingAmount").toString()));
+                    jsonObjectIP.put("ProcessTime", jsonObjectFromIP.get("event_time").toString().concat("T00:00"));
+                    jsonArray.put(jsonObjectIP);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -144,14 +183,15 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
         return jsonArray;
     }
 
+
     public LoanBluetoothData getBluetoothData() {
         int interest = 0, principal = 0, total = 0;
         LoanBluetoothData bluetoothData = new LoanBluetoothData();
         for (Installments collection : collections) {
             if (collection.isChecked) {
-                principal = principal + collection.collectionPR.eventValue;
-                interest = interest + collection.collectionIP.eventValue;
-                total = total + collection.collectionPR.eventValue + collection.collectionIP.eventValue;
+                principal = principal + Integer.parseInt(collection.collectionPR.event_value);
+                interest = interest + Integer.parseInt(collection.collectionIP.event_value);
+                total = total + Integer.parseInt(collection.collectionPR.event_value) + Integer.parseInt(collection.collectionIP.event_value);
             }
         }
         bluetoothData.interest = interest;

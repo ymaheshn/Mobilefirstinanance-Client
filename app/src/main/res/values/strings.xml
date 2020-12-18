@@ -1,5 +1,5 @@
 <resources>
-<!--    <string name="app_name">MFFApp</string>-->
+    <!--    <string name="app_name">MFFApp</string>-->
     <!-- Login Page-->
     <string name="login_header_text">Partner Login</string>
     <string name="login_sub_content_text">Please enter  your mobile number.....</string>

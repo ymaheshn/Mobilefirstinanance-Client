@@ -3,6 +3,7 @@ package Utilities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,7 +24,7 @@ import loans.ExpandableListDialog;
  * Created by gufran khan on 24-06-2018.
  */
 
-public class CustomDilalogs {
+public class CustomDialogues {
 
     private static ArrayList<RecyclerViewItem> viewItems;
 

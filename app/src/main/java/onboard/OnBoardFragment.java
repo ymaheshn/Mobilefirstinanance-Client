@@ -12,6 +12,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -204,11 +205,16 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
             noClientsTV.setVisibility(noData ? View.VISIBLE : View.GONE);
             clientsRV.setVisibility(noData ? View.GONE : View.VISIBLE);
         });
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(clientsRV.getContext(), DividerItemDecoration.VERTICAL);
         clientsRV.addItemDecoration(dividerItemDecoration);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         clientsRV.setLayoutManager(linearLayoutManager);
         clientsRV.setAdapter(onBoardAdapter);
+
+        /**
+         * commented for now,but it should be fixed.
+         */
         clientsRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -219,11 +225,13 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                Log.i("isLoading","isLoading :"+isLoading);
                 if (!isLoading) {
                     if (linearLayoutManager != null &&
                             linearLayoutManager.findLastCompletelyVisibleItemPosition() == onBoardAdapter.getItemCount() - 1) {
                         //bottom of list!
                         pageIndex++;
+                        Log.i("pageIndex","pageIndex :"+pageIndex);
                         onBoardPresenter.getAllClients(pageIndex, false);
                         isLoading = true;
                         progressBar.setVisibility(View.VISIBLE);
@@ -231,6 +239,7 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
                 }
             }
         });
+
         clientsRV.post(() -> {
             int previousPosition = PreferenceConnector.readInteger(getContext(), "ListPosition", -1);
             if (previousPosition >= 0) {
@@ -268,6 +277,7 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
         if (TextUtils.isEmpty(query)) {
             textClear.setVisibility(View.GONE);
             isLoading = false;
+            pageIndex = 0;
             onBoardPresenter.getAllClients(0, true);
         } else {
             onBoardPresenter.getSearch(query);

@@ -1,5 +1,7 @@
 package onboard;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 
@@ -20,4 +22,6 @@ public class ClientDataDTO implements Serializable {
     public String status;
     public String identifier;
     public String formLabel;
+
+
 }

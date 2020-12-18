@@ -44,7 +44,6 @@ import loans.model.Datum;
 import loans.model.Installments;
 import loans.model.LoanBluetoothData;
 import loans.model.ProfileCollection;
-import loans.model.ProfileCollectionResponse;
 import networking.MyApplication;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -74,9 +73,12 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
     private ProgressDialog progressDialog = null;
     private Datum linkedProfileData;
     private int collectedAmount;
-    private ProfileCollectionResponse collectionResponse;
+    private List<ProfileCollection> profileCollections;
+
     private RecyclerView recyclerView;
+
     private InstallmentsAdapter installmentsAdapter;
+
     private String contractUuid;
     private LoanBluetoothData bluetoothData;
     private View textNoRepayment;
@@ -126,11 +128,16 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
                 getParcelable(Constants.KeyExtras.LINKED_PROFILE);
         contractUuid = arguments.
                 getString(Constants.KeyExtras.CONTRACT_ID);
-        collectionResponse = arguments.getParcelable(Constants.KeyExtras.LINKED_PROFILE_COLLECTION);
+        profileCollections = arguments.getParcelableArrayList(Constants.KeyExtras.LINKED_PROFILE_COLLECTION);
+//        for (ProfileCollection pf2: profileCollections
+//             ) {
+//            Log.i("pf2","pf2 :"+pf2);
+//        }
         textNoRepayment = view.findViewById(R.id.text_no_repayments);
         recyclerView = view.findViewById(R.id.rc_installments);
         bottomLayout = view.findViewById(R.id.bottom_layout);
-        preprocessData(collectionResponse);
+
+        preProcessData(profileCollections);
 
         TextView textName = view.findViewById(R.id.nameTV);
         textName.setText(linkedProfileData.contractCodes.name);
@@ -151,41 +158,40 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
 //        editLoanAmount.setFilters(new InputFilter[]{new InputFilterMinMax("1", linkedProfileData.contractCodes.nextTotalCollection + "")});
     }
 
-    private void preprocessData(ProfileCollectionResponse collectionResponse) {
-
-        List<ProfileCollection> profileCollections = collectionResponse.data;
-        ArrayList<ProfileCollection> installements = new ArrayList<>();
-
-        for (ProfileCollection profileCollection : profileCollections) {
-            if (!TextUtils.isEmpty(profileCollection.eventType) && (profileCollection.eventType.equalsIgnoreCase("PR")
-                    || profileCollection.eventType.equalsIgnoreCase("IP"))) {
+    private void preProcessData(List<ProfileCollection> profileCollections) {
+        ArrayList<ProfileCollection> installments = new ArrayList<>();
+        for (ProfileCollection profileCollection2 : profileCollections) {
+            if (!TextUtils.isEmpty(profileCollection2.event_type) && (profileCollection2.event_type.equalsIgnoreCase("PR")
+                    || profileCollection2.event_type.equalsIgnoreCase("IP"))) {
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
                 Date result;
                 try {
-                    result = df.parse(profileCollection.eventTime);
-                    profileCollection.eventTimeInDate = result;
+                    result = df.parse(profileCollection2.event_time);
+                    profileCollection2.event_time = result.toString();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    profileCollection.eventTimeFormated = sdf.format(result);
+                    profileCollection2.event_time = sdf.format(result);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                installements.add(profileCollection);
+                installments.add(profileCollection2);
             }
         }
+
         ArrayList<Installments> adapterInstallments = new ArrayList<>();
-        Collections.sort(installements, (o1, o2) -> o1.eventTimeInDate.compareTo(o2.eventTimeInDate));
-        for (int i = 0; i < installements.size(); i = i + 2) {
+        Collections.sort(installments, (o1, o2) -> o1.event_time.compareTo(o2.event_time));
+        for (int i = 0; i < installments.size(); i = i + 2) {
             Installments inst = new Installments();
-            ProfileCollection collection = installements.get(i);
-            if (collection.eventType.equals("PR")) {
+            ProfileCollection collection = installments.get(i);
+            if (collection.event_type.equals("PR")) {
                 inst.collectionPR = collection;
-                inst.collectionIP = installements.get(i + 1);
+                inst.collectionIP = installments.get(i + 1);
             } else {
                 inst.collectionIP = collection;
-                inst.collectionPR = installements.get(i + 1);
+                inst.collectionPR = installments.get(i + 1);
             }
             adapterInstallments.add(inst);
         }
+
         installmentsAdapter = new InstallmentsAdapter(getActivity(), adapterInstallments, new InstallmentsAdapter.OnUpdateAmount() {
             @Override
             public void onUpdate(double value) {
@@ -348,8 +354,8 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
     }
 
     @Override
-    public void onGetLinkedProfile(Datum datum, ProfileCollectionResponse collectionResponse) {
-        preprocessData(collectionResponse);
+    public void onGetLinkedProfile(Datum datum, List<ProfileCollection> profileCollections)  {
+        preProcessData(profileCollections);
     }
 
     @Override

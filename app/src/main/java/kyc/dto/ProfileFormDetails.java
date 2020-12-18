@@ -8,5 +8,5 @@ import java.util.ArrayList;
  */
 
 public class ProfileFormDetails implements Serializable {
-    public ArrayList<Profileform> allProfileformsList = new ArrayList<>();
+    public ArrayList<ProfileForm> allProfileformsList = new ArrayList<>();
 }

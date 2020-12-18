@@ -70,7 +70,7 @@ import java.util.Map;
 
 import Utilities.AlertDialogUtils;
 import Utilities.Constants;
-import Utilities.CustomDilalogs;
+import Utilities.CustomDialogues;
 import Utilities.PreferenceConnector;
 import Utilities.UtilityMethods;
 import addclient.AddClientFragment;
@@ -89,7 +89,7 @@ import interfaces.IOnHeaderItemsClickListener;
 import kyc.dto.AdharDTO;
 import kyc.dto.BranchTree;
 import kyc.dto.KycDynamicForm;
-import kyc.dto.Profileform;
+import kyc.dto.ProfileForm;
 import kyc.utils.DataAttributes;
 import kyc.utils.MySupportMapFragment;
 import networking.MyApplication;
@@ -98,6 +98,8 @@ import networking.WebService;
 import networking.WebServiceURLs;
 import onboard.TabDto;
 import onboard.WorkFlowTemplateDto;
+
+import static Utilities.CustomDialogues.showBranch;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -151,7 +153,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     @BindView(R.id.img_camera)
     ImageView imgCamera;
 
-    private HashMap<String, KycDynamicForm> allDymamicFormHashmap;
+    private HashMap<String, KycDynamicForm> allDynamicFormHashMap;
     private ProgressDialog progressDialog = null;
     private KycPresenter kycPresenter;
     private String profileId = "";
@@ -159,8 +161,8 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     private String selectedFormId = "";
     private String profileJsonString = "";
     private int formId;
-    private EditText longitudeEdittext;
-    private EditText latitudeEdittext;
+    private EditText longitudeEditText;
+    private EditText latitudeEditText;
     private String url;
     private double longitude;
     private double latitude;
@@ -170,7 +172,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     private String templateDetailsId;
     private String workFlowId;
     private String workFlowProfileId;
-    private List<BranchTree> branchTree;
+    private List<BranchTree> branchTrees;
     private List<String> branchNamesInString = new ArrayList<>();
 
     public KycFragment() {
@@ -222,11 +224,9 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                     } else {
                         coApplicantPictureLL.setVisibility(View.GONE);
                     }
-
-
-                    if (allDymamicFormHashmap != null) {
-                        loadDynamicForm(allDymamicFormHashmap.get(selectedText).allProfileformsList);
-                        selectedFormId = allDymamicFormHashmap.get(selectedText).profileFormId;
+                    if (allDynamicFormHashMap != null) {
+                        loadDynamicForm(allDynamicFormHashMap.get(selectedText).allProfileFormsList);
+                        selectedFormId = allDynamicFormHashMap.get(selectedText).profileFormId;
                         if (!TextUtils.isEmpty(profileId) && !TextUtils.isEmpty(profileFormId)) {
                             if (profileFormId.equals(selectedFormId))
                                 mapSavedDataToViews(profileJsonString);
@@ -285,14 +285,14 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
         });
 
         if (UtilityMethods.isNetworkAvailable(getActivity())) {
-            getBranchTress(new WebService.OnServiceResponseListener() {
+            getBranchTrees(new WebService.OnServiceResponseListener() {
                 @Override
                 public void onApiCallResponseSuccess(String url, String object) {
                     if (!TextUtils.isEmpty(object)) {
                         Type typeMyType = new TypeToken<ArrayList<BranchTree>>() {
                         }.getType();
-                        branchTree = new Gson().fromJson(object, typeMyType);
-                        prepareBranchData(branchTree);
+                        branchTrees = new Gson().fromJson(object, typeMyType);
+                        prepareBranchData(branchTrees);
                     }
                     kycPresenter.getAllDynamicFormsFromServer();
                 }
@@ -302,6 +302,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                     kycPresenter.getAllDynamicFormsFromServer();
                 }
             });
+
             WorkFlowTemplateDto workFlowTemplateDt = Constants.workFlowTemplateDt;
             if (!(TextUtils.isEmpty(profileId) || Constants.isFromAddClient)) {
                 TabDto tabDto = workFlowTemplateDt.tabDtoArrayList.get(index);
@@ -344,7 +345,6 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
 
                     new WebService.OnServiceResponseListener() {
 
-
                         @Override
                         public void onApiCallResponseSuccess(String url, String object) {
                             hideProgressBar();
@@ -370,14 +370,14 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                                 }
                             }
                             showProgressBar();
-                            getBranchTress(new WebService.OnServiceResponseListener() {
+                            getBranchTrees(new WebService.OnServiceResponseListener() {
                                 @Override
                                 public void onApiCallResponseSuccess(String url, String object) {
                                     hideProgressBar();
                                     if (!TextUtils.isEmpty(object)) {
                                         Type typeMyType = new TypeToken<ArrayList<BranchTree>>() {
                                         }.getType();
-                                        branchTree = new Gson().fromJson(object, typeMyType);
+                                        branchTrees = new Gson().fromJson(object, typeMyType);
                                     }
                                 }
 
@@ -402,7 +402,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
         }
     }
 
-    public void getBranchTress(WebService.OnServiceResponseListener responseListener) {
+    public void getBranchTrees(WebService.OnServiceResponseListener responseListener) {
         if (UtilityMethods.isNetworkAvailable(getActivity())) {
             showProgressBar();
             String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") +
@@ -509,15 +509,15 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                     coApplicantPictureLL.setVisibility(View.GONE);
                 }
 
-                if (allDymamicFormHashmap != null) {
-                    loadDynamicForm(allDymamicFormHashmap.get(adapterView.getItemAtPosition(i)).allProfileformsList);
-                    selectedFormId = allDymamicFormHashmap.get(adapterView.getItemAtPosition(i)).profileFormId;
+                if (allDynamicFormHashMap != null) {
+                    loadDynamicForm(allDynamicFormHashMap.get(adapterView.getItemAtPosition(i)).allProfileFormsList);
+                    selectedFormId = allDynamicFormHashMap.get(adapterView.getItemAtPosition(i)).profileFormId;
                     if (!TextUtils.isEmpty(profileId) && !TextUtils.isEmpty(profileFormId)) {
                         if (profileFormId.equals(selectedFormId))
                             mapSavedDataToViews(profileJsonString);
                         else {
                             for (int j = 0; j < adapterView.getCount(); j++) {
-                                if (profileFormId.equals(allDymamicFormHashmap.get(adapterView.getItemAtPosition(i)).profileFormId)) {
+                                if (profileFormId.equals(allDynamicFormHashMap.get(adapterView.getItemAtPosition(i)).profileFormId)) {
                                     typeSelectionSP.setSelection(j);
                                     break;
 
@@ -532,7 +532,6 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     }
 
     private void mapSavedDataToViews(String jsonObjectString) {
-
         Map<String, String> valuesHM = new Gson().fromJson(
                 jsonObjectString, new TypeToken<HashMap<String, String>>() {
                 }.getType()
@@ -569,7 +568,6 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                         if (fieldName.equalsIgnoreCase(LATITUDE) && !TextUtils.isEmpty(value)) {
                             latitude = Double.parseDouble(value);
                         }
-
                         if (fieldName.equalsIgnoreCase(LONGITUDE) && !TextUtils.isEmpty(value)) {
                             longitude = Double.parseDouble(value);
                         }
@@ -580,7 +578,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                         if (fieldName.equalsIgnoreCase("Hierarchy")) {
                             try {
                                 branchName = null;
-                                String branch = searchBranch(branchTree, Integer.parseInt(value));
+                                String branch = searchBranch(branchTrees, Integer.parseInt(value));
                                 if (!TextUtils.isEmpty(branch)) {
                                     editText.setText(branch);
                                 } else {
@@ -597,7 +595,6 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
             }
         }
     }
-
 
     String branchName = null;
 
@@ -642,7 +639,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
 
     private JSONObject validateData() {
         boolean allFieldsValidated = true;
-        // this json object will be uaed for post service
+        // this json object will be used for post service
         JSONObject jsonObject = new JSONObject();
         if (!TextUtils.isEmpty(selectedFormId)) {
             try {
@@ -659,9 +656,9 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                     try {
                         branchId = null;
                         if (editText.getTag(R.id.editText).equals("Hierarchy")) {
-                            String branchByName = searchBranchByName(branchTree, editText.getText().toString());
+                            String branchByName = searchBranchByName(branchTrees, editText.getText().toString());
                             if (!TextUtils.isEmpty(branchByName)) {
-                                jsonObject.put(editText.getTag(R.id.editText).toString(), branchByName);
+                                jsonObject.put(editText.getTag(R.id.editText).toString(), Integer.parseInt(branchByName));
                             } else {
                                 jsonObject.put(editText.getTag(R.id.editText).toString(), editText.getText().toString());
                             }
@@ -703,6 +700,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
 
     private void validateKycAndSave() {
         JSONObject jsonObject1 = validateData();
+        Log.i("request payload", "request payload :" + jsonObject1);
         if (jsonObject1 != null) {
             if (TextUtils.isEmpty(profileId))
                 kycPresenter.createClientKycData(jsonObject1.toString());
@@ -741,7 +739,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
         XmlPullParserFactory pullParserFactory;
         AdharDTO adharDTO = new AdharDTO();
         try {
-            // init the parserfactory
+            // init the parser factory
             pullParserFactory = XmlPullParserFactory.newInstance();
             // get the parser
             XmlPullParser parser = pullParserFactory.newPullParser();
@@ -770,7 +768,6 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                     adharDTO.setSubDistrict(parser.getAttributeValue(null, DataAttributes.AADHAR_SUBDIST_ATTR));
                     adharDTO.setState(parser.getAttributeValue(null, DataAttributes.AADHAR_STATE_ATTR));
                     adharDTO.setPostCode(parser.getAttributeValue(null, DataAttributes.AADHAR_PC_ATTR));
-
 
                 } else if (eventType == XmlPullParser.END_TAG) {
 
@@ -860,12 +857,12 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
         }
     }
 
-    private void loadDynamicForm(ArrayList<Profileform> dynamicForm) {
+    private void loadDynamicForm(ArrayList<ProfileForm> dynamicForm) {
         mainLayout.removeAllViews();
-        latitudeEdittext = null;
-        longitudeEdittext = null;
+        latitudeEditText = null;
+        longitudeEditText = null;
         // addIdentifierField();
-        for (Profileform profileform : dynamicForm) {
+        for (ProfileForm profileform : dynamicForm) {
             addFieldToLayout(profileform);
         }
         containerMap.setVisibility(View.VISIBLE);
@@ -883,7 +880,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
         mainLayout.addView(view);
     }
 
-    private void addFieldToLayout(final Profileform profileform) {
+    private void addFieldToLayout(final ProfileForm profileform) {
         if (profileform.type.equalsIgnoreCase(Constants.DynamicUiTypes.TYPE_VARCHAR)
                 || profileform.type.equalsIgnoreCase(Constants.DynamicUiTypes.TYPE_NUMBER) ||
                 profileform.type.equalsIgnoreCase(Constants.DynamicUiTypes.TYPE_PHONE)) {
@@ -943,7 +940,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
             editText.setFocusableInTouchMode(false);
             editText.setOnClickListener(view1 -> {
                 if (profileform.type.equalsIgnoreCase(Constants.DynamicUiTypes.TYPE_LIST)) {
-                    CustomDilalogs.showListPop(getActivity(), profileform.name, (EditText) view1, profileform.value);
+                    CustomDialogues.showListPop(getActivity(), profileform.name, (EditText) view1, profileform.value);
                 } else {
                     showDatePickerDialog((EditText) view1);
                 }
@@ -961,24 +958,39 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
             editText.setTag(R.id.editText, profileform.name);
             editText.setCursorVisible(false);
             editText.setFocusableInTouchMode(false);
+
+            for (BranchTree bt:branchTrees){
+                Log.i("1"," "+bt.id);
+                Log.i("2"," "+bt.branchCode);
+                Log.i("3"," "+bt.name);
+                Log.i("4"," "+bt.treeLevel);
+                Log.i("5"," "+bt.children);
+                Log.i("6"," "+bt.currentBranchId);
+                Log.i("7"," "+bt.parentBranchId);
+            }
+
             editText.setOnClickListener(view1 -> {
-                CustomDilalogs.showBranch(getActivity(), profileform.name, (EditText) view1, branchTree);
-//                getBranchTress(new WebService.OnServiceResponseListener() {
-//                    @Override
-//                    public void onApiCallResponseSuccess(String url, String object) {
-//                        hideProgressBar();
-//                        if (!TextUtils.isEmpty(object)) {
-//                            Type typeMyType = new TypeToken<ArrayList<BranchTree>>(){}.getType();
-//                            List<BranchTree> branchTree = new Gson().fromJson(object, typeMyType);
-//                            CustomDilalogs.showBranch(getActivity(), profileform.name, (EditText) view1, branchTree.get(0).children);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onApiCallResponseFailure(String errorMessage) {
-//                        hideProgressBar();
-//                    }
-//                });
+                showBranch(getActivity(), profileform.name, (EditText) view1, branchTrees);
+
+                getBranchTrees(new WebService.OnServiceResponseListener() {
+                    @Override
+                    public void onApiCallResponseSuccess(String url, String object) {
+                        hideProgressBar();
+                        if (!TextUtils.isEmpty(object)) {
+                            Type typeMyType = new TypeToken<ArrayList<BranchTree>>() {
+                            }.getType();
+                            List<BranchTree> branchTree = new Gson().fromJson(object, typeMyType);
+                            showBranch(getActivity(), profileform.name, (EditText) view1, branchTree.get(0).children);
+                        }
+                    }
+
+                    @Override
+                    public void onApiCallResponseFailure(String errorMessage) {
+                        hideProgressBar();
+                    }
+                });
+
+                Log.i("after", "getBranchTrees");
             });
             mainLayout.addView(view);
         }
@@ -1020,8 +1032,8 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
 
     @Override
     public void loadDynamicFormToView
-            (ArrayList<KycDynamicForm> allDynamicFormList, HashMap<String, KycDynamicForm> allDymamicFormHashmap) {
-        this.allDymamicFormHashmap = allDymamicFormHashmap;
+            (ArrayList<KycDynamicForm> allDynamicFormList, HashMap<String, KycDynamicForm> allDynamicFormHashMap) {
+        this.allDynamicFormHashMap = allDynamicFormHashMap;
         loadTypeSelectionGroup(allDynamicFormList);
         if (radioTypeSelection != null && radioTypeSelection.isShown()) {
             radioTypeSelection.check(0);
@@ -1036,9 +1048,10 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                 selectedForm = kycDynamicForm;
             }
         }
-        loadDynamicForm(selectedForm.allProfileformsList);
+        loadDynamicForm(selectedForm.allProfileFormsList);
         selectedFormId = selectedForm.profileFormId;
         if (!TextUtils.isEmpty(profileJsonString)) {
+            Log.i("profileJsonString", "profileJsonString :" + profileJsonString);
             mapSavedDataToViews(profileJsonString);
         }
     }
@@ -1134,9 +1147,9 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
 //                targetLat = latitude;
 //                targetLong = longitude;
 //            }
-            if (latitudeEdittext != null && longitudeEdittext != null) {
-                latitudeEdittext.setText(String.valueOf(targetLat));
-                longitudeEdittext.setText(String.valueOf(targetLong));
+            if (latitudeEditText != null && longitudeEditText != null) {
+                latitudeEditText.setText(String.valueOf(targetLat));
+                longitudeEditText.setText(String.valueOf(targetLong));
                 return;
             }
             for (int i = 0; i < mainLayout.getChildCount(); i++) {
@@ -1147,11 +1160,11 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                     EditText edittext = viewGroup.getEditText();
                     if (edittext.getTag(R.id.editText) != null) {
                         if (edittext.getTag(R.id.editText).equals("longitude") || edittext.getTag(R.id.editText).equals("Longitude")) {
-                            longitudeEdittext = edittext;
-                            longitudeEdittext.setText(String.valueOf(targetLong));
+                            longitudeEditText = edittext;
+                            longitudeEditText.setText(String.valueOf(targetLong));
                         } else if (edittext.getTag(R.id.editText).equals("latitude") || edittext.getTag(R.id.editText).equals("Latitude")) {
-                            latitudeEdittext = edittext;
-                            latitudeEdittext.setText(String.valueOf(targetLat));
+                            latitudeEditText = edittext;
+                            latitudeEditText.setText(String.valueOf(targetLat));
                         }
                     }
                 }

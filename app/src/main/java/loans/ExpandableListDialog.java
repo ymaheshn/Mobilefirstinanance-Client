@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -88,7 +89,6 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
     private List<RecyclerViewItem> prepareData(List<BranchTree> children, int index) {
         ArrayList<RecyclerViewItem> items = new ArrayList<>();
         for (BranchTree branchTree : children) {
-
             Item item = new Item(branchTree.treeLevel.split("/").length - 1);
             item.setText(branchTree.name);
             if (branchTree.children != null && branchTree.children.size() > 0) {
@@ -306,7 +306,5 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
                 return results;
             }
         };
-
-
     }
 }

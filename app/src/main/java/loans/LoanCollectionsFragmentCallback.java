@@ -1,13 +1,15 @@
 package loans;
 
+import java.util.List;
+
 import base.BasePresenterCallback;
 import loans.model.Datum;
-import loans.model.LinkedProfilesResponse;
-import loans.model.ProfileCollectionResponse;
+import loans.model.ProfileCollection;
 
 
 public interface LoanCollectionsFragmentCallback extends BasePresenterCallback {
+
     void onSaveContractData(String message, int i);
 
-    void onGetLinkedProfile(Datum datum, ProfileCollectionResponse collectionResponse);
+    void onGetLinkedProfile(Datum datum, List<ProfileCollection> profileCollections);
 }

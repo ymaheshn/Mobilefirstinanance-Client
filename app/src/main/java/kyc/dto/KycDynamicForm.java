@@ -1,9 +1,5 @@
 package kyc.dto;
 
-import android.provider.ContactsContract;
-
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -16,5 +12,5 @@ public class KycDynamicForm implements Serializable {
     public String ownerID = "";
     public String rootUserID = "";
     public  String formName="";
-    public ArrayList<Profileform> allProfileformsList = new ArrayList<>();
+    public ArrayList<ProfileForm> allProfileFormsList = new ArrayList<>();
 }

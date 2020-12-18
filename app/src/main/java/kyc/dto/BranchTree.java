@@ -1,5 +1,7 @@
 package kyc.dto;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -32,5 +34,8 @@ public class BranchTree {
     public BranchTree(String name, ArrayList<BranchTree> newList) {
         this.name = name;
         children = newList;
+    }
+
+    public BranchTree() {
     }
 }

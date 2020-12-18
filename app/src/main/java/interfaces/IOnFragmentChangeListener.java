@@ -8,6 +8,7 @@ import android.os.Bundle;
  */
 
 public interface IOnFragmentChangeListener {
+
     void onHeaderUpdate(int fragmentName, String title);
 
     void onFragmentChanged(int fragmentName, Bundle intentExtra);

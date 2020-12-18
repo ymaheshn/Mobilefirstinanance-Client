@@ -1,10 +1,6 @@
 package kyc;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -20,12 +16,10 @@ import java.util.Map;
 
 import Utilities.PreferenceConnector;
 import Utilities.UtilityMethods;
-import database.dao.ClientDataDAO;
 import database.dao.ClientFormsDAO;
 import database.db.DataBaseContext;
-import kyc.IKycFragmentCallback;
 import kyc.dto.KycDynamicForm;
-import kyc.dto.Profileform;
+import kyc.dto.ProfileForm;
 import networking.WebService;
 import networking.WebServiceURLs;
 
@@ -71,7 +65,7 @@ public class KycPresenter {
     public void getDynamicFormsFromResponse(String response) {
         try {
             ArrayList<KycDynamicForm> allDynamicFormList = new ArrayList<>();
-            HashMap<String, KycDynamicForm> allDymamicFormHashmap = new HashMap<>();
+            HashMap<String, KycDynamicForm> allDynamicFormHashMap = new HashMap<>();
             JSONArray jsonArray = new JSONArray(response);
             if (jsonArray != null && jsonArray.length() > 0) {
                 /*delete old forms to dataBase*/
@@ -86,19 +80,18 @@ public class KycPresenter {
 
                     if (formIdJson.has("profileFormDetails")) {
                         JSONObject jsonProfileObj = formIdJson.getJSONObject("profileFormDetails");
-                        JSONArray jsonArraHeader = jsonProfileObj.getJSONArray("Form Header");
-                        if (jsonArraHeader != null && jsonArraHeader.length() > 0) {
-                            JSONObject jobj = jsonArraHeader.getJSONObject(0);
-                            if (jobj.has("Value")) {
-                                kycDynamicForm.formName = jobj.getString("Value");
+                        JSONArray jsonArrayHeader = jsonProfileObj.getJSONArray("Form Header");
+                        if (jsonArrayHeader != null && jsonArrayHeader.length() > 0) {
+                            JSONObject jObj = jsonArrayHeader.getJSONObject(0);
+                            if (jObj.has("Value")) {
+                                kycDynamicForm.formName = jObj.getString("Value");
                             }
-                            for (int i = 0; i < jsonArraHeader.length(); i++) {
-                                Profileform profileform = new Profileform();
-                                JSONObject jobject = jsonArraHeader.getJSONObject(i);
+                            for (int i = 0; i < jsonArrayHeader.length(); i++) {
+                                ProfileForm profileform = new ProfileForm();
+                                JSONObject jobject = jsonArrayHeader.getJSONObject(i);
                                 if (jobject.has("Label"))
                                     profileform.name = jobject.getString("Label");
-                                if (profileform.name.contains("Form Label"))
-                                {
+                                if (profileform.name.contains("Form Label")) {
                                     continue;
                                 }
 
@@ -116,24 +109,23 @@ public class KycPresenter {
                                         }
                                     }
                                 }
-
-                                kycDynamicForm.allProfileformsList.add(profileform);
+                                kycDynamicForm.allProfileFormsList.add(profileform);
                             }
                         }
-                        JSONArray jsonArraBody = jsonProfileObj.getJSONArray("Form Body");
-                        if (jsonArraBody != null && jsonArraBody.length() > 0) {
-                            for (int i = 0; i < jsonArraBody.length(); i++) {
-                                Profileform profileform = new Profileform();
-                                JSONObject jobject = jsonArraBody.getJSONObject(i);
-                                if (jobject.has("Label"))
-                                    profileform.name = jobject.getString("Label");
-                                if (jobject.has("Type"))
-                                    profileform.type = jobject.getString("Type");
-                                if (jobject.has("Value")) {
-                                    if (jobject.get("Value") instanceof String) {
-                                        profileform.value.add((String) jobject.get("Value"));
+                        JSONArray jsonArrayBody = jsonProfileObj.getJSONArray("Form Body");
+                        if (jsonArrayBody != null && jsonArrayBody.length() > 0) {
+                            for (int i = 0; i < jsonArrayBody.length(); i++) {
+                                ProfileForm profileform = new ProfileForm();
+                                JSONObject jObject = jsonArrayBody.getJSONObject(i);
+                                if (jObject.has("Label"))
+                                    profileform.name = jObject.getString("Label");
+                                if (jObject.has("Type"))
+                                    profileform.type = jObject.getString("Type");
+                                if (jObject.has("Value")) {
+                                    if (jObject.get("Value") instanceof String) {
+                                        profileform.value.add((String) jObject.get("Value"));
                                     } else {
-                                        JSONArray jsonValues = jobject.getJSONArray("Value");
+                                        JSONArray jsonValues = jObject.getJSONArray("Value");
                                         if (jsonValues != null && jsonValues.length() > 0) {
                                             for (int k = 0; k < jsonValues.length(); k++) {
                                                 profileform.value.add(jsonValues.getString(k));
@@ -142,7 +134,7 @@ public class KycPresenter {
                                     }
                                 }
 
-                                kycDynamicForm.allProfileformsList.add(profileform);
+                                kycDynamicForm.allProfileFormsList.add(profileform);
                             }
 
                             //getting form type name
@@ -152,14 +144,14 @@ public class KycPresenter {
                     }
 
                     allDynamicFormList.add(kycDynamicForm);
-                    allDymamicFormHashmap.put(kycDynamicForm.formName, kycDynamicForm);
+                    allDynamicFormHashMap.put(kycDynamicForm.formName, kycDynamicForm);
                 }
 
                 /*save the forms to dataBase*/
                 ClientFormsDAO.getInstance().insertOrUpdateForm(DataBaseContext.getDBObject(1), jsonArray);
 
                 if (allDynamicFormList != null && allDynamicFormList.size() > 0) {
-                    iKycFragmentCallback.loadDynamicFormToView(allDynamicFormList, allDymamicFormHashmap);
+                    iKycFragmentCallback.loadDynamicFormToView(allDynamicFormList, allDynamicFormHashMap);
                 }
             }
 
@@ -173,9 +165,8 @@ public class KycPresenter {
         //ClientDataDAO.getInstance().insertOrUpdateClientKyc(DataBaseContext.getDBObject(1), jsonObject, clientId);
         if (UtilityMethods.isNetworkAvailable(context)) {
             iKycFragmentCallback.showProgressBar();
-
             Map<String, String> params = new Gson().fromJson(
-                    jsonObject, new TypeToken<HashMap<String, String>>() {
+                    jsonObject, new TypeToken<HashMap<String, Object>>() {
                     }.getType()
             );
             String url = PreferenceConnector.readString(context, "BASE_URL", "") +
@@ -209,13 +200,13 @@ public class KycPresenter {
             iKycFragmentCallback.showProgressBar();
 
             Map<String, String> params = new Gson().fromJson(
-                    jsonObject, new TypeToken<HashMap<String, String>>() {
+                    jsonObject, new TypeToken<HashMap<String, Object>>() {
                     }.getType()
             );
 
-            String urlWithPrfofileId = WebServiceURLs.UPDATE_KYC_DATA_URL.replace("PROFILE_ID", profileId);
+            String urlWithProfileId = WebServiceURLs.UPDATE_KYC_DATA_URL.replace("PROFILE_ID", profileId);
             String url = PreferenceConnector.readString(context, "BASE_URL", "") +
-                    urlWithPrfofileId +
+                    urlWithProfileId +
                     PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
             WebService.getInstance().apiPutRequestCall(url,
                     params, new WebService.OnServiceResponseListener() {

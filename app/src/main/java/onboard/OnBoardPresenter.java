@@ -2,6 +2,7 @@ package onboard;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.odedtech.mff.mffapp.R;
 
@@ -25,7 +26,6 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
         this.iOnBoardFragmentCallback = iOnBoardFragmentCallback;
     }
 
-
     public void getAllClients(int pageNumber, boolean clearAll) {
         if (pageNumber == 0) {
             iOnBoardFragmentCallback.showProgressBar();
@@ -34,13 +34,15 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
                 WebServiceURLs.ALL_PROFILES_URL +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
         url = url.replaceAll("PAGE_NUMBER", "" + pageNumber).replaceAll("NUMBER_OF_RECORDS", "10");
-        WebService.getInstance().apiGetRequestCall(url,
+
+        WebService.getInstance().apiGetRequestCallJSON(url,
                 new WebService.OnServiceResponseListener() {
                     @Override
                     public void onApiCallResponseSuccess(String url, String object) {
                         iOnBoardFragmentCallback.hideProgressBar();
-                        ArrayList<ClientDataDTO> clients = getAndParseAllClinets(object);
+                        ArrayList<ClientDataDTO> clients = getAndParseAllClients(object);
                         iOnBoardFragmentCallback.loadRecyclerView(clients, false, clearAll);
+
                     }
 
                     @Override
@@ -51,7 +53,6 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
                         } else {
                             iOnBoardFragmentCallback.showMessage(errorMessage);
                         }
-
                     }
                 });
     }
@@ -88,12 +89,12 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
     }
 
 
-    private ArrayList<ClientDataDTO> getAndParseAllClinets(String object) {
+    private ArrayList<ClientDataDTO> getAndParseAllClients(String object) {
         ArrayList<ClientDataDTO> clientDataDTOS = new ArrayList<>();
         try {
             JSONObject mainJson = new JSONObject(object);
-            if (mainJson != null) {
-                JSONArray jsonArray = mainJson.getJSONObject("data").getJSONArray("profiles");
+            JSONArray jsonArray = mainJson.getJSONObject("data").getJSONArray("profiles");
+            if (jsonArray.length() != 0) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ClientDataDTO clientDataDTO = new ClientDataDTO();
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -180,6 +181,8 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
                     }
                     clientDataDTOS.add(clientDataDTO);
                 }
+
+                Log.i("RESULT", "RESULT :" + clientDataDTOS);
             }
         } catch (Exception e) {
             e.printStackTrace();

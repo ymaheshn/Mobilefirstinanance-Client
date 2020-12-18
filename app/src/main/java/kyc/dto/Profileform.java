@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Created by gufran khan on 23-06-2018.
  */
 
-public class Profileform implements Serializable {
+public class ProfileForm implements Serializable {
     public String name = "";
     public String type = "";
     public ArrayList<String> value = new ArrayList<>();

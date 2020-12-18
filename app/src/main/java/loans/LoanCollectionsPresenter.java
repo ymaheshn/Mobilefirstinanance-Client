@@ -1,44 +1,30 @@
 package loans;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.odedtech.mff.mffapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.HashMap;
+import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
 
 import Utilities.PreferenceConnector;
-import Utilities.UtilityMethods;
-import data.LoanCollectionDao;
-import data.LoanCollectionDatabase;
-import data.LoanCollectionUtils;
 import domain.AddLoanCollectionUseCase;
 import domain.GetLoanCollectionsUseCase;
-import domain.services.SyncCommentRxBus;
-import domain.services.SyncResponseEventType;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import loans.model.Datum;
-import loans.model.LinkedProfilesResponse;
 import loans.model.LoanCollection;
-import loans.model.ProfileCollectionResponse;
+import loans.model.ProfileCollection;
 import networking.WebService;
 import networking.WebServiceURLs;
 
@@ -48,7 +34,6 @@ public class LoanCollectionsPresenter {
     private LoanCollectionsFragmentCallback loansFragmentCallback;
 
     private boolean dontUpdateForFirstTime;
-
 
     private final CompositeDisposable disposables = new CompositeDisposable();
     private int totalAmount;
@@ -62,30 +47,28 @@ public class LoanCollectionsPresenter {
         String url = PreferenceConnector.readString(context, "BASE_URL", "") +
                 WebServiceURLs.SAVE_CONTRACT_DATA +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
-        WebService.getInstance().apiPostRequestCallJSONArray(url,
-                jsonArray, new WebService.OnServiceResponseListener() {
 
-                    @Override
-                    public void onApiCallResponseSuccess(String url, String object) {
-                        String message = null;
-                        try {
-                            JSONObject jsonObject = new JSONObject(object);
-                            if (jsonObject.getInt("status") == 200) {
-                                message = jsonObject.getString("message");
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        loansFragmentCallback.onSaveContractData(message, (int) totalAmount);
-                        // remote call was successful--the Comment will be updated locally to reflect that sync is no longer pending
-                    }
+        WebService.getInstance().apiPostRequestCallJSONArray2(url, jsonArray, new WebService.OnServiceResponseListener() {
+            @Override
+            public void onApiCallResponseSuccess(String url, String object) {
+                String message = null;
+                try {
+                    JSONArray jsonArray1 = new JSONArray(object);
+                    message = "Installment Successful";
+                } catch (JSONException e) {
+                    Log.e("error", "error :" + e);
+                    e.printStackTrace();
+                }
+                loansFragmentCallback.onSaveContractData(message, (int) totalAmount);
+                // remote call was successful--the Comment will be updated locally to reflect that sync is no longer pending
+            }
 
-                    @Override
-                    public void onApiCallResponseFailure(String errorMessage) {
-                        // throw new RemoteException("");
-                        loansFragmentCallback.onSaveContractData(null, (int) totalAmount);
-                    }
-                });
+            @Override
+            public void onApiCallResponseFailure(String errorMessage) {
+                loansFragmentCallback.onSaveContractData(null, (int) totalAmount);
+            }
+        });
+
     }
 
     void saveContractData(AddLoanCollectionUseCase collectionUseCase, String loanAmount, String contractCode) {
@@ -108,17 +91,19 @@ public class LoanCollectionsPresenter {
 
     public void getLinkedProfileDetails(String contractUUID) {
         loansFragmentCallback.showProgressBar();
-        String serviceUrl = WebServiceURLs.GET_LINKED_PORTFOLIO_PROFILE_URL.replace("PROFILE_ID", contractUUID);
+        String serviceUrl = WebServiceURLs.GET_EVENTS_BY_CONTRACTUUID_URL;
         String url = PreferenceConnector.readString(context, "BASE_URL", "") + serviceUrl +
-                PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
+                PreferenceConnector.readString(context, context.getString(R.string.accessToken), "") + "&contractUUID=" + contractUUID + "&eventType";
         WebService.getInstance().apiGetRequestCall(url,
                 new WebService.OnServiceResponseListener() {
                     @Override
                     public void onApiCallResponseSuccess(String url, String object) {
                         Gson gson = new Gson();
-                        ProfileCollectionResponse profileCollectionResponse = gson.fromJson(object, ProfileCollectionResponse.class);
+                        Type type = new TypeToken<List<ProfileCollection>>() {
+                        }.getType();
+                        List<ProfileCollection> list = gson.fromJson(object, type);
                         loansFragmentCallback.hideProgressBar();
-                        loansFragmentCallback.onGetLinkedProfile(null, profileCollectionResponse);
+                        loansFragmentCallback.onGetLinkedProfile(null, list);
                     }
 
                     @Override

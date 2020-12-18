@@ -1,6 +1,5 @@
 package loans;
 
-
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +49,7 @@ import io.reactivex.schedulers.Schedulers;
 import loans.model.Datum;
 import loans.model.LinkedProfilesResponse;
 import loans.model.LoanCollection;
-import loans.model.ProfileCollectionResponse;
+import loans.model.ProfileCollection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -340,11 +340,11 @@ public class LoansFragment extends BaseFragment implements LoansFragmentCallback
     }
 
     @Override
-    public void linkedProfileCollection(Datum datum, ProfileCollectionResponse collectionResponse) {
+    public void linkedProfileCollection(Datum datum, List<ProfileCollection> profileCollections) {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyExtras.CONTRACT_ID, datum.contractUUID);
         bundle.putParcelable(Constants.KeyExtras.LINKED_PROFILE, datum);
-        bundle.putParcelable(Constants.KeyExtras.LINKED_PROFILE_COLLECTION, collectionResponse);
+        bundle.putParcelableArrayList(Constants.KeyExtras.LINKED_PROFILE_COLLECTION, (ArrayList<ProfileCollection>) profileCollections);
         iOnFragmentChangeListener.onFragmentChanged(Constants.LOAN_COLLECTIONS_FRAGMENT, bundle);
     }
 
@@ -440,7 +440,6 @@ public class LoansFragment extends BaseFragment implements LoansFragmentCallback
         public void setText(String text) {
             this.text = text;
         }
-
 
         protected Item(int level) {
             super(level);

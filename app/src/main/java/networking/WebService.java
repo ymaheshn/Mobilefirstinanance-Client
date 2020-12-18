@@ -10,6 +10,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
@@ -38,14 +39,41 @@ public class WebService {
         return webService;
     }
 
+    public void apiGetRequestCallJSON(final String url, final OnServiceResponseListener onServiceResponseListener) {
+        Log.d("url", "url :" + url);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    Log.d("Volley success", response.toString());
+                    onServiceResponseListener.onApiCallResponseSuccess(url, response.toString());
+                },
+                error -> {
+                    Log.d("Volley error", error.toString());
+                    String message = VolleyErrorHelper
+                            .getMessage(error, MyApplication.getInstance());
+                    if (TextUtils.isEmpty(message)) {
+                        message = "Oops!! Something went wrong";
+                    }
+                    onServiceResponseListener.onApiCallResponseFailure(message);
+                });
+
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(jsonRequest);
+    }
+
     public void apiGetRequestCall(final String url, final OnServiceResponseListener onServiceResponseListener) {
         // Request a string response from the provided URL.
+        Log.d("url", "url :" + url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
-                    Log.d("Volly response", response.toString());
+                    Log.d("Volley success", response);
                     onServiceResponseListener.onApiCallResponseSuccess(url, response);
                 }, error -> {
-            Log.d("Volly response", error.toString());
+
+            Log.d("Volley error", error.toString());
             String message = VolleyErrorHelper
                     .getMessage(error, MyApplication.getInstance());
             if (TextUtils.isEmpty(message)) {
@@ -100,8 +128,48 @@ public class WebService {
         MyApplication.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
+    public void apiPostRequestCallJSONArray2(final String url, final JSONArray params, final OnServiceResponseListener onServiceResponseListener) {
 
-    public void apiPostRequestCallJSONArray(final String url, final JSONArray params, final OnServiceResponseListener onServiceResponseListener) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, params, response -> {
+            Log.i("VOLLEY", response.toString());
+            onServiceResponseListener.onApiCallResponseSuccess(url, response.toString());
+        }, error -> {
+            Log.e("VOLLEY", error.toString());
+            String message = VolleyErrorHelper
+                    .getMessage(error, MyApplication.getInstance());
+            if (TextUtils.isEmpty(message)) {
+                message = "";
+            }
+            onServiceResponseListener.onApiCallResponseFailure(message);
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+
+            @Override
+            public byte[] getBody() {
+                try {
+                    return params.toString().getBytes(PROTOCOL_CHARSET);
+                } catch (UnsupportedEncodingException uee) {
+                    // error handling
+                    return null;
+                }
+            }
+        };
+
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(jsonArrayRequest);
+
+    }
+
+
+    public void apiPostRequestCallJSONArray(final String url, final JSONArray params,
+                                            final OnServiceResponseListener onServiceResponseListener) {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -147,7 +215,8 @@ public class WebService {
     }
 
 
-    public void apiPutRequestCallJSON(final String url, final JSONObject params, final OnServiceResponseListener onServiceResponseListener) {
+    public void apiPutRequestCallJSON(final String url, final JSONObject params,
+                                      final OnServiceResponseListener onServiceResponseListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -181,12 +250,14 @@ public class WebService {
         MyApplication.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
-    public void apiPutRequestCall(final String url, final Map<String, String> params, final OnServiceResponseListener onServiceResponseListener) {
+    public void apiPutRequestCall(final String url, final Map<String, String> params,
+                                  final OnServiceResponseListener onServiceResponseListener) {
         apiPutRequestCallJSON(url, new JSONObject(params), onServiceResponseListener);
     }
 
 
-    public void apiMultipart(String url, Map<String, VolleyMultipartRequest.DataPart> params, final OnServiceResponseListener onServiceResponseListener) {
+    public void apiMultipart(String url, Map<String, VolleyMultipartRequest.DataPart> params,
+                             final OnServiceResponseListener onServiceResponseListener) {
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {

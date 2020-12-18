@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,9 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.odedtech.mff.mffapp.R;
+import com.shufti.shuftipro.Shuftipro;
+import com.shufti.shuftipro.listeners.ShuftiVerifyListener;
+//import com.yoti.mobile.android.yotisdkcore.YotiSdk;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,10 +41,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import Utilities.AlertDialogUtils;
 import Utilities.Constants;
-import Utilities.CustomDilalogs;
+import Utilities.CustomDialogues;
 import Utilities.PreferenceConnector;
 import Utilities.UtilityMethods;
 import butterknife.BindView;
@@ -56,9 +61,14 @@ import onboard.TabFields;
 import onboard.WorkFlowTemplateDto;
 
 @SuppressLint("ValidFragment")
-public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetrievedFromGallery {
+public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetrievedFromGallery, ShuftiVerifyListener {
 
     private int index;
+
+//    private YotiSdk yotiSdk;
+    private Integer clientSessionTokenTtl;
+    private String clientSessionToken;
+    private String sessionId;
 
     @BindView(R.id.container_values)
     public LinearLayout containerValues;
@@ -74,6 +84,10 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
 
     @BindView(R.id.btn_verify)
     Button btnVerify;
+
+
+    Shuftipro instance;
+    JSONObject jsonObject;
 
     private WorkFlowTemplateDto workFlowTemplateDt;
     private String templateDetailsId;
@@ -123,6 +137,17 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
                 Constants.workFlowTemplateDt.workFlowProfileId);
     }
 
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//
+//        int sessionStatusCode = yotiSdk.getSessionStatusCode();
+//        String sessionStatusDescription = yotiSdk.getSessionStatusDescription();
+//
+//        Toast.makeText(getActivity(),sessionStatusCode,Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity(),sessionStatusDescription,Toast.LENGTH_LONG).show();
+//
+//    }
+
     private void addFieldsToLayout(TabFields tabFields) {
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -144,7 +169,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
             view.setLayoutParams(params);
             editText.setOnClickListener(view1 -> {
                 if (tabFields.type.equalsIgnoreCase(Constants.DynamicUiTypes.TYPE_LIST)) {
-                    CustomDilalogs.showListPop(getActivity(), tabFields.name, (EditText) view1, tabFields.valuesList);
+                    CustomDialogues.showListPop(getActivity(), tabFields.name, (EditText) view1, tabFields.valuesList);
                 } else {
                     showDatePickerDialog((EditText) view1);
                 }
@@ -278,6 +303,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
             mapSavedDataToViews(string);
             if (!TextUtils.isEmpty(templateDetailsId)) {
                 btnSave.setText("Update");
+
             } else {
                 btnSave.setText("Save");
             }
@@ -295,6 +321,178 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
                 break;
         }
     }
+
+    private void validateCashFlowAndSave() {
+        JSONObject jsonObject = validateData();
+        Log.d("jsonObject", "jsonObject :" + jsonObject);
+
+//        if (jsonObject != null) {
+//            if (!TextUtils.isEmpty(templateDetailsId)) {
+//                Log.d("templateDetailsId","templateDetailsId :"+templateDetailsId);
+//                updateCashFlowData(jsonObject.toString(), templateDetailsId);
+//            } else {
+//                saveCashFlowData(jsonObject.toString());
+//            }
+//        }
+
+        if (jsonObject != null) {
+            String selectIdentityType = null;
+            try {
+                selectIdentityType = jsonObject.getString("Select Identity type");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            switch (selectIdentityType) {
+                case "Shufti":
+                    launchShufptiProSdk();
+                    break;
+
+
+                case "Yoti":
+                    launchYotiSdk();
+                    break;
+            }
+
+        }
+
+
+    }
+
+    private void launchShufptiProSdk() {
+
+        jsonObject = new JSONObject();
+        try {
+            jsonObject.put("reference", UUID.randomUUID());
+            jsonObject.put("country", "IN");
+            jsonObject.put("language", "EN");
+            jsonObject.put("email", "kellavivek@gmail.com");
+            jsonObject.put("callback_url", "https://www.yourdomain.com");
+            jsonObject.put("redirect_url", "");
+            jsonObject.put("verification_mode", "any");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        //Creating face object
+        JSONObject faceObject = new JSONObject();
+        try {
+            faceObject.put("proof", "");
+            jsonObject.put("face", faceObject);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        //Creating document object
+        JSONObject documentationObject = new JSONObject();
+        ArrayList<String> doc_supported_types = new ArrayList<String>();
+
+        doc_supported_types.add("passport");
+        doc_supported_types.add("id_card");
+        doc_supported_types.add("driving_license");
+        doc_supported_types.add("credit_or_debit_card");
+
+        try {
+            documentationObject.put("proof", "");
+            documentationObject.put("supported_types", new JSONArray(doc_supported_types));
+
+            //Set parameters in the requested object
+            documentationObject.put("name", "");
+            documentationObject.put("dob", "");
+//            documentationObject.put("document_number", "");
+//            documentationObject.put("expiry_date", "");
+//            documentationObject.put("issue_date", "");
+            documentationObject.put("backside_proof_required", "1");
+
+            jsonObject.put("document", documentationObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject phoneObject = new JSONObject();
+        try {
+            phoneObject.put("proof", "");
+            phoneObject.put("phone_number", "");
+            phoneObject.put("random_code", "");
+            phoneObject.put("text", "");
+
+            jsonObject.put("phone", phoneObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        instance = Shuftipro.getInstance("cc30e2766c4594ad53396175b6ca3cda24fff531ce98bf48aaff0f936dbdc480", "xuSH1Ip2YG8BS4ekks2Mo1CWkwY1UjAe");
+        instance.setCaptureEnabled(true);
+        instance.shuftiproVerification(jsonObject, getActivity(), this);
+
+
+    }
+
+    private void launchYotiSdk() {
+
+//        yotiSdk = new YotiSdk(getActivity());
+//        String url = "https://";
+//
+//        WebService.getInstance().apiPostRequestCallJSON(url, null, new WebService.OnServiceResponseListener() {
+//            @Override
+//            public void onApiCallResponseSuccess(String url, String object) {
+//                try {
+//                    JSONObject yotiResponse = new JSONObject(object);
+//                    clientSessionTokenTtl = yotiResponse.getInt("client_session_token_ttl");
+//                    clientSessionToken = yotiResponse.getString("client_session_token");
+//                    sessionId = yotiResponse.getString("session_id");
+//                    yotiSdk.setSessionId(sessionId);
+//                    yotiSdk.setClientSessionToken(clientSessionToken);
+//                    yotiSdk.start(getActivity(),9001);
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onApiCallResponseFailure(String errorMessage) {
+//                showMessage(errorMessage);
+//            }
+//        });
+
+
+    }
+
+
+    public void updateCashFlowData(String s, String templateDetailsId) {
+        if (UtilityMethods.isNetworkAvailable(getActivity())) {
+            showProgressBar();
+
+            Map<String, String> params = new Gson().fromJson(
+                    s, new TypeToken<HashMap<String, String>>() {
+                    }.getType()
+            );
+            String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") +
+                    WebServiceURLs.CASH_FLOW_UPDATE_URL +
+                    PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
+            url = url.replace("WORKFLOW_PROFILE_ID", templateDetailsId);
+            WebService.getInstance().apiPutRequestCall(url,
+                    params, new WebService.OnServiceResponseListener() {
+
+                        @Override
+                        public void onApiCallResponseSuccess(String url, String object) {
+                            hideProgressBar();
+                            if (TextUtils.isEmpty(tabName)) {
+                                tabName = "";
+                            }
+                            Log.d("tabName", "tabName :" + tabName);
+                        }
+
+                        @Override
+                        public void onApiCallResponseFailure(String errorMessage) {
+                            hideProgressBar();
+                            showMessage(errorMessage);
+                        }
+                    });
+        }
+    }
+
 
     private void verifyWorkFlow() {
         if (TextUtils.isEmpty(templateDetailsId)) {
@@ -415,49 +613,6 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
         }
     }
 
-    private void validateCashFlowAndSave() {
-        JSONObject jsonObject = validateData();
-        if (jsonObject != null) {
-            if (!TextUtils.isEmpty(templateDetailsId)) {
-                updateCashFlowData(jsonObject.toString(), templateDetailsId);
-            } else {
-                saveCashFlowData(jsonObject.toString());
-            }
-        }
-    }
-
-    public void updateCashFlowData(String s, String templateDetialsId) {
-        if (UtilityMethods.isNetworkAvailable(getActivity())) {
-            showProgressBar();
-
-            Map<String, String> params = new Gson().fromJson(
-                    s, new TypeToken<HashMap<String, String>>() {
-                    }.getType()
-            );
-            String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") +
-                    WebServiceURLs.CASH_FLOW_UDATE_URL +
-                    PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
-            url = url.replace("WORKFLOW_PROFILE_ID", templateDetialsId);
-            WebService.getInstance().apiPutRequestCall(url,
-                    params, new WebService.OnServiceResponseListener() {
-
-                        @Override
-                        public void onApiCallResponseSuccess(String url, String object) {
-                            hideProgressBar();
-                            if (TextUtils.isEmpty(tabName)) {
-                                tabName = "";
-                            }
-                            showMessage(tabName + " Updated successfully");
-                        }
-
-                        @Override
-                        public void onApiCallResponseFailure(String errorMessage) {
-                            hideProgressBar();
-                            showMessage(errorMessage);
-                        }
-                    });
-        }
-    }
 
     public void saveCashFlowData(String s) {
         if (UtilityMethods.isNetworkAvailable(getActivity())) {
@@ -543,7 +698,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
         Uri selectedImage = data.getData();
         try {
             showLoading();
-            String filename = !TextUtils.isEmpty(fileNameToUpload) ? fileNameToUpload + "_" + UtilityMethods.getDateFormat()+".jpeg" : UtilityMethods.getDateFormat() + ".jpeg";
+            String filename = !TextUtils.isEmpty(fileNameToUpload) ? fileNameToUpload + "_" + UtilityMethods.getDateFormat() + ".jpeg" : UtilityMethods.getDateFormat() + ".jpeg";
             InputStream iStream = getActivity().getContentResolver().openInputStream(selectedImage);
             byte[] inputData = UtilityMethods.getBytes(iStream);
             String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") +
@@ -582,5 +737,12 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
             e.printStackTrace();
         }
         // String picturePath contains the path of selected Image
+    }
+
+    @Override
+    public void verificationStatus(HashMap<String, String> responseSet) {
+        Log.d("Response Set", responseSet.toString());
+        Log.d("response", responseSet.get("response"));
+        showMessage(responseSet.get("event"));
     }
 }

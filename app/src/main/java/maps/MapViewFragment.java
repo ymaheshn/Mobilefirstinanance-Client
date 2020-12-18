@@ -2,18 +2,15 @@ package maps;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -112,11 +109,12 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") +
                 WebServiceURLs.ALL_PROFILES_URL +
                 PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
+        url = url.replaceAll("PAGE_NUMBER", "" + 0).replaceAll("NUMBER_OF_RECORDS", "10");
         WebService.getInstance().apiGetRequestCall(url,
                 new WebService.OnServiceResponseListener() {
                     @Override
                     public void onApiCallResponseSuccess(String url, String object) {
-                        ArrayList<ClientDataDTO> clients = getAndParseAllClinets(object);
+                        ArrayList<ClientDataDTO> clients = getAndParseAllClients(object);
                         for (int index = 0; index < clients.size(); index++) {
                             if (mMap != null) {
                                 ClientDataDTO dataDTO = clients.get(index);
@@ -135,7 +133,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     }
 
 
-    private ArrayList<ClientDataDTO> getAndParseAllClinets(String object) {
+    private ArrayList<ClientDataDTO> getAndParseAllClients(String object) {
         ArrayList<ClientDataDTO> clientDataDTOS = new ArrayList<>();
         try {
             JSONObject mainJson = new JSONObject(object);
