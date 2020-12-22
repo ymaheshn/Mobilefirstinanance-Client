@@ -972,23 +972,23 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
             editText.setOnClickListener(view1 -> {
                 showBranch(getActivity(), profileform.name, (EditText) view1, branchTrees);
 
-                getBranchTrees(new WebService.OnServiceResponseListener() {
-                    @Override
-                    public void onApiCallResponseSuccess(String url, String object) {
-                        hideProgressBar();
-                        if (!TextUtils.isEmpty(object)) {
-                            Type typeMyType = new TypeToken<ArrayList<BranchTree>>() {
-                            }.getType();
-                            List<BranchTree> branchTree = new Gson().fromJson(object, typeMyType);
-                            showBranch(getActivity(), profileform.name, (EditText) view1, branchTree.get(0).children);
-                        }
-                    }
-
-                    @Override
-                    public void onApiCallResponseFailure(String errorMessage) {
-                        hideProgressBar();
-                    }
-                });
+//                getBranchTrees(new WebService.OnServiceResponseListener() {
+//                    @Override
+//                    public void onApiCallResponseSuccess(String url, String object) {
+//                        hideProgressBar();
+//                        if (!TextUtils.isEmpty(object)) {
+//                            Type typeMyType = new TypeToken<ArrayList<BranchTree>>() {
+//                            }.getType();
+//                            List<BranchTree> branchTree = new Gson().fromJson(object, typeMyType);
+//                            showBranch(getActivity(), profileform.name, (EditText) view1, branchTree.get(0).children);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onApiCallResponseFailure(String errorMessage) {
+//                        hideProgressBar();
+//                    }
+//                });
 
                 Log.i("after", "getBranchTrees");
             });

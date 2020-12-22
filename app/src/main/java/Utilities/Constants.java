@@ -25,6 +25,7 @@ public class Constants {
     public static final int APPROVAL_FRAGMENT = 10;
     public static final int LOAN_COLLECTIONS_FRAGMENT = 11;
     public static final int PROFILE_DETAILS_FRAGMENT = 12;
+    public static final int DASHBOARD_FRAGMENT = 13;
     public static int CURRENT_FRAGMENT = -1;
 
     /*tab names constants*/

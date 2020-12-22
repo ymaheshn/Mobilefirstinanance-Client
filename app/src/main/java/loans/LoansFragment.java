@@ -8,12 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +62,13 @@ public class LoansFragment extends BaseFragment implements LoansFragmentCallback
     @BindView(R.id.rv_list)
     MultiLevelRecyclerView clientsRV;
 
+
+    @BindView(R.id.clientsRV)
+    RecyclerView disbursalsRecyclerView;
+
+    @BindView(R.id.container_disbursals)
+    LinearLayout containerDisbursals;
+
     @BindView(R.id.noClientsTV)
     TextView noClientsTV;
 
@@ -99,10 +108,16 @@ public class LoansFragment extends BaseFragment implements LoansFragmentCallback
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         iOnFragmentChangeListener = (IOnFragmentChangeListener) getActivity();
-        iOnFragmentChangeListener.onHeaderUpdate(Constants.LOANS_FRAGMENT, "Contracts");
+        iOnFragmentChangeListener.onHeaderUpdate(Constants.LOANS_FRAGMENT, "Loans");
         getAllLoanCollections();
         loansPresenter = new LoansPresenter(getActivity(), this);
         radioGroupContracts.setOnCheckedChangeListener(this);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        disbursalsRecyclerView.setLayoutManager(linearLayoutManager);
+        disbursalsRecyclerView.setAdapter(new DisbursalsAdapter(getActivity(), datum -> {
+
+        }));
     }
 
 
@@ -374,16 +389,21 @@ public class LoansFragment extends BaseFragment implements LoansFragmentCallback
             case R.id.radio_collections:
                 noClientsTV.setVisibility(View.VISIBLE);
                 noClientsTV.setText("No Collections Available");
+                disbursalsRecyclerView.setVisibility(View.GONE);
+                clientsRV.setVisibility(View.VISIBLE);
                 if (clientsRV.getAdapter() != null) {
                     clientsRV.setVisibility(View.VISIBLE);
                 } else {
                     clientsRV.setVisibility(View.GONE);
                 }
+                containerDisbursals.setVisibility(View.GONE);
                 break;
             case R.id.radio_disbursals:
-                noClientsTV.setVisibility(View.VISIBLE);
+                noClientsTV.setVisibility(View.GONE);
                 noClientsTV.setText("No Disbursals Available");
                 clientsRV.setVisibility(View.GONE);
+                disbursalsRecyclerView.setVisibility(View.VISIBLE);
+                containerDisbursals.setVisibility(View.VISIBLE);
                 break;
         }
     }

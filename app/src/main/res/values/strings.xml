@@ -99,5 +99,9 @@
     <string name="first_name">First Name</string>
     <string name="user_name">User Name</string>
     <string name="something_went_erong">Something went wrong. Please try after some time.</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="transactions">Transactions</string>
+    <string name="trasnsfers">Transfers</string>
+    <string name="loans">Loans</string>
 
 </resources>

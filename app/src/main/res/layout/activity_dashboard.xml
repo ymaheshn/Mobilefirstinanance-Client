@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="5dp"
-                    android:text="Contracts"
+                    android:text="Loans"
                     android:textColor="@color/colorText"
                     android:textSize="12sp"
                     android:textStyle="bold" />

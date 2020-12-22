@@ -62,11 +62,13 @@ import maps.MapViewFragment;
 import networking.MyApplication;
 import onboard.OnBoardFragment;
 import pub.devrel.easypermissions.EasyPermissions;
+import savings.SavingsFragment;
 import services.LocationUpdatesBroadcastReceiver;
 import vas.VasFragment;
 
 import static Utilities.Constants.ADD_CLIENT_FRAGMENT;
 import static Utilities.Constants.CURRENT_FRAGMENT;
+import static Utilities.Constants.DASHBOARD_FRAGMENT;
 import static Utilities.Constants.KYC_FRAGMENT;
 import static Utilities.Constants.LOANS_FRAGMENT;
 import static Utilities.Constants.LOAN_COLLECTIONS_FRAGMENT;
@@ -304,6 +306,11 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     currentFrament = new OnBoardFragment();
                     addFragmentToContent(currentFrament, "client");
                     break;
+                case DASHBOARD_FRAGMENT:
+                    headerView.setVisibility(View.VISIBLE);
+                    currentFrament = new DashboardFragment();
+                    addFragmentToContent(currentFrament, "dashboard");
+                    break;
                 case LOANS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     currentFrament = new LoansFragment();
@@ -345,7 +352,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
         }
     }
 
-    private void replaceFragment(int fragmentName, Bundle intentExtra) {
+    public void replaceFragment(int fragmentName, Bundle intentExtra) {
         materialSearchView.closeSearch();
         query = null;
         if (CURRENT_FRAGMENT != fragmentName) {
@@ -358,6 +365,14 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     currentFrament = new OnBoardFragment();
                     imgSearch.setVisibility(View.VISIBLE);
                     replaceFragmentToContent(currentFrament, getString(R.string.onboard));
+                    break;
+                case DASHBOARD_FRAGMENT:
+                    headerView.setVisibility(View.VISIBLE);
+                    adharScannerIV.setVisibility(View.GONE);
+                    currentFrament = new DashboardFragment();
+                    imgSearch.setVisibility(View.GONE);
+                    headerTitleTV.setText(getString(R.string.dashboard));
+                    replaceFragmentToContent(currentFrament, "dashboard");
                     break;
                 case LOANS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
@@ -390,7 +405,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                 case SAVINGS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFrament = new EmptyFragment();
+                    currentFrament = new SavingsFragment();
                     headerTitleTV.setText(getString(R.string.savings));
                     replaceFragmentToContent(currentFrament, getString(R.string.savings));
                     break;

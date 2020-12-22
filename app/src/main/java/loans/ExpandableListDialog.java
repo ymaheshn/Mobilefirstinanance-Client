@@ -8,8 +8,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -89,13 +89,15 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
     private List<RecyclerViewItem> prepareData(List<BranchTree> children, int index) {
         ArrayList<RecyclerViewItem> items = new ArrayList<>();
         for (BranchTree branchTree : children) {
-            Item item = new Item(branchTree.treeLevel.split("/").length - 1);
-            item.setText(branchTree.name);
-            if (branchTree.children != null && branchTree.children.size() > 0) {
-                index = index + 1;
-                item.addChildren(prepareData(branchTree.children, index));
+            if (!TextUtils.isEmpty(branchTree.treeLevel)) {
+                Item item = new Item(branchTree.treeLevel.split("/").length - 1);
+                item.setText(branchTree.name);
+                if (branchTree.children != null && branchTree.children.size() > 0) {
+                    index = index + 1;
+                    item.addChildren(prepareData(branchTree.children, index));
+                }
+                items.add(item);
             }
-            items.add(item);
         }
         viewItems = items;
         return items;
@@ -179,17 +181,19 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
 
             switch (getItemViewType(position)) {
                 case 0:
-                case 1:
                     holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
                     break;
-                case 2:
+                case 1:
                     holder.itemView.setBackgroundColor(Color.parseColor("#f4f4f4"));
                     break;
-                case 3:
+                case 2:
                     holder.itemView.setBackgroundColor(Color.parseColor("#dfdfdf"));
                     break;
-                case 4:
+                case 3:
                     holder.itemView.setBackgroundColor(Color.parseColor("#dAdada"));
+                    break;
+                case 4:
+                    holder.itemView.setBackgroundColor(Color.parseColor("#D0D0D0"));
                     break;
             }
             Item item = (Item) mItem;

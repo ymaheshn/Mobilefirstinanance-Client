@@ -26,9 +26,12 @@ import base.BaseFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dashboard.DashboardActivity;
 import networking.WebService;
 import networking.WebServiceURLs;
 import onboard.ClientDataDTO;
+
+import static Utilities.Constants.DASHBOARD_FRAGMENT;
 
 
 public class MapViewFragment extends BaseFragment implements OnMapReadyCallback {
@@ -73,6 +76,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         } else {
             mapFragment.getMapAsync(this);
         }
+
+
         getAllClients();
     }
 
@@ -84,9 +89,12 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(hyderabad));
     }
 
-    @OnClick({R.id.kycMapIV, R.id.disbursalMapIV, R.id.collectionMapIV})
+    @OnClick({R.id.dashboard_map, R.id.kycMapIV, R.id.disbursalMapIV, R.id.collectionMapIV})
     public void onButtonClick(View view) {
         switch (view.getId()) {
+            case R.id.dashboard_map:
+                ((DashboardActivity) getActivity()).replaceFragment(DASHBOARD_FRAGMENT, null);
+                break;
             case R.id.kycMapIV:
                 kycMapIV.setImageDrawable(getResources().getDrawable(R.drawable.kyc_selected));
                 disbursalMapIV.setImageDrawable(getResources().getDrawable(R.drawable.disbursal_map));

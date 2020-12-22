@@ -32,4 +32,6 @@
 
     <color name="tab_color">#313D49</color>
     <color name="error_red">#830404</color>
+
+    <color name="app_bg">#EEEEEE</color>
 </resources>

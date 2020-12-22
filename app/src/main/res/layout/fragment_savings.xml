@@ -1,0 +1,102 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical"
+    tools:context="onboard.OnBoardFragment">
+
+
+    <RadioGroup
+        android:id="@+id/radio_savings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10dp"
+        android:background="@drawable/rounded_corner_white"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio_transactions"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/radio_bg_selector"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:padding="@dimen/_10dp"
+            android:text="@string/contracts"
+            android:textColor="@color/radio_text_selector" />
+
+        <RadioButton
+            android:id="@+id/radio_transfers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/radio_bg_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="@dimen/_10dp"
+            android:text="@string/trasnsfers"
+            android:textColor="@color/radio_text_selector" />
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider_color" />
+
+    <RelativeLayout
+        android:id="@+id/container_transactions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_transactions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/container_transfers"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btn_bill_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_toStartOf="@+id/btn_fund_transfer"
+            android:layout_toLeftOf="@+id/btn_fund_transfer"
+            android:textSize="12sp"
+            android:background="@drawable/save_btn_bg"
+            android:text="Bill Pay"
+            android:textColor="@color/colorWhite" />
+
+        <Button
+            android:id="@+id/btn_fund_transfer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/_10dp"
+            android:textSize="12sp"
+            android:background="@drawable/save_btn_bg"
+            android:text="Fund Transfer"
+            android:textColor="@color/colorWhite" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_transfers"
+            android:layout_below="@+id/btn_bill_pay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+
+</LinearLayout>
