@@ -21,7 +21,7 @@ android {
         config {
             keyAlias 'odedtechkey'
             keyPassword 'odedtech@12'
-            storeFile file('/Users/jagadesh/Desktop/mff.keystore')
+            storeFile file('/Users/jagadeshseeram/Desktop/mff.keystore')
             storePassword 'odedtech@12'
         }
     }
@@ -62,6 +62,12 @@ android {
         agent {
             applicationIdSuffix ".mff_android"
             buildConfigField("String", "BASE_URL", "\"https://dev.mobilefirstfinance.com\"")
+            dimension "version"
+        }
+        gfs {
+            applicationIdSuffix ".gfs"
+            buildConfigField("String", "BASE_URL", "\"https://gfs.mobilefirstfinance.com\"")
+            manifestPlaceholders = [appLabel: "@string/app_name_mig"]
             dimension "version"
         }
         mig {
