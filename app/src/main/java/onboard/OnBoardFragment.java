@@ -140,6 +140,7 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -225,13 +226,13 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                Log.i("isLoading","isLoading :"+isLoading);
-                if (!isLoading) {
+                Log.i("isLoading", "isLoading :" + isLoading);
+                if (!isLoading && onBoardAdapter.getItemCount() >= 10) {
                     if (linearLayoutManager != null &&
                             linearLayoutManager.findLastCompletelyVisibleItemPosition() == onBoardAdapter.getItemCount() - 1) {
                         //bottom of list!
                         pageIndex++;
-                        Log.i("pageIndex","pageIndex :"+pageIndex);
+                        Log.i("pageIndex", "pageIndex :" + pageIndex);
                         onBoardPresenter.getAllClients(pageIndex, false);
                         isLoading = true;
                         progressBar.setVisibility(View.VISIBLE);

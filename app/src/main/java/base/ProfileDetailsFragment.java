@@ -29,7 +29,6 @@ import com.google.gson.reflect.TypeToken;
 import com.odedtech.mff.mffapp.R;
 import com.shufti.shuftipro.Shuftipro;
 import com.shufti.shuftipro.listeners.ShuftiVerifyListener;
-//import com.yoti.mobile.android.yotisdkcore.YotiSdk;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,12 +59,14 @@ import onboard.TabDto;
 import onboard.TabFields;
 import onboard.WorkFlowTemplateDto;
 
+//import com.yoti.mobile.android.yotisdkcore.YotiSdk;
+
 @SuppressLint("ValidFragment")
 public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetrievedFromGallery, ShuftiVerifyListener {
 
     private int index;
 
-//    private YotiSdk yotiSdk;
+    //    private YotiSdk yotiSdk;
     private Integer clientSessionTokenTtl;
     private String clientSessionToken;
     private String sessionId;
@@ -253,6 +254,9 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
                     new WebService.OnServiceResponseListener() {
                         @Override
                         public void onApiCallResponseSuccess(String url, String object) {
+                            if (!isVisible()) {
+                                return;
+                            }
                             hideProgressBar();
                             if (!TextUtils.isEmpty(object)) {
                                 try {
@@ -284,6 +288,9 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
 
                         @Override
                         public void onApiCallResponseFailure(String errorMessage) {
+                            if (!isVisible()) {
+                                return;
+                            }
                             hideProgressBar();
                             if (errorMessage.contains("AuthFailureError")) {
                                 showAlert();
@@ -326,15 +333,6 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
         JSONObject jsonObject = validateData();
         Log.d("jsonObject", "jsonObject :" + jsonObject);
 
-//        if (jsonObject != null) {
-//            if (!TextUtils.isEmpty(templateDetailsId)) {
-//                Log.d("templateDetailsId","templateDetailsId :"+templateDetailsId);
-//                updateCashFlowData(jsonObject.toString(), templateDetailsId);
-//            } else {
-//                saveCashFlowData(jsonObject.toString());
-//            }
-//        }
-
         if (jsonObject != null) {
             String selectIdentityType = null;
             try {
@@ -343,19 +341,24 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
                 e.printStackTrace();
             }
 
-            switch (selectIdentityType) {
-                case "Shufti":
-                    launchShufptiProSdk();
-                    break;
-
-
-                case "Yoti":
-                    launchYotiSdk();
-                    break;
+            if (!TextUtils.isEmpty(selectIdentityType)) {
+                switch (selectIdentityType) {
+                    case "Shufti":
+                        launchShufptiProSdk();
+                        break;
+                    case "Yoti":
+                        launchYotiSdk();
+                        break;
+                }
+            } else {
+                if (!TextUtils.isEmpty(templateDetailsId)) {
+                    Log.d("templateDetailsId", "templateDetailsId :" + templateDetailsId);
+                    updateCashFlowData(jsonObject.toString(), templateDetailsId);
+                } else {
+                    saveCashFlowData(jsonObject.toString());
+                }
             }
-
         }
-
 
     }
 

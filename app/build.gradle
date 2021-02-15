@@ -56,12 +56,12 @@ android {
     productFlavors {
         client {
             applicationIdSuffix ".client"
-            buildConfigField("String", "BASE_URL", "\"https://dev.mobilefirstfinance.com\"")
+            buildConfigField("String", "BASE_URL", "\"https://uat.mobilefirstfinance.com\"")
             dimension "version"
         }
         agent {
             applicationIdSuffix ".mff_android"
-            buildConfigField("String", "BASE_URL", "\"https://dev.mobilefirstfinance.com\"")
+            buildConfigField("String", "BASE_URL", "\"https://uat.mobilefirstfinance.com\"")
             dimension "version"
         }
         gfs {

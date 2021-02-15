@@ -959,14 +959,14 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
             editText.setCursorVisible(false);
             editText.setFocusableInTouchMode(false);
 
-            for (BranchTree bt:branchTrees){
-                Log.i("1"," "+bt.id);
-                Log.i("2"," "+bt.branchCode);
-                Log.i("3"," "+bt.name);
-                Log.i("4"," "+bt.treeLevel);
-                Log.i("5"," "+bt.children);
-                Log.i("6"," "+bt.currentBranchId);
-                Log.i("7"," "+bt.parentBranchId);
+            for (BranchTree bt : branchTrees) {
+                Log.i("1", " " + bt.id);
+                Log.i("2", " " + bt.branchCode);
+                Log.i("3", " " + bt.name);
+                Log.i("4", " " + bt.treeLevel);
+                Log.i("5", " " + bt.children);
+                Log.i("6", " " + bt.currentBranchId);
+                Log.i("7", " " + bt.parentBranchId);
             }
 
             editText.setOnClickListener(view1 -> {
