@@ -74,8 +74,8 @@ public class KycPresenter {
                 for (int m = 0; m < jsonArray.length(); m++) {
                     JSONObject formIdJson = jsonArray.getJSONObject(m);
                     KycDynamicForm kycDynamicForm = new KycDynamicForm();
-                    if (formIdJson.has("ProfileFormID")) {
-                        kycDynamicForm.profileFormId = formIdJson.getString("ProfileFormID");
+                    if (formIdJson.has("profileFormID")) {
+                        kycDynamicForm.profileFormId = formIdJson.getString("profileFormID");
                     }
 
                     if (formIdJson.has("profileFormDetails")) {

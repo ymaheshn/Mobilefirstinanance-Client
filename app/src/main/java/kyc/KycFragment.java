@@ -289,10 +289,17 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                 @Override
                 public void onApiCallResponseSuccess(String url, String object) {
                     if (!TextUtils.isEmpty(object)) {
-                        Type typeMyType = new TypeToken<ArrayList<BranchTree>>() {
-                        }.getType();
-                        branchTrees = new Gson().fromJson(object, typeMyType);
-                        prepareBranchData(branchTrees);
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(object);
+                            JSONArray structureArray = jsonObject.getJSONArray("structure");
+                            Type typeMyType = new TypeToken<ArrayList<BranchTree>>() {
+                            }.getType();
+                            branchTrees = new Gson().fromJson(structureArray.toString(), typeMyType);
+                            prepareBranchData(branchTrees);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                     kycPresenter.getAllDynamicFormsFromServer();
                 }
@@ -375,9 +382,16 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                                 public void onApiCallResponseSuccess(String url, String object) {
                                     hideProgressBar();
                                     if (!TextUtils.isEmpty(object)) {
-                                        Type typeMyType = new TypeToken<ArrayList<BranchTree>>() {
-                                        }.getType();
-                                        branchTrees = new Gson().fromJson(object, typeMyType);
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(object);
+                                            JSONArray structureArray = jsonObject.getJSONArray("structure");
+                                            Type typeMyType = new TypeToken<ArrayList<BranchTree>>() {
+                                            }.getType();
+                                            branchTrees = new Gson().fromJson(structureArray.toString(), typeMyType);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
                                     }
                                 }
 

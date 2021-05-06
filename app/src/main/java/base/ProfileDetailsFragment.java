@@ -27,8 +27,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.odedtech.mff.mffapp.R;
-import com.shufti.shuftipro.Shuftipro;
-import com.shufti.shuftipro.listeners.ShuftiVerifyListener;
+import com.shutipro.sdk.Shuftipro;
+import com.shutipro.sdk.listeners.ShuftiVerifyListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -363,70 +363,70 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
     }
 
     private void launchShufptiProSdk() {
-
-        jsonObject = new JSONObject();
-        try {
-            jsonObject.put("reference", UUID.randomUUID());
-            jsonObject.put("country", "IN");
-            jsonObject.put("language", "EN");
-            jsonObject.put("email", "kellavivek@gmail.com");
-            jsonObject.put("callback_url", "https://www.yourdomain.com");
-            jsonObject.put("redirect_url", "");
-            jsonObject.put("verification_mode", "any");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        //Creating face object
-        JSONObject faceObject = new JSONObject();
-        try {
-            faceObject.put("proof", "");
-            jsonObject.put("face", faceObject);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        //Creating document object
-        JSONObject documentationObject = new JSONObject();
-        ArrayList<String> doc_supported_types = new ArrayList<String>();
-
-        doc_supported_types.add("passport");
-        doc_supported_types.add("id_card");
-        doc_supported_types.add("driving_license");
-        doc_supported_types.add("credit_or_debit_card");
-
-        try {
-            documentationObject.put("proof", "");
-            documentationObject.put("supported_types", new JSONArray(doc_supported_types));
-
-            //Set parameters in the requested object
-            documentationObject.put("name", "");
-            documentationObject.put("dob", "");
-//            documentationObject.put("document_number", "");
-//            documentationObject.put("expiry_date", "");
-//            documentationObject.put("issue_date", "");
-            documentationObject.put("backside_proof_required", "1");
-
-            jsonObject.put("document", documentationObject);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JSONObject phoneObject = new JSONObject();
-        try {
-            phoneObject.put("proof", "");
-            phoneObject.put("phone_number", "");
-            phoneObject.put("random_code", "");
-            phoneObject.put("text", "");
-
-            jsonObject.put("phone", phoneObject);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        instance = Shuftipro.getInstance("cc30e2766c4594ad53396175b6ca3cda24fff531ce98bf48aaff0f936dbdc480", "xuSH1Ip2YG8BS4ekks2Mo1CWkwY1UjAe");
-        instance.setCaptureEnabled(true);
-        instance.shuftiproVerification(jsonObject, getActivity(), this);
+        ((DashboardActivity) getActivity()).replaceFragment(Constants.SHUFPTI_FRAGMENT, null);
+//        jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put("reference", UUID.randomUUID());
+//            jsonObject.put("country", "IN");
+//            jsonObject.put("language", "EN");
+//            jsonObject.put("email", "kellavivek@gmail.com");
+//            jsonObject.put("callback_url", "https://www.yourdomain.com");
+//            jsonObject.put("redirect_url", "");
+//            jsonObject.put("verification_mode", "any");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        //Creating face object
+//        JSONObject faceObject = new JSONObject();
+//        try {
+//            faceObject.put("proof", "");
+//            jsonObject.put("face", faceObject);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        //Creating document object
+//        JSONObject documentationObject = new JSONObject();
+//        ArrayList<String> doc_supported_types = new ArrayList<String>();
+//
+//        doc_supported_types.add("passport");
+//        doc_supported_types.add("id_card");
+//        doc_supported_types.add("driving_license");
+//        doc_supported_types.add("credit_or_debit_card");
+//
+//        try {
+//            documentationObject.put("proof", "");
+//            documentationObject.put("supported_types", new JSONArray(doc_supported_types));
+//
+//            //Set parameters in the requested object
+//            documentationObject.put("name", "");
+//            documentationObject.put("dob", "");
+////            documentationObject.put("document_number", "");
+////            documentationObject.put("expiry_date", "");
+////            documentationObject.put("issue_date", "");
+//            documentationObject.put("backside_proof_required", "1");
+//
+//            jsonObject.put("document", documentationObject);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        JSONObject phoneObject = new JSONObject();
+//        try {
+//            phoneObject.put("proof", "");
+//            phoneObject.put("phone_number", "");
+//            phoneObject.put("random_code", "");
+//            phoneObject.put("text", "");
+//
+//            jsonObject.put("phone", phoneObject);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        instance = Shuftipro.getInstance("cc30e2766c4594ad53396175b6ca3cda24fff531ce98bf48aaff0f936dbdc480", "xuSH1Ip2YG8BS4ekks2Mo1CWkwY1UjAe");
+//        instance.setCaptureEnabled(true);
+//        instance.shuftiproVerification(jsonObject, getActivity(), this);
 
 
     }

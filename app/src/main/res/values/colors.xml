@@ -34,4 +34,5 @@
     <color name="error_red">#830404</color>
 
     <color name="app_bg">#EEEEEE</color>
+    <color name="borders">#EFF1F6</color>
 </resources>

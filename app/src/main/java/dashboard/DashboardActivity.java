@@ -64,6 +64,7 @@ import onboard.OnBoardFragment;
 import pub.devrel.easypermissions.EasyPermissions;
 import savings.SavingsFragment;
 import services.LocationUpdatesBroadcastReceiver;
+import shufpti.ShufptiVerificationServicesFragment;
 import vas.VasFragment;
 
 import static Utilities.Constants.ADD_CLIENT_FRAGMENT;
@@ -77,6 +78,7 @@ import static Utilities.Constants.ONBOARD_FRAGMENT;
 import static Utilities.Constants.PROFILE_DETAILS_FRAGMENT;
 import static Utilities.Constants.SAVINGS_FRAGMENT;
 import static Utilities.Constants.SCAN;
+import static Utilities.Constants.SHUFPTI_FRAGMENT;
 import static Utilities.Constants.VAS_FRAGMENT;
 
 public class DashboardActivity extends BaseActivity implements IOnFragmentChangeListener, MaterialSearchView.OnQueryTextListener, MaterialSearchView.SearchViewListener {
@@ -329,6 +331,9 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     currentFrament = new EmptyFragment();
                     addFragmentToContent(currentFrament, "Reports");
                     break;
+                case SHUFPTI_FRAGMENT:
+                    currentFrament = new ShufptiVerificationServicesFragment();
+                    addFragmentToContent(currentFrament, "Shufpti Pro");
             }
         }
     }
@@ -414,6 +419,12 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     adharScannerIV.setVisibility(View.VISIBLE);
                     currentFrament.setArguments(intentExtra);
                     replaceFragmentToContent(currentFrament, "client");
+                    break;
+                case SHUFPTI_FRAGMENT:
+                    headerView.setVisibility(View.GONE);
+                    adharScannerIV.setVisibility(View.GONE);
+                    currentFrament = new ShufptiVerificationServicesFragment();
+                    replaceFragmentToContent(currentFrament,"Shufti Pro");
                     break;
             }
         }

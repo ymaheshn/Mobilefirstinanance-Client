@@ -253,16 +253,16 @@ public class LoansFragment extends BaseFragment implements LoansFragmentCallback
                 HashMap<String, List<Datum>> groupData = new HashMap<>();
                 for (Datum againDatum : profilesResponse.data) {
                     if (datum.contractCodes.branch.equals(againDatum.contractCodes.branch)) {
-                        if (TextUtils.isEmpty(againDatum.contractCodes.group)) {
-                            againDatum.contractCodes.group = "Group";
+                        if (TextUtils.isEmpty(againDatum.contractCodes.name)) {
+                            againDatum.contractCodes.name = "Group";
                         }
-                        if (groupData.containsKey(againDatum.contractCodes.group)) {
-                            List<Datum> data = groupData.get(againDatum.contractCodes.group);
+                        if (groupData.containsKey(againDatum.contractCodes.name)) {
+                            List<Datum> data = groupData.get(againDatum.contractCodes.name);
                             data.add(againDatum);
                         } else {
                             ArrayList<Datum> data = new ArrayList<>();
                             data.add(againDatum);
-                            groupData.put(againDatum.contractCodes.group, data);
+                            groupData.put(againDatum.contractCodes.name, data);
                         }
                     }
                 }
