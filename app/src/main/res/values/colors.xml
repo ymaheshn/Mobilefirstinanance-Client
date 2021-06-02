@@ -35,4 +35,7 @@
 
     <color name="app_bg">#EEEEEE</color>
     <color name="borders">#EFF1F6</color>
+
+    <color name="theme">#619A92</color>
+    <color name="theme_dark">#3D6E67</color>
 </resources>

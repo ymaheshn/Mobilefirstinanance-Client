@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/_10dp"
+    android:theme="@style/CardView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_weight="4"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_10dp"
+            app:contentPadding="@dimen/_15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:paddingHorizontal="@dimen/_10dp"
+                    android:src="@drawable/check_balance" />
+
+                <TextView
+                    android:id="@+id/text_product"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5dp"
+                    android:text="Check Balance"
+                    android:textColor="@color/theme_dark"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_weight="4"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_10dp"
+            app:contentPadding="@dimen/_15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:src="@drawable/airtime" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5dp"
+                    android:text="Airtime"
+                    android:textColor="@color/theme_dark"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_transfer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_weight="4"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_10dp"
+            app:contentPadding="@dimen/_15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_transfer" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5dp"
+                    android:text="Transfer"
+                    android:textColor="@color/theme_dark"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_weight="4"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_10dp"
+            app:contentPadding="@dimen/_15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:src="@drawable/pay_bills" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5dp"
+                    android:text="Pay Bills"
+                    android:textColor="@color/theme_dark"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_weight="4"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_10dp"
+            app:contentPadding="@dimen/_15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:src="@drawable/buy_data" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5dp"
+                    android:text="Buy Data"
+                    android:textColor="@color/theme_dark"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_weight="4"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_10dp"
+            app:contentPadding="@dimen/_15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:src="@drawable/block_card" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5dp"
+                    android:text="Block Card"
+                    android:textColor="@color/theme_dark"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+</ScrollView>

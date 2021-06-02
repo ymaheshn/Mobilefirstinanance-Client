@@ -15,9 +15,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-feature android:name="android.hardware.bluetooth" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-feature android:name="android.hardware.bluetooth" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name="networking.MyApplication"
@@ -28,7 +29,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="LockedOrientationActivity">
+        tools:ignore="LockedOrientationActivity"
+        tools:replace="android:icon">
+        <activity android:name="vas.BlockCardActivity"></activity>
+        <activity android:name="vas.TransferActivity" />
         <activity
             android:name="dashboard.DashboardActivity"
             android:screenOrientation="portrait"
@@ -56,22 +60,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="client.login.ClientLoginActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="client.login.ClientOTPActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="client.login.ClientOtpScrren"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="client.login.PinActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="client.login.SignUpActivity"
             android:screenOrientation="portrait" />
@@ -93,7 +93,6 @@
         <service
             android:name="domain.services.jobs.SchedulerJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
             android:name="domain.services.jobs.GcmJobService"
             android:exported="true"

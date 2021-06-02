@@ -140,7 +140,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
         ButterKnife.bind(this);
         DBOperations.getInstance(this);
         CURRENT_FRAGMENT = -1;
-        addFragment(MAP_FRAGMENT, "");
+        addFragment(VAS_FRAGMENT, "");
 
         createLocationRequest();
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -324,8 +324,11 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     addFragmentToContent(currentFrament, getString(R.string.onboard));
                     break;
                 case VAS_FRAGMENT:
-                    currentFrament = new EmptyFragment();
-                    addFragmentToContent(currentFrament, "Savings");
+                    headerView.setVisibility(View.VISIBLE);
+                    adharScannerIV.setVisibility(View.GONE);
+                    headerTitleTV.setText(getString(R.string.vas));
+                    currentFrament = new VasFragment();
+                    replaceFragmentToContent(currentFrament, getString(R.string.vas));
                     break;
                 case SAVINGS_FRAGMENT:
                     currentFrament = new EmptyFragment();
@@ -424,7 +427,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     headerView.setVisibility(View.GONE);
                     adharScannerIV.setVisibility(View.GONE);
                     currentFrament = new ShufptiVerificationServicesFragment();
-                    replaceFragmentToContent(currentFrament,"Shufti Pro");
+                    replaceFragmentToContent(currentFrament, "Shufti Pro");
                     break;
             }
         }

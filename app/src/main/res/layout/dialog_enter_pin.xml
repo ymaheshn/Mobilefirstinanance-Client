@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please enter your pin"
+        android:textSize="20sp" />
+
+    <com.mukesh.OtpView
+        android:id="@+id/otp_view"
+        style="@style/OtpWidget.OtpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:inputType="numberPassword"
+        android:itemBackground="@drawable/login_code_btn_selector"
+        android:textColor="@android:color/black"
+        app:itemCount="6"
+        app:lineColor="@color/colorBlack"
+        app:viewType="none" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/save_btn_bg_inactive"
+        android:text="Submit"
+        android:textColor="@color/colorWhite" />
+
+</LinearLayout>
