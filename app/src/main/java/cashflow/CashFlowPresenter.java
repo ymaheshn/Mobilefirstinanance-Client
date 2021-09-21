@@ -54,7 +54,7 @@ public class CashFlowPresenter implements WebService.OnServiceResponseListener {
                     s, new TypeToken<HashMap<String, String>>() {
                     }.getType()
             );
-            String url = PreferenceConnector.readString(context, "BASE_URL", "") +
+            String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.CASH_FLOW_POST_URL +
                     PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
             WebService.getInstance().apiPostRequestCall(url,
@@ -90,7 +90,7 @@ public class CashFlowPresenter implements WebService.OnServiceResponseListener {
     public void getCashFlowData(String workFlowId, String workFlowProfileId) {
         if (UtilityMethods.isNetworkAvailable(context)) {
             icashFlowCallBacks.showProgressBar();
-            String url = PreferenceConnector.readString(context, "BASE_URL", "") +
+            String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.CASH_FLOW_GET_INFO_URL +
                     PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
 
@@ -148,7 +148,7 @@ public class CashFlowPresenter implements WebService.OnServiceResponseListener {
                     s, new TypeToken<HashMap<String, String>>() {
                     }.getType()
             );
-            String url = PreferenceConnector.readString(context, "BASE_URL", "") +
+            String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.CASH_FLOW_UPDATE_URL +
                     PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
             url = url.replace("WORKFLOW_PROFILE_ID", templateDetialsId);

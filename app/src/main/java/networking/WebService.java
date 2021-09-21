@@ -7,11 +7,14 @@ import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -39,7 +42,49 @@ public class WebService {
         return webService;
     }
 
+    public void apiPostJsonRequest(final String url, final JSONArray params, final OnServiceResponseListener onServiceResponseListener) {
+        JsonRequest<JSONObject> jsonRequest = new JsonRequest<JSONObject>(Request.Method.POST, url, params.toString(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Volley success", response.toString());
+                onServiceResponseListener.onApiCallResponseSuccess(url, response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Volley error", error.toString());
+                String message = VolleyErrorHelper
+                        .getMessage(error, MyApplication.getInstance());
+                if (TextUtils.isEmpty(message)) {
+                    message = "Oops!! Something went wrong";
+                }
+                onServiceResponseListener.onApiCallResponseFailure(message);
+            }
+        }) {
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String jsonString = new String(response.data,
+                            HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+                    return Response.success(new JSONObject(jsonString),
+                            HttpHeaderParser.parseCacheHeaders(response));
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                } catch (JSONException je) {
+                    return Response.error(new ParseError(je));
+                }
+            }
+        };
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(jsonRequest);
+    }
+
     public void apiGetRequestCallJSON(final String url, final OnServiceResponseListener onServiceResponseListener) {
+        HttpsTrustManager.allowAllSSL();
         Log.d("url", "url :" + url);
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
@@ -65,6 +110,7 @@ public class WebService {
     }
 
     public void apiGetRequestCall(final String url, final OnServiceResponseListener onServiceResponseListener) {
+        HttpsTrustManager.allowAllSSL();
         // Request a string response from the provided URL.
         Log.d("url", "url :" + url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -94,7 +140,7 @@ public class WebService {
     }
 
     public void apiPostRequestCallJSON(final String url, final JSONObject params, final OnServiceResponseListener onServiceResponseListener) {
-
+        HttpsTrustManager.allowAllSSL();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -129,7 +175,7 @@ public class WebService {
     }
 
     public void apiPostRequestCallJSONArray2(final String url, final JSONArray params, final OnServiceResponseListener onServiceResponseListener) {
-
+        HttpsTrustManager.allowAllSSL();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, params, response -> {
             Log.i("VOLLEY", response.toString());
             onServiceResponseListener.onApiCallResponseSuccess(url, response.toString());
@@ -170,13 +216,10 @@ public class WebService {
 
     public void apiPostRequestCallJSONArray(final String url, final JSONArray params,
                                             final OnServiceResponseListener onServiceResponseListener) {
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i("VOLLEY", response.toString());
-                onServiceResponseListener.onApiCallResponseSuccess(url, response.toString());
-            }
+        HttpsTrustManager.allowAllSSL();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
+            Log.i("VOLLEY", response.toString());
+            onServiceResponseListener.onApiCallResponseSuccess(url, response.toString());
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -217,6 +260,7 @@ public class WebService {
 
     public void apiPutRequestCallJSON(final String url, final JSONObject params,
                                       final OnServiceResponseListener onServiceResponseListener) {
+        HttpsTrustManager.allowAllSSL();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -258,6 +302,7 @@ public class WebService {
 
     public void apiMultipart(String url, Map<String, VolleyMultipartRequest.DataPart> params,
                              final OnServiceResponseListener onServiceResponseListener) {
+        HttpsTrustManager.allowAllSSL();
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {

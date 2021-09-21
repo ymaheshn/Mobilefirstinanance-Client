@@ -1,7 +1,13 @@
 package base;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+
+import com.odedtech.mff.mffapp.R;
+
+import Utilities.PreferenceConnector;
+import login.LoginActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -21,4 +27,10 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    protected void navigateToLogin() {
+        PreferenceConnector.writeString(getApplicationContext(), getString(R.string.accessToken), "");
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 }

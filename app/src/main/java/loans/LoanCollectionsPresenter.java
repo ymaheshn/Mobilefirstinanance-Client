@@ -9,6 +9,7 @@ import com.odedtech.mff.mffapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -28,6 +29,8 @@ import loans.model.ProfileCollection;
 import networking.WebService;
 import networking.WebServiceURLs;
 
+import static networking.WebServiceURLs.BASE_URL;
+
 public class LoanCollectionsPresenter {
 
     private Context context;
@@ -44,28 +47,38 @@ public class LoanCollectionsPresenter {
     }
 
     void savePayment(double totalAmount, JSONArray jsonArray) {
-        String url = PreferenceConnector.readString(context, "BASE_URL", "") +
-                WebServiceURLs.SAVE_CONTRACT_DATA +
+        String url = BASE_URL +
+                WebServiceURLs.SAVE_CONTRACT_DATA_NEW +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
 
-        WebService.getInstance().apiPostRequestCallJSONArray2(url, jsonArray, new WebService.OnServiceResponseListener() {
+        WebService.getInstance().apiPostJsonRequest(url, jsonArray, new WebService.OnServiceResponseListener() {
             @Override
             public void onApiCallResponseSuccess(String url, String object) {
                 String message = null;
                 try {
-                    JSONArray jsonArray1 = new JSONArray(object);
-                    message = "Installment Successful";
+                    JSONObject jsonObject = new JSONObject(object);
+                    int status = jsonObject.getInt("status");
+                    if (status == 200) {
+                        message = jsonObject.getString("message");
+                        int receiptID = jsonObject.getJSONObject("data").getJSONArray("portfolio")
+                                .getJSONObject(0).getInt("receiptID");
+                        loansFragmentCallback.onSaveContractData(message, receiptID, (int) totalAmount);
+                        return;
+                    } else {
+                        message = null;
+                    }
                 } catch (JSONException e) {
+                    message = null;
                     Log.e("error", "error :" + e);
                     e.printStackTrace();
                 }
-                loansFragmentCallback.onSaveContractData(message, (int) totalAmount);
+                loansFragmentCallback.onSaveContractData(message, -1, (int) totalAmount);
                 // remote call was successful--the Comment will be updated locally to reflect that sync is no longer pending
             }
 
             @Override
             public void onApiCallResponseFailure(String errorMessage) {
-                loansFragmentCallback.onSaveContractData(null, (int) totalAmount);
+                loansFragmentCallback.onSaveContractData(null, -1, (int) totalAmount);
             }
         });
 
@@ -125,7 +138,7 @@ public class LoanCollectionsPresenter {
                         totalAmount = totalAmount + Integer.parseInt(loanCollection.getLoanAmount());
                     }
                     if (dontUpdateForFirstTime) {
-                        loansFragmentCallback.onSaveContractData(null, totalAmount);
+                        loansFragmentCallback.onSaveContractData(null, -1, totalAmount);
                     }
                     dontUpdateForFirstTime = true;
                 }

@@ -114,7 +114,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     }
 
     public void getAllClients() {
-        String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") +
+        String url = WebServiceURLs.BASE_URL +
                 WebServiceURLs.ALL_PROFILES_URL +
                 PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
         url = url.replaceAll("PAGE_NUMBER", "" + 0).replaceAll("NUMBER_OF_RECORDS", "10");

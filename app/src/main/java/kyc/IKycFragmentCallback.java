@@ -23,4 +23,6 @@ public interface IKycFragmentCallback {
     void showAlert();
 
     void loadDynamicFormToView(ArrayList<KycDynamicForm> allDynamicFormList, HashMap<String, KycDynamicForm> allDymamicFormHashmap);
+
+    void loadDynamicSpinner(ArrayList<KycDynamicForm> allDynamicFormList, HashMap<String, KycDynamicForm> allDymamicFormHashmap);
 }

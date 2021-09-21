@@ -20,6 +20,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import Utilities.AlertDialogUtils;
+import loans.model.CollectionPortfolio;
+import loans.model.CollectionPortfolioDetails;
 import loans.model.Installments;
 import loans.model.LoanBluetoothData;
 import loans.model.ProfileCollection;
@@ -32,7 +34,8 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
     private int totalAmount;
 
 
-    public InstallmentsAdapter(Context context, ArrayList<Installments> collections, OnUpdateAmount onUpdateAmount) {
+    public InstallmentsAdapter(Context context, ArrayList<Installments> collections,
+                               OnUpdateAmount onUpdateAmount) {
         this.context = context;
         this.collections = collections;
         this.onUpdateAmount = onUpdateAmount;
@@ -48,8 +51,8 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Installments installments = collections.get(i);
-        ProfileCollection profileCollection = installments.collectionPR;
-        ProfileCollection profileCollectionNext = installments.collectionIP;
+        CollectionPortfolioDetails profileCollection = installments.collectionPR;
+        CollectionPortfolioDetails profileCollectionNext = installments.collectionIP;
         viewHolder.textDate.setText(profileCollection.event_time);
         if (profileCollection.event_type.equalsIgnoreCase("PR")) {
             viewHolder.textPrincipal.setText(String.valueOf(profileCollection.event_value));
@@ -62,6 +65,7 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
         viewHolder.checkInstallment.setOnCheckedChangeListener(null);
         viewHolder.checkInstallment.setChecked(installments.isChecked);
         viewHolder.checkInstallment.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
         });
     }
 
@@ -85,25 +89,22 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
             textPrincipal = itemView.findViewById(R.id.text_prinicpal);
             textTotal = itemView.findViewById(R.id.text_total);
             checkInstallment = itemView.findViewById(R.id.check_installment);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Installments installments = collections.get(getAdapterPosition());
-                    boolean previousSelection = checkPreviousSelection(getAdapterPosition());
-                    if (previousSelection) {
-                        int totalAmountInstallment = Integer.parseInt(textTotal.getText().toString());
-                        if (!installments.isChecked) {
-                            totalAmount = totalAmount + totalAmountInstallment;
-                        } else {
-                            deselectThePreviousSelections(getAdapterPosition());
-                            totalAmount = totalAmount - totalAmountInstallment;
-                        }
-                        onUpdateAmount.onUpdate(totalAmount);
-                        installments.isChecked = !installments.isChecked;
-                        notifyDataSetChanged();
+            itemView.setOnClickListener(v -> {
+                Installments installments = collections.get(getAdapterPosition());
+                boolean previousSelection = checkPreviousSelection(getAdapterPosition());
+                if (previousSelection) {
+                    int totalAmountInstallment = Integer.parseInt(textTotal.getText().toString());
+                    if (!installments.isChecked) {
+                        totalAmount = totalAmount + totalAmountInstallment;
                     } else {
-                        AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select the previous installments");
+                        deselectThePreviousSelections(getAdapterPosition());
+                        totalAmount = totalAmount - totalAmountInstallment;
                     }
+                    onUpdateAmount.onUpdate(totalAmount);
+                    installments.isChecked = !installments.isChecked;
+                    notifyDataSetChanged();
+                } else {
+                    AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select the previous installments");
                 }
             });
         }
@@ -135,7 +136,7 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
             if (collection.isChecked) {
                 try {
 
-                    JSONObject jsonObjectFromPR = new JSONObject(gson.toJson(collection.collectionPR, ProfileCollection.class));
+                    JSONObject jsonObjectFromPR = new JSONObject(gson.toJson(collection.collectionPR, CollectionPortfolioDetails.class));
                     JSONObject eventJSONPR = (JSONObject) jsonObjectFromPR.get("eventjson");
                     JSONObject eventJSONTransPR = (JSONObject) eventJSONPR.get("Transaction");
 
@@ -156,10 +157,9 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
 
                     JSONObject jsonObjectIP = new JSONObject();
 
-                    JSONObject jsonObjectFromIP = new JSONObject(gson.toJson(collection.collectionIP, ProfileCollection.class));
+                    JSONObject jsonObjectFromIP = new JSONObject(gson.toJson(collection.collectionIP, CollectionPortfolioDetails.class));
                     JSONObject eventJSONIP = (JSONObject) jsonObjectFromIP.get("eventjson");
                     JSONObject eventJSONTransIP = (JSONObject) eventJSONIP.get("Transaction");
-
 
 
                     jsonObjectIP.put("ContractUUID", jsonObjectFromIP.get("contractuuid"));
@@ -184,9 +184,14 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
     }
 
 
-    public LoanBluetoothData getBluetoothData() {
+    public LoanBluetoothData getBluetoothData(LoanBluetoothData existingData) {
         int interest = 0, principal = 0, total = 0;
-        LoanBluetoothData bluetoothData = new LoanBluetoothData();
+        LoanBluetoothData bluetoothData;
+        if (existingData != null) {
+            bluetoothData = existingData;
+        } else {
+            bluetoothData = new LoanBluetoothData();
+        }
         for (Installments collection : collections) {
             if (collection.isChecked) {
                 principal = principal + Integer.parseInt(collection.collectionPR.event_value);
@@ -194,9 +199,9 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
                 total = total + Integer.parseInt(collection.collectionPR.event_value) + Integer.parseInt(collection.collectionIP.event_value);
             }
         }
-        bluetoothData.interest = interest;
-        bluetoothData.principal = interest;
-        bluetoothData.total = interest;
+        bluetoothData.interest = bluetoothData.interest + interest;
+        bluetoothData.principal = bluetoothData.principal + principal;
+        bluetoothData.total = bluetoothData.total + total;
         return bluetoothData;
     }
 

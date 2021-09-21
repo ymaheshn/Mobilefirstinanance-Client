@@ -9,7 +9,7 @@ import loans.model.ProfileCollection;
 
 public interface LoanCollectionsFragmentCallback extends BasePresenterCallback {
 
-    void onSaveContractData(String message, int i);
+    void onSaveContractData(String message, int recieptId, int i);
 
     void onGetLinkedProfile(Datum datum, List<ProfileCollection> profileCollections);
 }

@@ -1,19 +1,25 @@
 package base;
 
 import android.app.DatePickerDialog;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.odedtech.mff.mffapp.R;
+
+import java.io.IOException;
 import java.util.Calendar;
 
 import Utilities.UtilityMethods;
+import retrofit2.Response;
 
 public class BaseFragment extends Fragment {
     @Nullable
@@ -63,5 +69,22 @@ public class BaseFragment extends Fragment {
                 }, mYear, mMonth, mDay);
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
+    }
+
+    protected void checkResponseError(Response response) {
+        if (response.code() == 401) {
+            try {
+                MFFErrorResponse errorResponse = new Gson()
+                        .fromJson(response.errorBody().string(), MFFErrorResponse.class);
+                if (errorResponse.error != null && errorResponse.error.equals("invalid_token")) {
+                    ((BaseActivity) getActivity()).navigateToLogin();
+                }
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Toast.makeText(getActivity(),
+                getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
     }
 }

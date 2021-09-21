@@ -8,22 +8,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.odedtech.mff.mffapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
 import Utilities.PreferenceConnector;
+import base.MFFResponse;
+import base.MFFResponseNew;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dashboard.DashboardActivity;
+import login.model.EntityResponse;
+import login.model.LoginRequest;
+import login.model.LoginResponse;
+import network.MFFApiWrapper;
 import networking.WebService;
 import networking.WebServiceURLs;
 import otp.OTPActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static Utilities.Constants.CONTACT_URL;
 
@@ -33,12 +46,24 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
     @BindView(R.id.numberET)
     EditText numberET;
 
+    @BindView(R.id.etPassword)
+    EditText etPassword;
+
+    @BindView(R.id.etUserName)
+    EditText etUserName;
+
+    @BindView(R.id.view_switcher)
+    ViewSwitcher viewSwitcher;
+
+    @BindView(R.id.loginWithMobileNumber)
+    TextView loginWithMobileNumber;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setting theme of the application
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_with_username);
         ButterKnife.bind(LoginActivity.this);
         // Example of a call to a native method
         String phoneNumber = PreferenceConnector.readString(this, getString(R.string.phoneNumber), "");
@@ -46,6 +71,8 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
             numberET.setText(phoneNumber);
             numberET.setSelection(phoneNumber.length());
         }
+
+        loginWithMobileNumber.setOnClickListener(view -> viewSwitcher.showNext());
     }
 
     /**
@@ -54,10 +81,97 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
      */
 
     public void nextBtnClicked(View view) {
-        loginApiCall(numberET.getText().toString());
+        if (viewSwitcher.getCurrentView().getId() == R.id.containerUsername) {
+            loginApiCall(numberET.getText().toString());
+        } else {
+            loginApiCallWithUsername(etUserName.getText().toString(), etPassword.getText().toString());
+        }
     }
 
     private ProgressDialog progressDialog = null;
+
+    private void loginApiCallWithUsername(String username, String password) {
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+            Toast.makeText(LoginActivity.this,
+                    "Details can't be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.password = password;
+        loginRequest.userName = username;
+        loginRequest.rootUser = "DEV";
+
+        MFFApiWrapper.getInstance().service.login(loginRequest).enqueue(new Callback<MFFResponse<LoginResponse>>() {
+            @Override
+            public void onResponse(Call<MFFResponse<LoginResponse>> call, Response<MFFResponse<LoginResponse>> response) {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                MFFResponse<LoginResponse> responseBody = response.body();
+                if (responseBody.statusCodeValue == HttpURLConnection.HTTP_OK && !TextUtils.isEmpty(responseBody.body.accessToken)) {
+                    PreferenceConnector.writeString(getApplicationContext(), getString(R.string.accessToken),
+                            responseBody.body.accessToken);
+                    PreferenceConnector.writeBoolean(getApplicationContext(), getString(R.string.loginStatus), true);
+                    getEntityDetails();
+                } else {
+                    Toast.makeText(LoginActivity.this,
+                            getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MFFResponse<LoginResponse>> call, Throwable t) {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                Toast.makeText(LoginActivity.this,
+                        getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void getEntityDetails() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
+        String accessToken = PreferenceConnector.readString(this, getString(R.string.accessToken), "");
+        MFFApiWrapper.getInstance().service.getEntityDetails(accessToken).enqueue(new Callback<MFFResponseNew<EntityResponse>>() {
+            @Override
+            public void onResponse(Call<MFFResponseNew<EntityResponse>> call, Response<MFFResponseNew<EntityResponse>> response) {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                MFFResponseNew<EntityResponse> body = response.body();
+                if (body.status == HttpURLConnection.HTTP_OK) {
+                    PreferenceConnector.writeString(getApplicationContext(), getString(R.string.entityname),
+                            body.data.users.get(0).profileDetails.entityName);
+                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(LoginActivity.this,
+                            getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MFFResponseNew<EntityResponse>> call, Throwable t) {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                Toast.makeText(LoginActivity.this,
+                        getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void loginApiCall(String phoneNumber) {
         progressDialog = new ProgressDialog(this);

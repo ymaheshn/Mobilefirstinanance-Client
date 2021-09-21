@@ -47,7 +47,7 @@ public class Constants {
     public static boolean isFromAddClient = false;
     public static WorkFlowTemplateDto workFlowTemplateDt = null;
 
-    public static final String CONTACT_URL = "https://request.mobilefirstfinance.com/book_an_appointment";
+    public static final String CONTACT_URL = "https://odedtech.atlassian.net/servicedesk/customer/portal/3";
 
     public interface KeyExtras {
         String CONTRACT_ID = "contract_id";

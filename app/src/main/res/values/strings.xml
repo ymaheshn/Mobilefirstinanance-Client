@@ -2,11 +2,13 @@
     <!--    <string name="app_name">MFFApp</string>-->
     <!-- Login Page-->
     <string name="login_header_text">Partner Login</string>
-    <string name="login_sub_content_text">Please enter  your mobile number.....</string>
+    <string name="login_text">Login</string>
+    <string name="login_sub_content_username_text">Please enter your username</string>
+    <string name="login_sub_content_text">Please enter your mobile number</string>
     <string name="login_main_header">finance</string>
 
     <!-- OTP -->
-    <string name="resend_text">Resend OTP</string>
+    <string name="resend_text">Resend PIN</string>
     <string name="verification_text">Verification Code</string>
     <string name="code_text">Please type the verification code sent</string>
     <string name="number_bundle">number</string>
@@ -31,6 +33,7 @@
     <!-- Preference Connector keys-->
     <string name="loginStatus">isLoggedIn</string>
     <string name="accessToken">accessToken</string>
+    <string name="entityname">entityname</string>
     <string name="portNumber">portNumber</string>
     <string name="baseURL">baseURL</string>
     <string name="phoneNumber">phoneNumber</string>
@@ -39,13 +42,14 @@
     <string name="disbursals">Disbursals</string>
     <string name="select_all">Select All</string>
     <string name="collect">Collect</string>
-    <string name="collection">Collect</string>
+    <string name="collection_cash">Cash</string>
+    <string name="collection_wire">Wire</string>
     <string name="print_receipt">Print Receipt</string>
     <string name="next_collection_principal">Next Collection Principal</string>
     <string name="next_collection_interest">Next Collection Interest</string>
     <string name="next_total_collection">Next Total Collection</string>
     <string name="balance">Balance</string>
-    <string name="pay">Pay(₹)</string>
+    <string name="pay">Pay</string>
     <string name="timeout">Timeout</string>
     <string name="nointernet">No Internet</string>
     <string name="generic_error">Oops!! Something went wrong</string>
@@ -85,6 +89,8 @@
     <string name="confirm_four_digit_code">Confirm 4 Digit Code</string>
 
     <string name="sign_up">Don\'t have account yet? Sign Up</string>
+    <string name="login_with_mobile_number">Login with Mobile Number</string>
+    <string name="just_sign_up">Sign Up?</string>
     <string name="app_name_mff_client">MFF Client</string>
     <string name="server_client_id">48802848445-o1dk720hfb8em9gn960441vfu31f4unq.apps.googleusercontent.com</string>
     <string name="facebook_app_id">1835340143432268</string>
@@ -116,5 +122,6 @@
     <string name="start_verification">Start Verification</string>
     <string name="provide_credentials">Please provide clientId and secretKey or accessToken before proceed.</string>
     <string name="select_service">Please, select one or more methods of verification.</string>
+    <string name="something_went_wrong">Something went wrong. Please try after some time.</string>
 
 </resources>

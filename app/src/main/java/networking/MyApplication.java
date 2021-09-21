@@ -1,6 +1,5 @@
 package networking;
 
-import android.app.Activity;
 import android.app.Application;
 import android.location.Location;
 import android.text.TextUtils;
@@ -11,20 +10,13 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.Volley;
 import com.prowesspride.api.Setup;
 
-import javax.inject.Inject;
-
 import bluetooth.evolute.BluetoothComm;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
-import di.DaggerAppComponent;
-import domain.services.jobs.SyncCommentJobManagerInitializer;
 
 /**
  * Created by gufran khan on 22-06-2018.
  */
 
-public class MyApplication extends Application implements HasActivityInjector {
+public class MyApplication extends Application {
 
     public static final String TAG = MyApplication.class.getSimpleName();
 
@@ -33,21 +25,10 @@ public class MyApplication extends Application implements HasActivityInjector {
     private static MyApplication mInstance;
     private Location currentLocation;
 
-    @Inject
-    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
-
-    @Inject
-    SyncCommentJobManagerInitializer syncCommentJobManagerInitializer;
-
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        DaggerAppComponent.builder()
-                .application(this)
-                .build()
-                .inject(this);
-        syncCommentJobManagerInitializer.initialize(this);
     }
 
     public static synchronized MyApplication getInstance() {
@@ -56,7 +37,8 @@ public class MyApplication extends Application implements HasActivityInjector {
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
-            mRequestQueue = Volley.newRequestQueue(getApplicationContext(), new HurlStack(null, ClientSSLSocketFactory.getSocketFactory()));
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext(), new HurlStack(null,
+                    ClientSSLSocketFactory.getSocketFactory()));
         }
 
         return mRequestQueue;
@@ -125,10 +107,5 @@ public class MyApplication extends Application implements HasActivityInjector {
 
     public Location getCurrentLocation() {
         return currentLocation;
-    }
-
-    @Override
-    public AndroidInjector<Activity> activityInjector() {
-        return dispatchingAndroidInjector;
     }
 }

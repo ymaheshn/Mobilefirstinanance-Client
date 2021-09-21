@@ -1,6 +1,5 @@
 package networking;
 
-import android.app.Application;
 import android.net.SSLCertificateSocketFactory;
 import android.net.SSLSessionCache;
 
@@ -27,9 +26,8 @@ public class ClientSSLSocketFactory extends SSLCertificateSocketFactory {
         super(handshakeTimeoutMillis);
     }
 
-    public static SSLSocketFactory getSocketFactory(){
-        try
-        {
+    public static SSLSocketFactory getSocketFactory() {
+        try {
             // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {
@@ -49,9 +47,11 @@ public class ClientSSLSocketFactory extends SSLCertificateSocketFactory {
             };
 
             X509TrustManager tm = new X509TrustManager() {
-                public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {}
+                public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+                }
 
-                public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {}
+                public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+                }
 
                 public X509Certificate[] getAcceptedIssuers() {
                     return null;

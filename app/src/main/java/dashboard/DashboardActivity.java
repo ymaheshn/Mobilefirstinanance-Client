@@ -47,7 +47,6 @@ import base.BaseFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.android.AndroidInjection;
 import database.db.DBOperations;
 import domain.AddLoanCollectionUseCase;
 import domain.GetLoanCollectionsUseCase;
@@ -58,6 +57,7 @@ import interfaces.IOnHeaderItemsClickListener;
 import kyc.KycFragment;
 import loans.LoanCollectionFragment;
 import loans.LoansFragment;
+import loans.LoansFragmentNew;
 import maps.MapViewFragment;
 import networking.MyApplication;
 import onboard.OnBoardFragment;
@@ -132,7 +132,6 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
     private boolean isSubmitClick;
 
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dashboard);
@@ -357,6 +356,8 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
         query = null;
         if (currentFrament instanceof OnBoardFragment) {
             ((OnBoardFragment) currentFrament).getAllClients();
+        } else if (currentFrament instanceof LoansFragmentNew) {
+            ((LoansFragmentNew) currentFrament).getCollectionPortfolio();
         }
     }
 
@@ -386,8 +387,8 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
                     headerTitleTV.setText(getString(R.string.contracts));
-                    // imgSearch.setVisibility(View.VISIBLE);
-                    currentFrament = new LoansFragment();
+                    imgSearch.setVisibility(View.VISIBLE);
+                    currentFrament = new LoansFragmentNew();
                     replaceFragmentToContent(currentFrament, getString(R.string.contracts));
                     break;
                 case LOAN_COLLECTIONS_FRAGMENT:

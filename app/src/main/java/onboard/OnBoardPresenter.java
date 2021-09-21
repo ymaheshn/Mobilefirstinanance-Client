@@ -30,7 +30,7 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
         if (pageNumber == 0) {
             iOnBoardFragmentCallback.showProgressBar();
         }
-        String url = PreferenceConnector.readString(context, "BASE_URL", "") +
+        String url = WebServiceURLs.BASE_URL+
                 WebServiceURLs.ALL_PROFILES_URL +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
         url = url.replaceAll("PAGE_NUMBER", "" + pageNumber).replaceAll("NUMBER_OF_RECORDS", "10");
@@ -63,7 +63,7 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
             return;
         }
         iOnBoardFragmentCallback.showProgressBar();
-        String url = PreferenceConnector.readString(context, "BASE_URL", "") +
+        String url = WebServiceURLs.BASE_URL +
                 WebServiceURLs.SEARCH_PROFILES_URL +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
         url = url.replaceAll("NAME", "" + searchQuery);
@@ -204,7 +204,7 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
     public void getIsLinkedStatusAPI(String profileId) {
         iOnBoardFragmentCallback.showProgressBar();
         String updatedStatusUrl = WebServiceURLs.PROFILE_LINK_STATUS_URL.replace("PROFILE_ID", profileId);
-        String url = PreferenceConnector.readString(context, "BASE_URL", "") +
+        String url = WebServiceURLs.BASE_URL +
                 updatedStatusUrl +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
         WebService.getInstance().apiGetRequestCall(url,
@@ -214,10 +214,12 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
                         iOnBoardFragmentCallback.hideProgressBar();
                         try {
                             Object json = new JSONTokener(object).nextValue();
-                            if (json instanceof JSONObject) {
-                                WorkFlowTemplateDto workFlowTemplateDto = getParseTabsData(object);
+                            JSONObject jsonObject = (JSONObject) json;
+                            Object dataJSON = jsonObject.getJSONObject("data").get("workflow");
+                            if (dataJSON instanceof JSONObject) {
+                                WorkFlowTemplateDto workFlowTemplateDto = getParseTabsData(dataJSON.toString());
                                 iOnBoardFragmentCallback.profileLinkStatusFromApi(true, workFlowTemplateDto);
-                            } else if (json instanceof JSONArray) {
+                            } else if (dataJSON instanceof JSONArray) {
                                 iOnBoardFragmentCallback.profileLinkStatusFromApi(false, null);
                             } else {
                                 iOnBoardFragmentCallback.showMessage("Something went wrong, please try again after sometime.");

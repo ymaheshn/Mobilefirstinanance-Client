@@ -55,8 +55,8 @@ public class SyncCommentJob extends Job {
                     @Override
                     public void onApiCallResponseSuccess(String url, String object) {
                         // remote call was successful--the Comment will be updated locally to reflect that sync is no longer pending
-                        LoanCollection updatedComment = LoanCollectionUtils.clone(comment, false);
-                        SyncCommentRxBus.getInstance().post(SyncResponseEventType.SUCCESS, updatedComment);
+//                        LoanCollection updatedComment = LoanCollectionUtils.clone(comment, false);
+//                        SyncCommentRxBus.getInstance().post(SyncResponseEventType.SUCCESS, updatedComment);
                     }
 
                     @Override

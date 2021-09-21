@@ -121,6 +121,7 @@
         <!--android:textSize="18sp" />-->
 
         <LinearLayout
+            android:id="@+id/container_pay_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10dp"
@@ -159,22 +160,41 @@
         <!--android:textColor="@android:color/black"-->
         <!--android:textSize="18sp" />-->
 
-        <Button
-            android:id="@+id/btn_collect"
+        <LinearLayout
+            android:id="@+id/container_collect"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/btn_print"
-            android:layout_marginBottom="@dimen/_10dp"
-            android:background="@drawable/save_btn_bg_inactive"
-            android:gravity="center"
-            android:text="@string/collection"
-            android:textColor="@color/colorWhite" />
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btn_collect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:background="@drawable/save_btn_bg_inactive"
+                android:gravity="center"
+                android:text="@string/collection_cash"
+                android:textColor="@color/colorWhite" />
+
+            <Button
+                android:id="@+id/btn_collect_wire"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:layout_weight="1"
+                android:background="@drawable/save_btn_bg_inactive"
+                android:gravity="center"
+                android:text="@string/collection_wire"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_print"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/_10dp"
             android:background="@drawable/save_btn_bg_inactive"
             android:gravity="center"

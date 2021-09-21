@@ -243,7 +243,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
         this.workFlowProfileId = workFlowProfileId;
         if (UtilityMethods.isNetworkAvailable(getActivity())) {
             showProgressBar();
-            String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") +
+            String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.CASH_FLOW_GET_INFO_URL +
                     PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
 
@@ -471,7 +471,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
                     s, new TypeToken<HashMap<String, String>>() {
                     }.getType()
             );
-            String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") +
+            String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.CASH_FLOW_UPDATE_URL +
                     PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
             url = url.replace("WORKFLOW_PROFILE_ID", templateDetailsId);
@@ -586,7 +586,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
 
     private void verifyApi(String jsonPayload) {
         showProgressBar();
-        String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") + WebServiceURLs.VERIFY_WORKFLOW +
+        String url = WebServiceURLs.BASE_URL + WebServiceURLs.VERIFY_WORKFLOW +
                 PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
         try {
             WebService.getInstance().apiPutRequestCallJSON(url, new JSONObject(jsonPayload), new WebService.OnServiceResponseListener() {
@@ -625,7 +625,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
                     s, new TypeToken<HashMap<String, String>>() {
                     }.getType()
             );
-            String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") +
+            String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.CASH_FLOW_POST_URL +
                     PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
             WebService.getInstance().apiPostRequestCall(url,
@@ -704,7 +704,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
             String filename = !TextUtils.isEmpty(fileNameToUpload) ? fileNameToUpload + "_" + UtilityMethods.getDateFormat() + ".jpeg" : UtilityMethods.getDateFormat() + ".jpeg";
             InputStream iStream = getActivity().getContentResolver().openInputStream(selectedImage);
             byte[] inputData = UtilityMethods.getBytes(iStream);
-            String url = PreferenceConnector.readString(getActivity(), "BASE_URL", "") +
+            String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.UPLOAD_BUSINESS +
                     PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
             HashMap<String, VolleyMultipartRequest.DataPart> params = new HashMap<>();

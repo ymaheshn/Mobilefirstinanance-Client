@@ -17,16 +17,9 @@ public class LocalDataStore implements LocalDataRepository {
         this.loanCollectionDao = commentDao;
     }
 
-    /**
-     * Adds a comment to a given photo
-     */
+    @Override
     public Single<LoanCollection> add(String contractCode, String loanAmount) {
-        LoanCollection loanCollection = new LoanCollection(contractCode, loanAmount);
-
-        return Single.fromCallable(() -> {
-            long rowId = loanCollectionDao.add(loanCollection);
-            return LoanCollectionUtils.clone(loanCollection, rowId);
-        });
+        return null;
     }
 
     @Override

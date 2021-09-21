@@ -44,16 +44,17 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import Utilities.PreferenceConnector;
 import Utilities.UtilityMethods;
 import bluetooth.evolute.BluetoothComm;
 import bluetooth.evolute.BluetoothPair;
 import loans.model.ContractCodes;
-import loans.model.LinkedProfilesResponse;
 import networking.MyApplication;
 
 @SuppressLint("ValidFragment")
 public class BluetoothDeviceFragment extends DialogFragment {
 
+    private int recipetId;
     private DeviceConnected deviceConnected;
     private ContractCodes contractCodes;
     private int collectedAmount;
@@ -108,7 +109,8 @@ public class BluetoothDeviceFragment extends DialogFragment {
 
     @SuppressLint("ValidFragment")
     public BluetoothDeviceFragment(DeviceConnected deviceConnected, ContractCodes contractCodes, int collectedAmount,
-                                   int interest, int pricipal, int total) {
+                                   int interest, int pricipal, int total, int recipetId) {
+        this.recipetId = recipetId;
         this.deviceConnected = deviceConnected;
         this.contractCodes = contractCodes;
         this.collectedAmount = collectedAmount;
@@ -754,25 +756,25 @@ public class BluetoothDeviceFragment extends DialogFragment {
         protected Integer doInBackground(Integer... params) {
             try {
                 prnGen.iFlushBuf();
-
+                String entityName = PreferenceConnector.readString(getActivity(), getString(R.string.entityname), "");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, " MOBILE FIRST FINANCE ");
+                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, entityName);
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Receipt No: " + "12345" + "/" + "1");
+                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Receipt No: " + recipetId);
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Date:" + UtilityMethods.getDateFormat());
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Name: " + contractCodes.name);
 
                 // TODO: Dont miuss this
                 // ptr.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "LAST NAME:" + ll.getLastName());
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "CC: " + contractCodes.contractCodeUUID);
+                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "CC: " + contractCodes.contractUUID);
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Client ID: " + contractCodes.identifier);
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Principal:       " + pricipal + ".00");
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Interest:         " + input + ".00");
+                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Interest:         " + interest + ".00");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Total Amount:    " + total + ".00");
 //                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Collected Amount:" + collectedAmount + ".0");
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Collected Amount:" + collectedAmount + "0");
+//                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Collected Amount:" + collectedAmount + "0");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "       THANK YOU       ");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");

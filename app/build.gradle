@@ -10,8 +10,8 @@ project.ext {
     rxAndroidVersion = "2.0.1"
     priorityJobQueueVersion = "2.0.1"
     playServicesVersion = "16.1.0"
-    retrofitVersion = "2.1.0"
-    okHttpVersion = "3.4.1"
+    retrofitVersion = "2.9.0"
+    okHttpVersion = "4.9.1"
     rxRelayVersion = "2.0.0"
     rxLintVersion = "1.6"
 }
@@ -52,6 +52,10 @@ android {
         exclude 'META-INF/proguard/androidx-annotations.pro'
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     flavorDimensions "version"
     productFlavors {
         client {
@@ -61,7 +65,7 @@ android {
         }
         agent {
             applicationIdSuffix ".agent"
-            buildConfigField("String", "BASE_URL", "\"https://uat.mobilefirstfinance.com\"")
+            buildConfigField("String", "BASE_URL", "\"https://dev.mobilefirstfinance.com:5055\"")
             dimension "version"
         }
         gms {

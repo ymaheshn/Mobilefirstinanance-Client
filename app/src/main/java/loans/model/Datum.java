@@ -1,21 +1,14 @@
 package loans.model;
 
-import android.arch.persistence.room.Embedded;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-@Entity
 public class Datum implements Parcelable {
 
     public boolean isPending = true;
-
-    @PrimaryKey(autoGenerate = true)
-    public int uid;
 
     @SerializedName("linkedusertoportfolioID")
     @Expose
@@ -39,7 +32,6 @@ public class Datum implements Parcelable {
     @Expose
     public String ownerID;
 
-    @Embedded
     @SerializedName("contractCodes")
     @Expose
     public ContractCodes contractCodes;

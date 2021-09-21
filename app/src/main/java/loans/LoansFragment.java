@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -252,7 +251,7 @@ public class LoansFragment extends BaseFragment implements LoansFragmentCallback
             for (Datum datum : profilesResponse.data) {
                 HashMap<String, List<Datum>> groupData = new HashMap<>();
                 for (Datum againDatum : profilesResponse.data) {
-                    if (datum.contractCodes.branch.equals(againDatum.contractCodes.branch)) {
+                    if (datum.contractCodes.branchId.equals(againDatum.contractCodes.branchId)) {
                         if (TextUtils.isEmpty(againDatum.contractCodes.name)) {
                             againDatum.contractCodes.name = "Group";
                         }
@@ -266,7 +265,7 @@ public class LoansFragment extends BaseFragment implements LoansFragmentCallback
                         }
                     }
                 }
-                branchData.put(TextUtils.isEmpty(datum.contractCodes.branch) ? "Branch" : datum.contractCodes.branch, groupData);
+                branchData.put(TextUtils.isEmpty(datum.contractCodes.branchId) ? "Branch" : datum.contractCodes.branchId, groupData);
             }
 
             ArrayList<Item> items = new ArrayList<>();

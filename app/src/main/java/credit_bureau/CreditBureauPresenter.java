@@ -139,7 +139,7 @@ public class CreditBureauPresenter {
                     s, new TypeToken<HashMap<String, String>>() {
                     }.getType()
             );
-            String url = PreferenceConnector.readString(context, "BASE_URL", "") +
+            String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.CASH_FLOW_UPDATE_URL +
                     PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
             url = url.replace("WORKFLOW_PROFILE_ID", templateDetialsId);

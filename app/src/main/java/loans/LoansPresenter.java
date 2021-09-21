@@ -1,6 +1,5 @@
 package loans;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,7 +13,6 @@ import java.util.List;
 
 import Utilities.PreferenceConnector;
 import Utilities.UtilityMethods;
-import data.ContractsDatabase;
 import loans.model.Datum;
 import loans.model.LinkedProfilesResponse;
 import loans.model.ProfileCollection;
@@ -24,12 +22,12 @@ import networking.WebServiceURLs;
 public class LoansPresenter implements WebService.OnServiceResponseListener {
     private Context context;
     private LoansFragmentCallback loansFragmentCallback;
-    private final ContractsDatabase contractsDatabase;
+//    private final ContractsDatabase contractsDatabase;
 
     public LoansPresenter(Context context, LoansFragmentCallback loansFragmentCallback) {
         this.context = context;
         this.loansFragmentCallback = loansFragmentCallback;
-        contractsDatabase = ContractsDatabase.getInstance(context);
+//        contractsDatabase = ContractsDatabase.getInstance(context);
         getLinkedProfiles();
     }
 
@@ -39,15 +37,15 @@ public class LoansPresenter implements WebService.OnServiceResponseListener {
 
         if (!UtilityMethods.isNetworkAvailable(context)) {
             new Thread(() -> {
-                List<Datum> data = contractsDatabase.daoAccess().getContracts();
-                ((Activity) context).runOnUiThread(() -> {
-                    if (data != null && data.size() > 0) {
-                        LinkedProfilesResponse profilesResponse = new LinkedProfilesResponse();
-                        profilesResponse.data = data;
-                        loansFragmentCallback.loadRecyclerView(profilesResponse);
-                        loansFragmentCallback.hideProgressBar();
-                    }
-                });
+//                List<Datum> data = contractsDatabase.daoAccess().getContracts();
+//                ((Activity) context).runOnUiThread(() -> {
+//                    if (data != null && data.size() > 0) {
+//                        LinkedProfilesResponse profilesResponse = new LinkedProfilesResponse();
+//                        profilesResponse.data = data;
+//                        loansFragmentCallback.loadRecyclerView(profilesResponse);
+//                        loansFragmentCallback.hideProgressBar();
+//                    }
+//                });
             }).start();
         } else {
             String url = PreferenceConnector.readString(context, "BASE_URL", "") +
@@ -60,16 +58,16 @@ public class LoansPresenter implements WebService.OnServiceResponseListener {
 
                             Gson gson = new Gson();
                             LinkedProfilesResponse profilesResponse = gson.fromJson(object, LinkedProfilesResponse.class);
-                            new Thread(() -> {
-                                contractsDatabase.daoAccess().deleteAll();
-                                for (Datum datum : profilesResponse.data) {
-                                    contractsDatabase.daoAccess().insertDatum(datum);
-                                }
-                                ((Activity) context).runOnUiThread(() -> {
-                                    loansFragmentCallback.loadRecyclerView(profilesResponse);
-                                    loansFragmentCallback.hideProgressBar();
-                                });
-                            }).start();
+//                            new Thread(() -> {
+//                                contractsDatabase.daoAccess().deleteAll();
+//                                for (Datum datum : profilesResponse.data) {
+//                                    contractsDatabase.daoAccess().insertDatum(datum);
+//                                }
+//                                ((Activity) context).runOnUiThread(() -> {
+//                                    loansFragmentCallback.loadRecyclerView(profilesResponse);
+//                                    loansFragmentCallback.hideProgressBar();
+//                                });
+//                            }).start();
                         }
 
                         @Override
@@ -90,13 +88,14 @@ public class LoansPresenter implements WebService.OnServiceResponseListener {
         loansFragmentCallback.showProgressBar();
 
         String serviceUrl = WebServiceURLs.GET_EVENTS_BY_CONTRACTUUID_URL;
-        String url = PreferenceConnector.readString(context, "BASE_URL", "") + serviceUrl + PreferenceConnector.readString(context, context.getString(R.string.accessToken), "") + "&contractUUID=" + datum.contractUUID+"&eventType";
+        String url = PreferenceConnector.readString(context, "BASE_URL", "") + serviceUrl + PreferenceConnector.readString(context, context.getString(R.string.accessToken), "") + "&contractUUID=" + datum.contractUUID + "&eventType";
         WebService.getInstance().apiGetRequestCall(url,
                 new WebService.OnServiceResponseListener() {
                     @Override
                     public void onApiCallResponseSuccess(String url, String object) {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<List<ProfileCollection>>(){}.getType();
+                        Type type = new TypeToken<List<ProfileCollection>>() {
+                        }.getType();
                         List<ProfileCollection> list = gson.fromJson(object, type);
                         loansFragmentCallback.hideProgressBar();
                         loansFragmentCallback.linkedProfileCollection(datum, list);

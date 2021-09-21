@@ -8,7 +8,6 @@ import android.content.Context;
 import Utilities.Constants;
 import loans.model.LoanCollection;
 
-@Database(entities = {LoanCollection.class}, version = 1, exportSchema = false)
 public abstract class LoanCollectionDatabase extends RoomDatabase {
     private static LoanCollectionDatabase instance;
 
