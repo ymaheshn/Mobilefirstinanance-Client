@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
                 }
 
                 MFFResponse<LoginResponse> responseBody = response.body();
-                if (responseBody.statusCodeValue == HttpURLConnection.HTTP_OK && !TextUtils.isEmpty(responseBody.body.accessToken)) {
+                if (responseBody != null && responseBody.statusCodeValue == HttpURLConnection.HTTP_OK && !TextUtils.isEmpty(responseBody.body.accessToken)) {
                     PreferenceConnector.writeString(getApplicationContext(), getString(R.string.accessToken),
                             responseBody.body.accessToken);
                     PreferenceConnector.writeBoolean(getApplicationContext(), getString(R.string.loginStatus), true);

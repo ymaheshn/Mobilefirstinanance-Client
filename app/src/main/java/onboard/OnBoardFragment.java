@@ -89,7 +89,7 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         iOnFragmentChangeListener = (IOnFragmentChangeListener) getActivity();
-        iOnFragmentChangeListener.onHeaderUpdate(Constants.ONBOARD_FRAGMENT, getString(R.string.onboard));
+        iOnFragmentChangeListener.onHeaderUpdate(Constants.ONBOARD_FRAGMENT, getString(R.string.profiles));
         onBoardPresenter = new OnBoardPresenter(getActivity(), this);
         if (Constants.FLAVOR_CLIENT.equalsIgnoreCase(BuildConfig.FLAVOR)) {
             textAddClient.setText("Add Application");

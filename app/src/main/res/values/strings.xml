@@ -60,6 +60,7 @@
 
     <!--Header Details-->
     <string name="onboard">On-board</string>
+    <string name="dashboard">Dashboard</string>
     <string name="contracts">Contracts</string>
     <string name="vas">Your Bank</string>
     <string name="savings">Savings</string>
@@ -105,7 +106,6 @@
     <string name="first_name">First Name</string>
     <string name="user_name">User Name</string>
     <string name="something_went_erong">Something went wrong. Please try after some time.</string>
-    <string name="dashboard">Dashboard</string>
     <string name="transactions">Transactions</string>
     <string name="trasnsfers">Transfers</string>
     <string name="loans">Loans</string>
@@ -123,5 +123,6 @@
     <string name="provide_credentials">Please provide clientId and secretKey or accessToken before proceed.</string>
     <string name="select_service">Please, select one or more methods of verification.</string>
     <string name="something_went_wrong">Something went wrong. Please try after some time.</string>
+    <string name="profiles">Profiles</string>
 
 </resources>

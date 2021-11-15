@@ -101,8 +101,8 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
     RelativeLayout savingsClickRV;
     @BindView(R.id.reportsClickRV)
     RelativeLayout reportsClickRV;
-    @BindView(R.id.googleMapView)
-    ImageView googleMapView;
+    @BindView(R.id.profileClickRV)
+    RelativeLayout profileClickRV;
     @BindView(R.id.adharScannerIV)
     ImageView adharScannerIV;
     @BindView(R.id.img_search)
@@ -135,11 +135,10 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dashboard);
-        // bind the view using butterknife
         ButterKnife.bind(this);
         DBOperations.getInstance(this);
         CURRENT_FRAGMENT = -1;
-        addFragment(VAS_FRAGMENT, "");
+        addFragment(DASHBOARD_FRAGMENT, "");
 
         createLocationRequest();
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -238,12 +237,12 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
-    @OnClick({R.id.clientClickRV, R.id.loansClickRV, R.id.savingsClickRV, R.id.reportsClickRV,
-            R.id.googleMapView, R.id.adharScannerIV, R.id.img_search, R.id.img_more, R.id.toolbar_back})
+    @OnClick({R.id.clientClickRV, R.id.loansClickRV, R.id.savingsClickRV, R.id.reportsClickRV, R.id.adharScannerIV,
+            R.id.img_search, R.id.img_more, R.id.toolbar_back, R.id.profileClickRV})
     public void onButtonClick(View view) {
         switch (view.getId()) {
             case R.id.clientClickRV:
-                replaceFragment(ONBOARD_FRAGMENT, null);
+                replaceFragment(DASHBOARD_FRAGMENT, null);
                 break;
             case R.id.loansClickRV:
                 replaceFragment(LOANS_FRAGMENT, null);
@@ -253,9 +252,8 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                 break;
             case R.id.reportsClickRV:
                 replaceFragment(SAVINGS_FRAGMENT, null);
-                break;
-            case R.id.googleMapView:
-                replaceFragment(MAP_FRAGMENT, null);
+            case R.id.profileClickRV:
+                replaceFragment(ONBOARD_FRAGMENT, null);
                 break;
             case R.id.adharScannerIV:
                 iOnHeaderItemsClickListener.onHeaderItemClick(SCAN);
@@ -304,11 +302,14 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
             switch (fragmentName) {
                 case ONBOARD_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
+                    headerTitleTV.setText(R.string.profiles);
                     currentFrament = new OnBoardFragment();
                     addFragmentToContent(currentFrament, "client");
                     break;
                 case DASHBOARD_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
+                    headerTitleTV.setText(R.string.dashboard);
+                    adharScannerIV.setVisibility(View.GONE);
                     currentFrament = new DashboardFragment();
                     addFragmentToContent(currentFrament, "dashboard");
                     break;
@@ -373,7 +374,8 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     adharScannerIV.setVisibility(View.GONE);
                     currentFrament = new OnBoardFragment();
                     imgSearch.setVisibility(View.VISIBLE);
-                    replaceFragmentToContent(currentFrament, getString(R.string.onboard));
+                    headerTitleTV.setText(getString(R.string.profiles));
+                    replaceFragmentToContent(currentFrament, getString(R.string.profiles));
                     break;
                 case DASHBOARD_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);

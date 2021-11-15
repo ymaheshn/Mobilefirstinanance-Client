@@ -2,6 +2,9 @@ package network;
 
 import base.MFFResponse;
 import base.MFFResponseNew;
+import dashboard.models.DashboardCount;
+import dashboard.models.GraphCount;
+import dashboard.models.ProfileCount;
 import loans.model.CollectionPortfolioDetailsResponse;
 import loans.model.CollectionPortfolioResponse;
 import loans.model.SavedPortfolioResponse;
@@ -13,6 +16,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MFFApiService {
@@ -45,4 +49,13 @@ public interface MFFApiService {
     })
     @POST("/PortfolioService/savePortfolioRepayment")
     Call<SavedPortfolioResponse> savePortfolio(@Query("access_token") String accessToken, @Body String array);
+
+    @GET("/ProfileService/profile/count")
+    Call<MFFResponseNew<ProfileCount>> getTotalClient(@Query("access_token") String accessToken);
+
+    @GET("/WorkflowService/workflows/count")
+    Call<MFFResponseNew<DashboardCount>> getOnBoardDetailsCount(@Query("access_token") String accessToken);
+
+    @GET("https://dev.solitx.io:5050/ContractService/contracts/delinquency/count/{date}")
+    Call<GraphCount> getGraphDetails(@Path("date") String date, @Query("access_token") String accessToken);
 }

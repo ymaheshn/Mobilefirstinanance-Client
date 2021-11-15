@@ -30,7 +30,7 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
         if (pageNumber == 0) {
             iOnBoardFragmentCallback.showProgressBar();
         }
-        String url = WebServiceURLs.BASE_URL+
+        String url = WebServiceURLs.BASE_URL +
                 WebServiceURLs.ALL_PROFILES_URL +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
         url = url.replaceAll("PAGE_NUMBER", "" + pageNumber).replaceAll("NUMBER_OF_RECORDS", "10");
@@ -217,8 +217,13 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
                             JSONObject jsonObject = (JSONObject) json;
                             Object dataJSON = jsonObject.getJSONObject("data").get("workflow");
                             if (dataJSON instanceof JSONObject) {
-                                WorkFlowTemplateDto workFlowTemplateDto = getParseTabsData(dataJSON.toString());
-                                iOnBoardFragmentCallback.profileLinkStatusFromApi(true, workFlowTemplateDto);
+                                JSONObject workflowJson = (JSONObject) dataJSON;
+                                if (workflowJson.has("isLinked") && workflowJson.getString("isLinked").equals("false")) {
+                                    iOnBoardFragmentCallback.profileLinkStatusFromApi(false, null);
+                                } else {
+                                    WorkFlowTemplateDto workFlowTemplateDto = getParseTabsData(dataJSON.toString());
+                                    iOnBoardFragmentCallback.profileLinkStatusFromApi(true, workFlowTemplateDto);
+                                }
                             } else if (dataJSON instanceof JSONArray) {
                                 iOnBoardFragmentCallback.profileLinkStatusFromApi(false, null);
                             } else {

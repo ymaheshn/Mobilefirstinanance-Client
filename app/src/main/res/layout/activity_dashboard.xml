@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="5dp"
-                    android:text="@string/onboard"
+                    android:text="@string/dashboard"
                     android:textColor="@color/colorText"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -159,7 +159,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/loansClickRVD"
+            android:id="@+id/profileClickRV"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -171,14 +171,26 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/loansIVD"
+                    android:id="@+id/profileIV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="@android:color/transparent" />
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/loansselected" />
 
+                <TextView
+                    android:id="@+id/profileTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/profiles"
+                    android:textColor="@color/colorText"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
+
 
         <RelativeLayout
             android:id="@+id/savingsClickRV"
@@ -198,7 +210,7 @@
                     android:layout_height="20dp"
                     android:layout_gravity="center_horizontal"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/savingsselected" />
+                    android:src="@drawable/reportsselected" />
 
                 <TextView
                     android:id="@+id/saavingsTV"
@@ -231,7 +243,7 @@
                     android:layout_height="20dp"
                     android:layout_gravity="center_horizontal"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/reportsselected" />
+                    android:src="@drawable/savingsselected" />
 
                 <TextView
                     android:id="@+id/reportsTV"
@@ -246,12 +258,4 @@
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/googleMapView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/mapbutton" />
 </RelativeLayout>
