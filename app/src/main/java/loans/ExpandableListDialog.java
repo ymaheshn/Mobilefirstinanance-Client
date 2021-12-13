@@ -22,28 +22,47 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.multilevelview.MultiLevelAdapter;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.models.RecyclerViewItem;
 import com.odedtech.mff.mffapp.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import Utilities.PreferenceConnector;
+import Utilities.UtilityMethods;
+import base.BaseActivity;
+import base.BaseFragment;
+import interfaces.IOnFragmentChangeListener;
+import kyc.KycFragment;
 import kyc.dto.BranchTree;
+import loans.model.SearchData;
+import networking.WebService;
+import networking.WebServiceURLs;
 
-public class ExpandableListDialog extends Dialog implements View.OnClickListener {
+public class ExpandableListDialog extends Dialog implements View.OnClickListener, SearchAdapter.IOnSearchItemClickListener {
 
     private final EditText editText;
     private final List<BranchTree> cityList;
-    private MultiLevelRecyclerView list;
+    private RecyclerView list;
     private EditText filterText = null;
+    private ImageView searchImg;
     //    ArrayAdapter<String> adapter = null;
     private static final String TAG = "CityList";
     private MyAdapter myAdapter;
     //    private final MyListAdapter adapter;
     public ArrayList<RecyclerViewItem> viewItems;
+    Context mContext;
+    SearchAdapter searchAdapter;
+    View progressBar;
+
 
     public ExpandableListDialog(Context context, String titleText, EditText editText, List<BranchTree> cityList, ArrayList<RecyclerViewItem> viewItems) {
         super(context);
@@ -59,15 +78,96 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
         display.getSize(size);
         window.setLayout((int) (size.x * 0.85), (int) (size.y * 0.7));
         window.setGravity(Gravity.CENTER);
+        mContext = context;
 
         TextView title = findViewById(R.id.text_title);
         title.setText(titleText);
         filterText = findViewById(R.id.EditBox);
-        filterText.addTextChangedListener(filterTextWatcher);
+        searchImg = findViewById(R.id.search_img);
+        //filterText.addTextChangedListener(filterTextWatcher);
+        progressBar = findViewById(R.id.progressBar);
         list = findViewById(R.id.List);
-        if (cityList != null && cityList.size() > 0) {
+        /*if (cityList != null && cityList.size() > 0) {
             setMyAdapter(viewItems);
+        }*/
+        searchImg.setOnClickListener(v -> {
+            if(filterText.getText().length() >= 4){
+                callSearchApi(filterText.getText().toString());
+            }else{
+                Toast.makeText(mContext,
+                        "you have to enter at least 4 digit!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void callSearchApi(String searchWord){
+        if (UtilityMethods.isNetworkAvailable(mContext)) {
+            progressBar.setVisibility(View.VISIBLE);
+          //  KycFragment.showLoading();
+            String url = WebServiceURLs.BASE_URL +
+                    WebServiceURLs.HIERARCHY_SEARCH +
+                    PreferenceConnector.readString(mContext, mContext.getString(R.string.accessToken), "")
+                    +
+                                    "&branchName=" + searchWord;
+
+            WebService.getInstance().apiGetRequestCall(url, new WebService.OnServiceResponseListener() {
+
+                @Override
+                public void onApiCallResponseSuccess(String url, String object) {
+                  //  icashFlowCallBacks.hideProgressBar();
+                    if (!TextUtils.isEmpty(object)) {
+                        progressBar.setVisibility(View.GONE);
+                        try {
+                            JSONObject jsonObject = new JSONObject(object);
+                            JSONArray searchArray = jsonObject.getJSONObject("data").getJSONArray("portfolio");
+
+                            List<SearchData> listdata = new ArrayList<>();
+                            if (searchArray != null) {
+                                for (int i=0;i<searchArray.length();i++){
+                                    SearchData objData = new SearchData();
+                                    objData.branchid = searchArray.getJSONObject(i).getDouble("branchid");
+                                    objData.branch_name = searchArray.getJSONObject(i).getString("branch_name");
+                                    listdata.add(objData);
+                                }
+                            }
+                            callSearchAdapter(listdata);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                }
+
+                @Override
+                public void onApiCallResponseFailure(String errorMessage) {
+                  //  icashFlowCallBacks.hideProgressBar();
+                   // icashFlowCallBacks.showMessage(errorMessage);
+                }
+            });
         }
+
+
+    }
+
+    @Override
+    public void onItemClicked(SearchData mData) {
+        editText.setText(mData.branch_name);
+        dismiss();
+
+    }
+
+
+
+    private void callSearchAdapter(List<SearchData> items){
+
+        searchAdapter = new SearchAdapter(mContext, this, items);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        list.addItemDecoration(dividerItemDecoration);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        list.setLayoutManager(linearLayoutManager);
+        list.setAdapter(searchAdapter);
     }
 
 
@@ -78,7 +178,7 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
         } else {
             items = prepareData(cityList, 0);
         }
-        myAdapter = new MyAdapter(getContext(), items, list);
+        myAdapter = new MyAdapter(getContext(), items);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         list.addItemDecoration(dividerItemDecoration);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -157,7 +257,7 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
         private List<RecyclerViewItem> filterList = new ArrayList<>();
         private RecyclerViewItem mItem;
 
-        MyAdapter(Context mContext, List<RecyclerViewItem> mListItems, MultiLevelRecyclerView mMultiLevelRecyclerView) {
+        MyAdapter(Context mContext, List<RecyclerViewItem> mListItems) {
             super(mListItems);
             this.mListItems = mListItems;
             this.mOriginalItems.addAll(mListItems);
@@ -201,9 +301,9 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
 
             if (mItem.hasChildren() && mItem.getChildren().size() > 0) {
                 setExpandButton(mViewHolder.mExpandIcon, mItem.isExpanded());
-                mViewHolder.mExpandButton.setVisibility(View.VISIBLE);
+                mViewHolder.mExpandIcon.setVisibility(View.VISIBLE);
             } else {
-                mViewHolder.mExpandButton.setVisibility(View.GONE);
+                mViewHolder.mExpandIcon.setVisibility(View.GONE);
             }
 
             // indent child items
@@ -222,37 +322,62 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
 
             TextView mTitle;
             ImageView mExpandIcon;
-            LinearLayout mTextBox, mExpandButton;
+            LinearLayout mTextBox;
 
             Holder(View itemView) {
                 super(itemView);
                 mTitle = itemView.findViewById(R.id.title);
                 mExpandIcon = itemView.findViewById(R.id.image_view);
                 mTextBox = itemView.findViewById(R.id.text_box);
-                mExpandButton = itemView.findViewById(R.id.expand_field);
+             //   mExpandButton = itemView.findViewById(R.id.expand_field);
 
                 // The following code snippets are only necessary if you set multiLevelRecyclerView.removeItemClickListeners(); in MainActivity.java
                 // this enables more than one click event on an item (e.g. Click Event on the item itself and click event on the expand button)
+                mTitle.setOnClickListener(new View.OnClickListener(){
 
-                itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        v.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                final RecyclerViewItem item = mListItems.get(getAdapterPosition());
+                        final RecyclerViewItem item = mListItems.get(getAdapterPosition());
+                        Item currentItem = (Item) item;
+                        editText.setText(currentItem.text);
+                        dismiss();
+                        return;
+
+
+                    }
+                });
+
+               mExpandIcon.setOnClickListener(new View.OnClickListener(){
+
+                   @Override
+                   public void onClick(View v) {
+
+                       v.postDelayed(new Runnable() {
+                           @Override
+                           public void run() {
+                               final RecyclerViewItem item = mListItems.get(getAdapterPosition());
+                               Item currentItem = (Item) item;
+                               mExpandIcon.animate().rotation(currentItem.isExpanded() ? 0 : -180).start();
+
 //                        if (item.datum != null) {
 //                            iOnItemClickListener.onItemClicked(item.datum);
 //                        } else {
-                                Item currentItem = (Item) item;
-                                mExpandIcon.animate().rotation(currentItem.isExpanded() ? 0 : -180).start();
 
-                                if (!currentItem.hasChildren()) {
-                                    editText.setText(currentItem.text);
-                                    dismiss();
-                                }
-                            }
-                        }, 500);
+
+                           }
+                       }, 500);
+
+                   }
+               });
+
+                mTextBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final RecyclerViewItem item = mListItems.get(getAdapterPosition());
+                        Item currentItem = (Item) item;
+
+                        editText.setText(currentItem.text);
+                        dismiss();
 //                        }
                         //set click event on item here
 //                    Toast.makeText(mContext, String.format(Locale.ENGLISH, "Item at position %d was clicked!", getAdapterPosition()), Toast.LENGTH_SHORT).show();
@@ -282,7 +407,7 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 List values = (List) results.values;
                 if (constraint == null || constraint.length() == 0) {
-                    setMyAdapter(viewItems);
+                  //  setMyAdapter(viewItems);
                 } else {
                     mListItems.clear();
                     mListItems.addAll(values);
@@ -311,4 +436,7 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
             }
         };
     }
+
+
+
 }

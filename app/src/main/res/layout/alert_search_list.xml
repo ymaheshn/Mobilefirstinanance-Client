@@ -15,19 +15,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal">
+
+
     <EditText
         android:id="@+id/EditBox"
         android:layout_marginTop="@dimen/_10dp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="left"
+        android:layout_weight="0.9"
         android:hint="Search"
         android:maxLines="1"></EditText>
 
-    <com.multilevelview.MultiLevelRecyclerView
+    <ImageView
+        android:id="@+id/search_img"
+        android:layout_weight="0.1"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_search_new"/>
+
+   </LinearLayout>
+    <FrameLayout
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/semi_trans">
+
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/colorWhite" />
+    </FrameLayout>
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/List"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/_10dp"
-        android:choiceMode="singleChoice"/>
+      />
 </LinearLayout>

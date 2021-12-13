@@ -393,7 +393,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                                     showMessage("Something went wrong.");
                                 }
                             }
-                            showProgressBar();
+                            /*showProgressBar();
                             getBranchTrees(new WebService.OnServiceResponseListener() {
                                 @Override
                                 public void onApiCallResponseSuccess(String url, String object) {
@@ -416,7 +416,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                                 public void onApiCallResponseFailure(String errorMessage) {
                                     hideProgressBar();
                                 }
-                            });
+                            });*/
                         }
 
                         @Override
@@ -1007,7 +1007,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
             }
 
             editText.setOnClickListener(view1 -> {
-                showBranch(getActivity(), profileform.name, (EditText) view1, branchTrees);
+               showBranch(getActivity(), profileform.name, (EditText) view1, branchTrees);
 
 //                getBranchTrees(new WebService.OnServiceResponseListener() {
 //                    @Override

@@ -31,9 +31,11 @@ public class WebServiceURLs {
     public static String UPLOAD_PROFILE = "/ProfileService/upload/files/WORKFLOW_PROFILE_ID/profilePicture?access_token=";
     public static String UPLOAD_BUSINESS = "/ProfileService/upload/files/WORKFLOW_PROFILE_ID/business?access_token=";
     public static String UPLOAD_PERSONAL = "/ProfileService/upload/files/WORKFLOW_PROFILE_ID/personal?access_token=";
-    public static String VERIFY_WORKFLOW = "/ProfileService/workflowTemplateDetails/verify?access_token=";
+    public static String VERIFY_WORKFLOW = "/WorkflowService/workflowTemplateDetails/verify?access_token=";
     public static String VERIFY_BRANCHES = "/BranchService/branches/treeLevel?access_token=";
     public static String SAVE_CONTRACT_DATA_NEW = "/PortfolioService/savePortfolioRepayment?access_token=";
+    public static String HIERARCHY_SEARCH = "/PortfolioService/hierarchySearch?access_token=";
+
 
     // Client
     public static String CLIENT_LOGIN_URL = BASE_URL + ":5059/client/login";

@@ -14,7 +14,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.internal.LinkedTreeMap;
 import com.odedtech.mff.mffapp.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
@@ -32,6 +36,9 @@ import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
+import loans.model.CollectionPortfolio;
+import loans.model.CollectionPortfolioResponse;
+import loans.model.DashBoardGraphResponse;
 import network.MFFApiWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -236,23 +243,30 @@ public class DashboardFragment extends BaseFragment {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = formatter.format(new Date());
         String accessToken = PreferenceConnector.readString(getActivity(), getString(R.string.accessToken), "");
-        MFFApiWrapper.getInstance().service.getGraphDetails(strDate, accessToken).enqueue(new Callback<GraphCount>() {
+        MFFApiWrapper.getInstance().service.getGraphDetails(strDate, accessToken).enqueue(new Callback<DashBoardGraphResponse>() {
             @Override
-            public void onResponse(Call<GraphCount> call, Response<GraphCount> response) {
-                GraphCount body = response.body();
-                graphProgress.setVisibility(View.GONE);
-                if (body != null) {
-                    chart.setVisibility(View.VISIBLE);
-                    textPar.setVisibility(View.VISIBLE);
-                    generateData(body);
-                } else {
-                    Toast.makeText(getActivity(),
-                            getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
-                }
+            public void onResponse(Call<DashBoardGraphResponse> call, Response<DashBoardGraphResponse> response) {
+               if(response.body() != null) {
+
+
+                   DashBoardGraphResponse body = response.body();
+                   GraphCount objCount = body.data.portfolio;
+                   graphProgress.setVisibility(View.GONE);
+                   if (objCount != null) {
+                       chart.setVisibility(View.VISIBLE);
+                       textPar.setVisibility(View.VISIBLE);
+                       generateData(objCount);
+                   } else {
+                       Toast.makeText(getActivity(),
+                               getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                   }
+               }else {
+                   graphProgress.setVisibility(View.GONE);
+               }
             }
 
             @Override
-            public void onFailure(Call<GraphCount> call, Throwable t) {
+            public void onFailure(Call<DashBoardGraphResponse> call, Throwable t) {
                 graphProgress.setVisibility(View.GONE);
                 Toast.makeText(getActivity(),
                         getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();

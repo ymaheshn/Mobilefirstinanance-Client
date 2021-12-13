@@ -7,6 +7,7 @@ import dashboard.models.GraphCount;
 import dashboard.models.ProfileCount;
 import loans.model.CollectionPortfolioDetailsResponse;
 import loans.model.CollectionPortfolioResponse;
+import loans.model.DashBoardGraphResponse;
 import loans.model.SavedPortfolioResponse;
 import login.model.EntityResponse;
 import login.model.LoginRequest;
@@ -56,6 +57,6 @@ public interface MFFApiService {
     @GET("/WorkflowService/workflows/count")
     Call<MFFResponseNew<DashboardCount>> getOnBoardDetailsCount(@Query("access_token") String accessToken);
 
-    @GET("https://dev.solitx.io:5050/ContractService/contracts/delinquency/count/{date}")
-    Call<GraphCount> getGraphDetails(@Path("date") String date, @Query("access_token") String accessToken);
+    @GET("/PortfolioService/contracts/delinquency/count/{date}")
+    Call<DashBoardGraphResponse> getGraphDetails(@Path("date") String date, @Query("access_token") String accessToken);
 }

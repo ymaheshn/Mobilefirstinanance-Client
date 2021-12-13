@@ -22,27 +22,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            android:layout_weight="1"
             android:textStyle="bold"
             tools:text="Name" />
 
     </LinearLayout>
 
-    <LinearLayout
+ <!--   <LinearLayout
         android:id="@+id/expand_field"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0"
-        android:gravity="center">
+        android:gravity="center">-->
 
-        <ImageView
-            android:id="@+id/image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
-            android:tint="#4e4e4e" />
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:visibility="gone"
+        android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+        android:tint="#4e4e4e" />
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
 </LinearLayout>

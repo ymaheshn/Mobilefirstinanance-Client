@@ -288,7 +288,7 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        //onBoardAdapter.getFilter().filter(newText);
+        onBoardAdapter.getFilter().filter(newText);
         if (TextUtils.isEmpty(newText)) {
             textClear.setVisibility(View.GONE);
             isLoading = false;
