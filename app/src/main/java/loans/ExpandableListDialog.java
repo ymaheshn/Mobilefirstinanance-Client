@@ -104,18 +104,18 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
     private void callSearchApi(String searchWord){
         if (UtilityMethods.isNetworkAvailable(mContext)) {
             progressBar.setVisibility(View.VISIBLE);
-          //  KycFragment.showLoading();
+            //  KycFragment.showLoading();
             String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.HIERARCHY_SEARCH +
                     PreferenceConnector.readString(mContext, mContext.getString(R.string.accessToken), "")
                     +
-                                    "&branchName=" + searchWord;
+                    "&branchName=" + searchWord;
 
             WebService.getInstance().apiGetRequestCall(url, new WebService.OnServiceResponseListener() {
 
                 @Override
                 public void onApiCallResponseSuccess(String url, String object) {
-                  //  icashFlowCallBacks.hideProgressBar();
+                    //  icashFlowCallBacks.hideProgressBar();
                     if (!TextUtils.isEmpty(object)) {
                         progressBar.setVisibility(View.GONE);
                         try {
@@ -126,7 +126,7 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
                             if (searchArray != null) {
                                 for (int i=0;i<searchArray.length();i++){
                                     SearchData objData = new SearchData();
-                                    objData.branchid = searchArray.getJSONObject(i).getDouble("branchid");
+                                    objData.branchid = searchArray.getJSONObject(i).getString("branchid");
                                     objData.branch_name = searchArray.getJSONObject(i).getString("branch_name");
                                     listdata.add(objData);
                                 }
@@ -142,8 +142,8 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
 
                 @Override
                 public void onApiCallResponseFailure(String errorMessage) {
-                  //  icashFlowCallBacks.hideProgressBar();
-                   // icashFlowCallBacks.showMessage(errorMessage);
+                    //  icashFlowCallBacks.hideProgressBar();
+                    // icashFlowCallBacks.showMessage(errorMessage);
                 }
             });
         }
@@ -169,6 +169,75 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
         list.setLayoutManager(linearLayoutManager);
         list.setAdapter(searchAdapter);
     }
+
+  /*  private void callSearchApi(String searchWord){
+        if (UtilityMethods.isNetworkAvailable(mContext)) {
+            progressBar.setVisibility(View.VISIBLE);
+            //  KycFragment.showLoading();
+            String url = WebServiceURLs.BASE_URL +
+                    WebServiceURLs.HIERARCHY_SEARCH +
+                    PreferenceConnector.readString(mContext, mContext.getString(R.string.accessToken), "")
+                    +
+                    "&branchName=" + searchWord;
+
+            WebService.getInstance().apiGetRequestCall(url, new WebService.OnServiceResponseListener() {
+
+                @Override
+                public void onApiCallResponseSuccess(String url, String object) {
+                    //  icashFlowCallBacks.hideProgressBar();
+                    if (!TextUtils.isEmpty(object)) {
+                        progressBar.setVisibility(View.GONE);
+                        try {
+                            JSONObject jsonObject = new JSONObject(object);
+                            JSONArray searchArray = jsonObject.getJSONObject("data").getJSONArray("portfolio");
+
+                            List<SearchData> listdata = new ArrayList<>();
+                            if (searchArray != null) {
+                                for (int i=0;i<searchArray.length();i++){
+                                    SearchData objData = new SearchData();
+                                    objData.branchid = ""+searchArray.getJSONObject(i).getDouble("branchid");
+                                    objData.branch_name = searchArray.getJSONObject(i).getString("branch_name");
+                                    listdata.add(objData);
+                                }
+                            }
+                            callSearchAdapter(listdata);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                }
+
+                @Override
+                public void onApiCallResponseFailure(String errorMessage) {
+                    //  icashFlowCallBacks.hideProgressBar();
+                    // icashFlowCallBacks.showMessage(errorMessage);
+                }
+            });
+        }
+
+
+    }*/
+
+/*    @Override
+    public void onItemClicked(SearchData mData) {
+        editText.setText(mData.branch_name);
+        dismiss();
+
+    }*/
+
+
+
+   /* private void callSearchAdapter(List<SearchData> items){
+
+        searchAdapter = new SearchAdapter(mContext, this, items);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        list.addItemDecoration(dividerItemDecoration);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        list.setLayoutManager(linearLayoutManager);
+        list.setAdapter(searchAdapter);
+    }*/
 
 
     private void setMyAdapter(ArrayList<RecyclerViewItem> viewItems) {
@@ -329,7 +398,7 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
                 mTitle = itemView.findViewById(R.id.title);
                 mExpandIcon = itemView.findViewById(R.id.image_view);
                 mTextBox = itemView.findViewById(R.id.text_box);
-             //   mExpandButton = itemView.findViewById(R.id.expand_field);
+                //   mExpandButton = itemView.findViewById(R.id.expand_field);
 
                 // The following code snippets are only necessary if you set multiLevelRecyclerView.removeItemClickListeners(); in MainActivity.java
                 // this enables more than one click event on an item (e.g. Click Event on the item itself and click event on the expand button)
@@ -347,28 +416,28 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
                     }
                 });
 
-               mExpandIcon.setOnClickListener(new View.OnClickListener(){
+                mExpandIcon.setOnClickListener(new View.OnClickListener(){
 
-                   @Override
-                   public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
-                       v.postDelayed(new Runnable() {
-                           @Override
-                           public void run() {
-                               final RecyclerViewItem item = mListItems.get(getAdapterPosition());
-                               Item currentItem = (Item) item;
-                               mExpandIcon.animate().rotation(currentItem.isExpanded() ? 0 : -180).start();
+                        v.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                final RecyclerViewItem item = mListItems.get(getAdapterPosition());
+                                Item currentItem = (Item) item;
+                                mExpandIcon.animate().rotation(currentItem.isExpanded() ? 0 : -180).start();
 
 //                        if (item.datum != null) {
 //                            iOnItemClickListener.onItemClicked(item.datum);
 //                        } else {
 
 
-                           }
-                       }, 500);
+                            }
+                        }, 500);
 
-                   }
-               });
+                    }
+                });
 
                 mTextBox.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -407,7 +476,7 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 List values = (List) results.values;
                 if (constraint == null || constraint.length() == 0) {
-                  //  setMyAdapter(viewItems);
+                    //  setMyAdapter(viewItems);
                 } else {
                     mListItems.clear();
                     mListItems.addAll(values);

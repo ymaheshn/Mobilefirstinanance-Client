@@ -36,6 +36,14 @@ public class WebServiceURLs {
     public static String SAVE_CONTRACT_DATA_NEW = "/PortfolioService/savePortfolioRepayment?access_token=";
     public static String HIERARCHY_SEARCH = "/PortfolioService/hierarchySearch?access_token=";
 
+/*    public static String VERIFY_WORKFLOW = "/ProfileService/workflowTemplateDetails/verify?access_token=";
+    public static String VERIFY_WORKFLOW = "/WorkflowService/workflowTemplateDetails/verify?access_token=";
+    public static String VERIFY_BRANCHES = "/BranchService/branches/treeLevel?access_token=";
+    public static String SAVE_CONTRACT_DATA_NEW = "/PortfolioService/savePortfolioRepayment?access_token=";
+    public static String HIERARCHY_SEARCH = "/PortfolioService/hierarchySearch?access_token=";*/
+    public static String PROFILES_SEARCH = "/ProfileService/searchProfiles?access_token=";
+
+
 
     // Client
     public static String CLIENT_LOGIN_URL = BASE_URL + ":5059/client/login";
