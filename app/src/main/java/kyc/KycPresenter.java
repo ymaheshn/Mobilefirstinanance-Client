@@ -361,7 +361,7 @@ public class KycPresenter {
 
     public void verifyWorkFlow(String jsonPayload, WebService.OnServiceResponseListener responseListener) {
         iKycFragmentCallback.showProgressBar();
-        String url = PreferenceConnector.readString(context, "BASE_URL", "") + WebServiceURLs.VERIFY_WORKFLOW +
+        String url = WebServiceURLs.BASE_URL + WebServiceURLs.VERIFY_WORKFLOW +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
         try {
             WebService.getInstance().apiPutRequestCallJSON(url, new JSONObject(jsonPayload), responseListener);
