@@ -60,26 +60,18 @@ import loans.LoansFragment;
 import loans.LoansFragmentNew;
 import maps.MapViewFragment;
 import networking.MyApplication;
+import onboard.ClientDataDTO;
 import onboard.OnBoardFragment;
 import pub.devrel.easypermissions.EasyPermissions;
 import savings.SavingsFragment;
+import search_profiles_list.SearchProfilesListFragment;
 import services.LocationUpdatesBroadcastReceiver;
 import shufpti.ShufptiVerificationServicesFragment;
 import vas.VasFragment;
 
-import static Utilities.Constants.ADD_CLIENT_FRAGMENT;
-import static Utilities.Constants.CURRENT_FRAGMENT;
-import static Utilities.Constants.DASHBOARD_FRAGMENT;
-import static Utilities.Constants.KYC_FRAGMENT;
-import static Utilities.Constants.LOANS_FRAGMENT;
-import static Utilities.Constants.LOAN_COLLECTIONS_FRAGMENT;
-import static Utilities.Constants.MAP_FRAGMENT;
-import static Utilities.Constants.ONBOARD_FRAGMENT;
-import static Utilities.Constants.PROFILE_DETAILS_FRAGMENT;
-import static Utilities.Constants.SAVINGS_FRAGMENT;
-import static Utilities.Constants.SCAN;
-import static Utilities.Constants.SHUFPTI_FRAGMENT;
-import static Utilities.Constants.VAS_FRAGMENT;
+import java.util.ArrayList;
+
+import static Utilities.Constants.*;
 
 public class DashboardActivity extends BaseActivity implements IOnFragmentChangeListener, MaterialSearchView.OnQueryTextListener, MaterialSearchView.SearchViewListener {
     private static final int RC_LOCATION = 9;
@@ -127,7 +119,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationRequest mLocationRequest;
     private IOnDataRetrievedFromGallery onDataRetrievedFromGallery;
-    private BaseFragment currentFrament;
+    private BaseFragment currentFragment;
     private String query;
     private boolean isSubmitClick;
 
@@ -270,6 +262,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
         }
     }
 
+
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -301,42 +294,44 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
             CURRENT_FRAGMENT = fragmentName;
             switch (fragmentName) {
                 case ONBOARD_FRAGMENT:
-                    headerView.setVisibility(View.VISIBLE);
+                    headerView.setVisibility(View.GONE);
                     headerTitleTV.setText(R.string.profiles);
-                    currentFrament = new OnBoardFragment();
-                    addFragmentToContent(currentFrament, "client");
+                    currentFragment = new OnBoardFragment();
+                    addFragmentToContent(currentFragment, "client");
                     break;
                 case DASHBOARD_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     headerTitleTV.setText(R.string.dashboard);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFrament = new DashboardFragment();
-                    addFragmentToContent(currentFrament, "dashboard");
+                    currentFragment = new DashboardFragment();
+                    addFragmentToContent(currentFragment, "dashboard");
                     break;
                 case LOANS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
-                    currentFrament = new LoansFragment();
-                    addFragmentToContent(currentFrament, "Contracts");
+                    currentFragment = new LoansFragment();
+                    addFragmentToContent(currentFragment, "Contracts");
                     break;
                 case MAP_FRAGMENT:
                     headerView.setVisibility(View.GONE);
-                    currentFrament = new MapViewFragment();
-                    addFragmentToContent(currentFrament, getString(R.string.onboard));
+                    currentFragment = new MapViewFragment();
+                    addFragmentToContent(currentFragment, getString(R.string.onboard));
                     break;
                 case VAS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
                     headerTitleTV.setText(getString(R.string.vas));
-                    currentFrament = new VasFragment();
-                    replaceFragmentToContent(currentFrament, getString(R.string.vas));
+                    currentFragment = new VasFragment();
+                    replaceFragmentToContent(currentFragment, getString(R.string.vas));
                     break;
                 case SAVINGS_FRAGMENT:
-                    currentFrament = new EmptyFragment();
-                    addFragmentToContent(currentFrament, "Reports");
+                    headerView.setVisibility(View.VISIBLE);
+                    adharScannerIV.setVisibility(View.GONE);
+                    currentFragment = new EmptyFragment();
+                    addFragmentToContent(currentFragment, "Reports");
                     break;
                 case SHUFPTI_FRAGMENT:
-                    currentFrament = new ShufptiVerificationServicesFragment();
-                    addFragmentToContent(currentFrament, "Shufpti Pro");
+                    currentFragment = new ShufptiVerificationServicesFragment();
+                    addFragmentToContent(currentFragment, "Shufpti Pro");
             }
         }
     }
@@ -355,10 +350,10 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
 
     public void clearSearch() {
         query = null;
-        if (currentFrament instanceof OnBoardFragment) {
-            ((OnBoardFragment) currentFrament).getAllClients();
-        } else if (currentFrament instanceof LoansFragmentNew) {
-            ((LoansFragmentNew) currentFrament).getCollectionPortfolio();
+        if (currentFragment instanceof OnBoardFragment) {
+            ((OnBoardFragment) currentFragment).getAllClients();
+        } else if (currentFragment instanceof LoansFragmentNew) {
+            ((LoansFragmentNew) currentFragment).getCollectionPortfolio();
         }
     }
 
@@ -370,70 +365,86 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
             CURRENT_FRAGMENT = fragmentName;
             switch (fragmentName) {
                 case ONBOARD_FRAGMENT:
-                    headerView.setVisibility(View.VISIBLE);
+                    headerView.setVisibility(View.GONE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFrament = new OnBoardFragment();
+                    currentFragment = new OnBoardFragment();
                     imgSearch.setVisibility(View.VISIBLE);
                     headerTitleTV.setText(getString(R.string.profiles));
-                    replaceFragmentToContent(currentFrament, getString(R.string.profiles));
+                    replaceFragmentToContent(currentFragment, getString(R.string.profiles));
                     break;
                 case DASHBOARD_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFrament = new DashboardFragment();
-                    imgSearch.setVisibility(View.GONE);
+                    currentFragment = new DashboardFragment();
+                    imgSearch.setVisibility(View.VISIBLE);
                     headerTitleTV.setText(getString(R.string.dashboard));
-                    replaceFragmentToContent(currentFrament, "dashboard");
+                    replaceFragmentToContent(currentFragment, "dashboard");
                     break;
                 case LOANS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
                     headerTitleTV.setText(getString(R.string.contracts));
                     imgSearch.setVisibility(View.VISIBLE);
-                    currentFrament = new LoansFragmentNew();
-                    replaceFragmentToContent(currentFrament, getString(R.string.contracts));
+                    currentFragment = new LoansFragmentNew();
+                    replaceFragmentToContent(currentFragment, getString(R.string.contracts));
                     break;
                 case LOAN_COLLECTIONS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFrament = new LoanCollectionFragment();
-                    currentFrament.setArguments(intentExtra);
+                    currentFragment = new LoanCollectionFragment();
+                    currentFragment.setArguments(intentExtra);
                     headerTitleTV.setText(getString(R.string.contracts));
-                    replaceFragmentToContent(currentFrament, getString(R.string.contracts));
+                    replaceFragmentToContent(currentFragment, getString(R.string.contracts));
                     break;
                 case MAP_FRAGMENT:
                     headerView.setVisibility(View.GONE);
-                    currentFrament = new MapViewFragment();
-                    addFragmentToContent(currentFrament, getString(R.string.onboard));
+                    currentFragment = new MapViewFragment();
+                    addFragmentToContent(currentFragment, getString(R.string.onboard));
                     break;
                 case VAS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
                     headerTitleTV.setText(getString(R.string.vas));
-                    currentFrament = new VasFragment();
-                    replaceFragmentToContent(currentFrament, getString(R.string.vas));
+                    currentFragment = new VasFragment();
+                    replaceFragmentToContent(currentFragment, getString(R.string.vas));
                     break;
                 case SAVINGS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFrament = new SavingsFragment();
+                    currentFragment = new SavingsFragment();
                     headerTitleTV.setText(getString(R.string.savings));
-                    replaceFragmentToContent(currentFrament, getString(R.string.savings));
+                    replaceFragmentToContent(currentFragment, getString(R.string.savings));
                     break;
                 case ADD_CLIENT_FRAGMENT:
-                    currentFrament = new AddClientFragment();
+                    currentFragment = new AddClientFragment();
                     adharScannerIV.setVisibility(View.VISIBLE);
-                    currentFrament.setArguments(intentExtra);
-                    replaceFragmentToContent(currentFrament, "client");
+                    currentFragment.setArguments(intentExtra);
+                    replaceFragmentToContent(currentFragment, "client");
                     break;
                 case SHUFPTI_FRAGMENT:
                     headerView.setVisibility(View.GONE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFrament = new ShufptiVerificationServicesFragment();
-                    replaceFragmentToContent(currentFrament, "Shufti Pro");
+                    currentFragment = new ShufptiVerificationServicesFragment();
+                    replaceFragmentToContent(currentFragment, "Shufti Pro");
+                    break;
+                case SEARCH_PROFILE_LIST_FRAGMENT:
+                    headerView.setVisibility(View.GONE);
+                    adharScannerIV.setVisibility(View.GONE);
+                    currentFragment = new SearchProfilesListFragment();
+                    imgSearch.setVisibility(View.VISIBLE);
+                    headerTitleTV.setText(getString(R.string.profiles));
+                    replaceSearchListFragment(currentFragment, intentExtra);
                     break;
             }
         }
+    }
+
+    private void replaceSearchListFragment(Fragment fragment, Bundle data) {
+        fragment.setArguments(data);
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack(fragment.getClass().getSimpleName())
+                .replace(R.id.contentFL, fragment, "tagName")
+                .commit();
     }
 
     private void replaceFragmentToContent(Fragment fragment, String tagName) {
@@ -456,8 +467,8 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
         }
         if (!TextUtils.isEmpty(query)) {
             query = null;
-            if (currentFrament instanceof MaterialSearchView.OnQueryTextListener) {
-                ((MaterialSearchView.OnQueryTextListener) currentFrament).onQueryTextSubmit("");
+            if (currentFragment instanceof MaterialSearchView.OnQueryTextListener) {
+                ((MaterialSearchView.OnQueryTextListener) currentFragment).onQueryTextSubmit("");
             }
         }
         if (CURRENT_FRAGMENT != ONBOARD_FRAGMENT) {
@@ -561,21 +572,27 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
     public boolean onQueryTextSubmit(String query) {
         this.query = query;
         isSubmitClick = true;
-        if (currentFrament instanceof MaterialSearchView.OnQueryTextListener) {
-            ((MaterialSearchView.OnQueryTextListener) currentFrament).onQueryTextSubmit(query);
+        if (currentFragment instanceof MaterialSearchView.OnQueryTextListener) {
+            ((MaterialSearchView.OnQueryTextListener) currentFragment).onQueryTextSubmit(query);
         }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if (isSubmitClick) {
-            isSubmitClick = false;
+        if (currentFragment instanceof OnBoardFragment) {
+            materialSearchView.setEnabled(false);
+            materialSearchView.setFocusableInTouchMode(false);
             return false;
-        }
-        this.query = newText;
-        if (currentFrament instanceof MaterialSearchView.OnQueryTextListener) {
-            ((MaterialSearchView.OnQueryTextListener) currentFrament).onQueryTextChange(newText);
+        } else {
+            if (isSubmitClick) {
+                isSubmitClick = false;
+                return false;
+            }
+            this.query = newText;
+            if (currentFragment instanceof MaterialSearchView.OnQueryTextListener) {
+                ((MaterialSearchView.OnQueryTextListener) currentFragment).onQueryTextChange(newText);
+            }
         }
         return false;
     }
@@ -585,15 +602,22 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
         if (!TextUtils.isEmpty(query)) {
             materialSearchView.setQuery(query, false);
         }
-        if (currentFrament instanceof MaterialSearchView.SearchViewListener) {
-            ((MaterialSearchView.SearchViewListener) currentFrament).onSearchViewShown();
+        if (currentFragment instanceof MaterialSearchView.SearchViewListener) {
+            ((MaterialSearchView.SearchViewListener) currentFragment).onSearchViewShown();
         }
     }
 
     @Override
     public void onSearchViewClosed() {
-        if (currentFrament instanceof MaterialSearchView.SearchViewListener) {
-            ((MaterialSearchView.SearchViewListener) currentFrament).onSearchViewClosed();
+        if (currentFragment instanceof MaterialSearchView.SearchViewListener) {
+            ((MaterialSearchView.SearchViewListener) currentFragment).onSearchViewClosed();
         }
+    }
+
+    public void openSearchProfilesLisFragment(ArrayList<ClientDataDTO> clients, String branch_name, String branch_id) {
+        Bundle bundle = new Bundle();
+        bundle.putString("branch_name", branch_name);
+        bundle.putString("branch_id", branch_id);
+        replaceFragment(SEARCH_PROFILE_LIST_FRAGMENT, bundle);
     }
 }

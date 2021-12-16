@@ -895,16 +895,21 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     }
 
     private void loadDynamicForm(ArrayList<ProfileForm> dynamicForm) {
-        mainLayout.removeAllViews();
-        latitudeEditText = null;
-        longitudeEditText = null;
-        // addIdentifierField();
-        for (ProfileForm profileform : dynamicForm) {
-            addFieldToLayout(profileform);
-        }
-        containerMap.setVisibility(View.VISIBLE);
+        try {
+            mainLayout.removeAllViews();
+            latitudeEditText = null;
+            longitudeEditText = null;
+            // addIdentifierField();
+            for (ProfileForm profileform : dynamicForm) {
+                addFieldToLayout(profileform);
+            }
+            containerMap.setVisibility(View.VISIBLE);
 //        if (TextUtils.isEmpty(profileId)) {
 //        }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void addIdentifierField() {

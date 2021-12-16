@@ -1,48 +1,37 @@
-package onboard;
-
-
-import android.app.ProgressDialog;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
-
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.odedtech.mff.mffapp.BuildConfig;
-import com.odedtech.mff.mffapp.R;
-
-import java.util.ArrayList;
+package search_profiles_list;
 
 import Utilities.AlertDialogUtils;
 import Utilities.Constants;
 import Utilities.PreferenceConnector;
 import Utilities.UtilityMethods;
 import addclient.AddClientFragment;
+import android.app.ProgressDialog;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.*;
 import base.BaseFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import com.odedtech.mff.mffapp.R;
 import dashboard.DashboardActivity;
 import interfaces.IOnFragmentChangeListener;
+import onboard.*;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCallback,
-        MaterialSearchView.OnQueryTextListener, MaterialSearchView.SearchViewListener {
+import java.util.ArrayList;
+
+public class SearchProfilesListFragment extends BaseFragment implements IOnBoardFragmentCallback {
 
     private static final int PERMISSION_REQUEST_CODE = 100;
 
@@ -58,28 +47,42 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
     TextView textClear;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView(R.id.iv_search)
-    ImageView iv_search;
+    @BindView(R.id.tv_title)
+    TextView tv_title;
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
+
     private Unbinder unbinder;
     private IOnFragmentChangeListener iOnFragmentChangeListener;
-    private OnBoardPresenter onBoardPresenter;
+    private SearchProfilesListPresenter searchProfilesListPresenter;
     private ProgressDialog progressDialog = null;
-    private OnBoardAdapter onBoardAdapter;
+    private SearchProfileListAdapter searchProfileListAdapter;
 
+    private String branch_name = "";
+    private String branch_id = "";
 
     boolean isLoading = false;
     private int pageIndex = 0;
 
-    public OnBoardFragment() {
+    public SearchProfilesListFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            branch_name = bundle.getString("branch_name", "");
+            branch_id = bundle.getString("branch_id", "");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_on_board, container, false);
+        View view = inflater.inflate(R.layout.fragment_profiles_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -89,16 +92,12 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         iOnFragmentChangeListener = (IOnFragmentChangeListener) getActivity();
-        iOnFragmentChangeListener.onHeaderUpdate(Constants.ONBOARD_FRAGMENT, getString(R.string.profiles));
-        onBoardPresenter = new OnBoardPresenter(getActivity(), this);
-        if (Constants.FLAVOR_CLIENT.equalsIgnoreCase(BuildConfig.FLAVOR)) {
-            textAddClient.setText("Add Application");
-        } else {
-            textAddClient.setText("Add client");
-        }
+        tv_title.setText(branch_name);
+        searchProfilesListPresenter = new SearchProfilesListPresenter(getActivity(), this);
+
         ((DashboardActivity) getActivity()).setToolBarBackVisible(false);
         if (UtilityMethods.isNetworkAvailable(getActivity())) {
-            onBoardPresenter.getAllClients(pageIndex, true);
+            searchProfilesListPresenter.getAllClients(branch_id, pageIndex, true);
         } else {
             Toast.makeText(getActivity(), "Please check your internet", Toast.LENGTH_SHORT).show();
         }
@@ -111,30 +110,14 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
         unbinder.unbind();
     }
 
-    @OnClick({R.id.addClientLL, R.id.text_clears,R.id.iv_search})
+    @OnClick({R.id.iv_back})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.addClientLL:
-                Constants.clientDataDTO = null;
-                Constants.isFromAddClient = true;
-                iOnFragmentChangeListener.onFragmentChanged(Constants.ADD_CLIENT_FRAGMENT, null);
-                break;
-            case R.id.text_clears:
-                textClear.setVisibility(View.GONE);
-                ((DashboardActivity) getActivity()).clearSearch();
-                break;
-            case R.id.iv_search:
-                searchDialog();
+            case R.id.iv_back:
+                getActivity().onBackPressed();
                 break;
         }
     }
-
-    private void searchDialog() {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        SearchProfilesFragment alertDialog = SearchProfilesFragment.newInstance("Profiles");
-        alertDialog.show(fm, "Profiles");
-    }
-
 
     @Override
     public void showProgressBar() {
@@ -173,17 +156,17 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
             clientsRV.setVisibility(View.VISIBLE);
             noClientsTV.setVisibility(View.GONE);
             if (pageIndex == 0) {
-                if (onBoardAdapter != null) {
+                if (searchProfileListAdapter != null) {
                     isLoading = false;
                     progressBar.setVisibility(View.GONE);
-                    onBoardAdapter.setData(clients, clearAll);
+                    searchProfileListAdapter.setData(clients, clearAll);
                     textClear.setVisibility(clearAll ? View.VISIBLE : View.GONE);
                 } else {
                     setAdapter(clients);
                 }
             } else {
                 textClear.setVisibility(clearAll ? View.VISIBLE : View.GONE);
-                onBoardAdapter.setData(clients, clearAll);
+                searchProfileListAdapter.setData(clients, clearAll);
                 if (clearAll) {
                     isLoading = true;
                     progressBar.setVisibility(View.GONE);
@@ -204,11 +187,11 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
 
 
     public void setAdapter(ArrayList<ClientDataDTO> clients) {
-        onBoardAdapter = new OnBoardAdapter(getActivity(), clients, clientDataDTO -> {
+        searchProfileListAdapter = new SearchProfileListAdapter(getActivity(), clients, clientDataDTO -> {
             if (UtilityMethods.isNetworkAvailable(getActivity())) {
                 Constants.clientDataDTO = clientDataDTO;
                 Constants.isFromAddClient = false;
-                onBoardPresenter.getIsLinkedStatusAPI(clientDataDTO.profileId);
+                searchProfilesListPresenter.getIsLinkedStatusAPI(clientDataDTO.profileId);
             } else {
                 showMessage("Please check your internet");
             }
@@ -221,7 +204,7 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
         clientsRV.addItemDecoration(dividerItemDecoration);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         clientsRV.setLayoutManager(linearLayoutManager);
-        clientsRV.setAdapter(onBoardAdapter);
+        clientsRV.setAdapter(searchProfileListAdapter);
 
         /**
          * commented for now,but it should be fixed.
@@ -237,13 +220,13 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 Log.i("isLoading", "isLoading :" + isLoading);
-                if (!isLoading && onBoardAdapter.getItemCount() >= 10) {
+                if (!isLoading && searchProfileListAdapter.getItemCount() >= 10) {
                     if (linearLayoutManager != null &&
-                            linearLayoutManager.findLastCompletelyVisibleItemPosition() == onBoardAdapter.getItemCount() - 1) {
+                            linearLayoutManager.findLastCompletelyVisibleItemPosition() == searchProfileListAdapter.getItemCount() - 1) {
                         //bottom of list!
                         pageIndex++;
                         Log.i("pageIndex", "pageIndex :" + pageIndex);
-                        onBoardPresenter.getAllClients(pageIndex, false);
+                        searchProfilesListPresenter.getAllClients(branch_id, pageIndex, false);
                         isLoading = true;
                         progressBar.setVisibility(View.VISIBLE);
                     }
@@ -257,12 +240,6 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
                 clientsRV.scrollToPosition(previousPosition);
             }
         });
-    }
-
-
-    public void getAllClients() {
-        isLoading = false;
-        onBoardPresenter.getAllClients(0, true);
     }
 
     @Override
@@ -283,36 +260,4 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
         }
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        if (TextUtils.isEmpty(query)) {
-            textClear.setVisibility(View.GONE);
-            isLoading = false;
-            pageIndex = 0;
-            onBoardPresenter.getAllClients(0, true);
-        } else {
-            onBoardPresenter.getSearch(query);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        onBoardAdapter.getFilter().filter(newText);
-        if (TextUtils.isEmpty(newText)) {
-            textClear.setVisibility(View.GONE);
-            isLoading = false;
-            onBoardPresenter.getAllClients(0, true);
-        }
-        return false;
-    }
-
-    @Override
-    public void onSearchViewShown() {
-
-    }
-
-    @Override
-    public void onSearchViewClosed() {
-    }
 }

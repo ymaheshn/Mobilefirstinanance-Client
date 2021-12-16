@@ -27,6 +27,7 @@ public class Constants {
     public static final int PROFILE_DETAILS_FRAGMENT = 12;
     public static final int DASHBOARD_FRAGMENT = 13;
     public static final int SHUFPTI_FRAGMENT = 14;
+    public static final int SEARCH_PROFILE_LIST_FRAGMENT = 15;
     public static int CURRENT_FRAGMENT = -1;
 
     /*tab names constants*/
