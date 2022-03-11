@@ -49,6 +49,7 @@ import Utilities.UtilityMethods;
 import bluetooth.evolute.BluetoothComm;
 import bluetooth.evolute.BluetoothPair;
 import loans.model.ContractCodes;
+import loans.model.LoanContractCodes;
 import networking.MyApplication;
 
 @SuppressLint("ValidFragment")
@@ -57,6 +58,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
     private int recipetId;
     private DeviceConnected deviceConnected;
     private ContractCodes contractCodes;
+    private LoanContractCodes contractCodes1;
     private int collectedAmount;
     private MyApplication myApplication;
 
@@ -90,6 +92,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
     private OutputStream outstream;
     private Printer_GEN prnGen;
     private String sDevicetype;
+    private String type;
     private Integer iRetVal;
     private boolean mblBonded;
     private int interest;
@@ -109,7 +112,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
 
     @SuppressLint("ValidFragment")
     public BluetoothDeviceFragment(DeviceConnected deviceConnected, ContractCodes contractCodes, int collectedAmount,
-                                   int interest, int pricipal, int total, int recipetId) {
+                                   int interest, int pricipal, int total, int recipetId,String type) {
         this.recipetId = recipetId;
         this.deviceConnected = deviceConnected;
         this.contractCodes = contractCodes;
@@ -117,6 +120,20 @@ public class BluetoothDeviceFragment extends DialogFragment {
         this.interest = interest;
         this.pricipal = pricipal;
         this.total = total;
+        this.type = type;
+    }
+
+    @SuppressLint("ValidFragment")
+    public BluetoothDeviceFragment(DeviceConnected deviceConnected, LoanContractCodes contractCodes, int collectedAmount,
+                                   int interest, int pricipal, int total, int recipetId,String type) {
+        this.recipetId = recipetId;
+        this.deviceConnected = deviceConnected;
+        this.contractCodes1 = contractCodes;
+        this.collectedAmount = collectedAmount;
+        this.interest = interest;
+        this.pricipal = pricipal;
+        this.total = total;
+        this.type = type;
     }
 
     @Nullable
@@ -763,12 +780,22 @@ public class BluetoothDeviceFragment extends DialogFragment {
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Receipt No: " + recipetId);
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Date:" + UtilityMethods.getDateFormat());
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Name: " + contractCodes.name);
+                if (type.equalsIgnoreCase("1")){
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Name: " + contractCodes.name);
 
-                // TODO: Dont miuss this
-                // ptr.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "LAST NAME:" + ll.getLastName());
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "CC: " + contractCodes.contractUUID);
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Client ID: " + contractCodes.identifier);
+                    // TODO: Dont miuss this
+                    // ptr.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "LAST NAME:" + ll.getLastName());
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "CC: " + contractCodes.contractUUID);
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Client ID: " + contractCodes.identifier);
+                }else {
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Name: " + contractCodes1.getName());
+
+                    // TODO: Dont miuss this
+                    // ptr.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "LAST NAME:" + ll.getLastName());
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "CC: " + contractCodes1.getContractUUID());
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Client ID: " + contractCodes1.getIdentifier());
+                }
+
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Principal:       " + pricipal + ".00");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Interest:         " + interest + ".00");
