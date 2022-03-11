@@ -23,6 +23,7 @@
     <application
         android:name="networking.MyApplication"
         android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher"
@@ -30,8 +31,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="LockedOrientationActivity"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:replace="android:icon">
-        <activity android:name="vas.BlockCardActivity"></activity>
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/network_security_config" />
+
+        <activity android:name="vas.BlockCardActivity" />
         <activity android:name="vas.TransferActivity" />
         <activity
             android:name="dashboard.DashboardActivity"
@@ -51,6 +57,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_api_key" />
 
+        <activity
+            android:name="loans.LoanCollectionActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.odedtech.mff.mff_android.SplashActivity"
             android:screenOrientation="portrait">
@@ -74,6 +83,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="client.login.SignUpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="loans.BusinessDocumentsActivity"
             android:screenOrientation="portrait" />
 
         <receiver

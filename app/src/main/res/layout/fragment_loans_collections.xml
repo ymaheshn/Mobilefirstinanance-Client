@@ -162,17 +162,17 @@
 
         <LinearLayout
             android:id="@+id/container_collect"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_collect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginBottom="@dimen/_10dp"
                 android:layout_marginEnd="@dimen/_5dp"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:layout_weight="1"
                 android:background="@drawable/save_btn_bg_inactive"
                 android:gravity="center"
                 android:text="@string/collection_cash"

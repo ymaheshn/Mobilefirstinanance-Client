@@ -13,15 +13,17 @@ public class BaseActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    protected void showLoading() {
+    public void showLoading() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+        if(progressDialog == null) {
+            progressDialog.show();
+        }
     }
 
-    protected void dismissLoading() {
+    public void dismissLoading() {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }

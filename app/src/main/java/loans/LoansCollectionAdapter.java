@@ -1,5 +1,6 @@
 package loans;
 
+import Utilities.AlertDialogUtils;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,25 +9,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.odedtech.mff.mffapp.R;
-
+import loans.model.CollectionPortfolioDetails;
+import loans.model.Installments;
+import loans.model.LoanBluetoothData;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import Utilities.AlertDialogUtils;
-import loans.model.CollectionPortfolio;
-import loans.model.CollectionPortfolioDetails;
-import loans.model.Installments;
-import loans.model.LoanBluetoothData;
-import loans.model.ProfileCollection;
-
-public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapter.ViewHolder> {
+public class LoansCollectionAdapter extends RecyclerView.Adapter<LoansCollectionAdapter.ViewHolder> {
 
     private final ArrayList<Installments> collections;
     private final OnUpdateAmount onUpdateAmount;
@@ -35,7 +31,7 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
     private int selectedPosition = -1;
 
 
-    public InstallmentsAdapter(Context context, ArrayList<Installments> collections,
+    public LoansCollectionAdapter(Context context, ArrayList<Installments> collections,
                                OnUpdateAmount onUpdateAmount) {
         this.context = context;
         this.collections = collections;
@@ -53,7 +49,6 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Installments installments = collections.get(i);
         CollectionPortfolioDetails profileCollection = installments.collectionPR;
-        CollectionPortfolioDetails profileCollectionNext = installments.collectionIP;
         viewHolder.textDate.setText(profileCollection.event_time);
         if (selectedPosition==i){
             viewHolder.checkInstallment.setChecked(installments.isChecked);
@@ -62,19 +57,10 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
             installments.isChecked = false;
             viewHolder.checkInstallment.setChecked(false);
         }
-       /* if(i == 0 && !installments.isChecked){
-            viewHolder.checkInstallment.setChecked(false);
-        }*/
-        if (profileCollection.event_type.equalsIgnoreCase("PR")) {
-            viewHolder.textPrincipal.setText(String.valueOf(profileCollection.event_value));
-            viewHolder.textInterest.setText(String.valueOf(profileCollectionNext.event_value));
-        } else {
-            viewHolder.textPrincipal.setText(String.valueOf(profileCollectionNext.event_value));
-            viewHolder.textInterest.setText(String.valueOf(profileCollection.event_value));
-        }
-        viewHolder.textTotal.setText(String.valueOf(Integer.parseInt(profileCollection.event_value) + Integer.parseInt(profileCollectionNext.event_value)));
-     //   viewHolder.checkInstallment.setOnCheckedChangeListener(null);
-       // viewHolder.checkInstallment.setChecked(installments.isChecked);
+        viewHolder.ll_interest.setVisibility(View.GONE);
+        viewHolder.tv_principal.setText("Event Type");
+        viewHolder.textPrincipal.setText(profileCollection.event_type);
+        viewHolder.textTotal.setText(String.valueOf(Integer.parseInt(profileCollection.event_value)));
         viewHolder.checkInstallment.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
         });
@@ -92,6 +78,8 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
         private final TextView textInterest;
         private final TextView textPrincipal;
         private final TextView textTotal;
+        private final TextView tv_principal;
+        private final LinearLayout ll_interest;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,14 +88,16 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
             textPrincipal = itemView.findViewById(R.id.text_prinicpal);
             textTotal = itemView.findViewById(R.id.text_total);
             checkInstallment = itemView.findViewById(R.id.check_installment);
+            tv_principal = itemView.findViewById(R.id.tv_principal);
+            ll_interest = itemView.findViewById(R.id.ll_interest);
             itemView.setOnClickListener(v -> {
                 Installments installments = collections.get(getAdapterPosition());
 
                 selectedPosition = getAdapterPosition();
-                if(selectedPosition == 0){
+            //    if(selectedPosition == 0){
                     if(installments.isChecked){
                         onUpdateAmount.onUpdate(0.0);
-                       installments.isChecked = !installments.isChecked;
+                        installments.isChecked = !installments.isChecked;
                         notifyDataSetChanged();
                         return;
                     }else{
@@ -118,33 +108,24 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
                         notifyDataSetChanged();
                     }
                     boolean previousSelection = checkPreviousSelection(getAdapterPosition());
-               if (previousSelection) {
+                    if (previousSelection) {
                   /* deselectThePreviousSelections(getAdapterPosition());
                    int totalAmountInstallment = Integer.parseInt(textTotal.getText().toString());
                   // if (!installments.isChecked) {
                        onUpdateAmount.onUpdate(totalAmountInstallment);
                        // installments.isChecked = !installments.isChecked;
                        notifyDataSetChanged();*/
-                  // }
-               }
-                  /*  if (!installments.isChecked) {
-                        totalAmount = totalAmount + totalAmountInstallment;
-                    } else {
-                        deselectThePreviousSelections(getAdapterPosition());
-                        totalAmount = totalAmount - totalAmountInstallment;
-                    }*/
-                  // onUpdateAmount.onUpdate(totalAmountInstallment);
-                   // installments.isChecked = !installments.isChecked;
-                //   notifyDataSetChanged();
-               }
-                else {
+                        // }
+                    }
+               // }
+               /* else {
                     if(selectedPosition > 0){
                         AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select only one installment at a time");
 
                     }
-                    }
-            //    } else {
-              //      AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select the previous installments");
+                }*/
+                //    } else {
+                //      AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select the previous installments");
                 //}
             });
         }
@@ -195,7 +176,7 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
                     jsonObjectPR.put("ProcessTime", jsonObjectFromPR.get("event_time").toString().concat("T00:00"));
                     jsonArray.put(jsonObjectPR);
 
-                    JSONObject jsonObjectIP = new JSONObject();
+                   /* JSONObject jsonObjectIP = new JSONObject();
 
                     JSONObject jsonObjectFromIP = new JSONObject(gson.toJson(collection.collectionIP, CollectionPortfolioDetails.class));
                     JSONObject eventJSONIP = (JSONObject) jsonObjectFromIP.get("eventjson");
@@ -213,7 +194,7 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
                     jsonObjectIP.put("PaymentMethod", eventJSONTransIP.get("PaymentMethod").toString());
                     jsonObjectIP.put("RemainingAmount", Double.parseDouble(eventJSONTransIP.get("RemainingAmount").toString()));
                     jsonObjectIP.put("ProcessTime", jsonObjectFromIP.get("event_time").toString().concat("T00:00"));
-                    jsonArray.put(jsonObjectIP);
+                    jsonArray.put(jsonObjectIP);*/
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -235,8 +216,8 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
         for (Installments collection : collections) {
             if (collection.isChecked) {
                 principal = principal + Integer.parseInt(collection.collectionPR.event_value);
-                interest = interest + Integer.parseInt(collection.collectionIP.event_value);
-                total = total + Integer.parseInt(collection.collectionPR.event_value) + Integer.parseInt(collection.collectionIP.event_value);
+                interest = interest + Integer.parseInt(collection.collectionPR.event_value);
+                total = total + Integer.parseInt(collection.collectionPR.event_value) ;
             }
         }
         bluetoothData.interest = bluetoothData.interest + interest;

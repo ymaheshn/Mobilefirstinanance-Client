@@ -319,7 +319,7 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
 
 
     public class MyAdapter extends MultiLevelAdapter implements Filterable {
-        private MyAdapter.Holder mViewHolder;
+        private Holder mViewHolder;
         private Context mContext;
         private List<RecyclerViewItem> mOriginalItems = new ArrayList<>();
         private List<RecyclerViewItem> mListItems;
@@ -340,12 +340,12 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MyAdapter.Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.branch_item_layout, parent, false));
+            return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.branch_item_layout, parent, false));
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            mViewHolder = (MyAdapter.Holder) holder;
+            mViewHolder = (Holder) holder;
             mItem = mListItems.get(position);
 
             switch (getItemViewType(position)) {

@@ -74,6 +74,7 @@ import Utilities.CustomDialogues;
 import Utilities.PreferenceConnector;
 import Utilities.UtilityMethods;
 import addclient.AddClientFragment;
+import base.BaseActivity;
 import base.BaseFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -32,13 +32,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewModel>
     }
 
     @Override
-    public SearchAdapter.ViewModel onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewModel onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.branch_item_layout, parent, false);
-        return new SearchAdapter.ViewModel(view);
+        return new ViewModel(view);
     }
 
     @Override
-    public void onBindViewHolder(SearchAdapter.ViewModel holder, int position) {
+    public void onBindViewHolder(ViewModel holder, int position) {
         holder.mTitle.setText(mList.get(position).branch_name);
     }
 

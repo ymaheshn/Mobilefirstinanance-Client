@@ -47,7 +47,7 @@ public class BaseFragment extends Fragment {
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
         } else {
-            String[] split = date.split("/");
+            String[] split = date.split("-");
             if (split.length == 3) {
                 mYear = Integer.parseInt(split[0]);
                 mMonth = Integer.parseInt(split[1]) - 1;

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.odedtech.mff.mffapp.R;
 import com.prowesspride.api.Setup;
 
+import loans.model.*;
 import org.json.JSONArray;
 
 import java.text.DateFormat;
@@ -41,13 +42,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import dashboard.DashboardActivity;
 import interfaces.IOnFragmentChangeListener;
-import loans.model.CollectionPortfolio;
-import loans.model.CollectionPortfolioDetails;
-import loans.model.CollectionPortfolioDetailsResponse;
-import loans.model.Datum;
-import loans.model.Installments;
-import loans.model.LoanBluetoothData;
-import loans.model.ProfileCollection;
 import network.MFFApiWrapper;
 import networking.MyApplication;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -67,6 +61,10 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
     @BindView(R.id.container_collect)
     View containerCollect;
 
+    @BindView(R.id.btn_print)
+    Button btnprint;
+    boolean showPrint = false;
+
 //    @BindView(R.id.text_collection_principal)
 //    TextView textPrincipal;
 //
@@ -83,6 +81,7 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
     private LoanCollectionsPresenter loansPresenter;
     private ProgressDialog progressDialog = null;
     private CollectionPortfolio linkedProfileData;
+    private LoansPortfolio linkedProfileData1;
     private int collectedAmount;
 //    private List<Collection> profileCollections;
 
@@ -95,6 +94,8 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
     private View textNoRepayment;
     private View bottomLayout;
     private int recieptId = -1;
+    private String type = "";
+    private String eventType = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,9 +127,16 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
     }
 
     private void getPortfolioDetails() {
+        if (type.equalsIgnoreCase("2")) {
+            List<String> objString = new ArrayList<>();
+            objString.add("IED");
+            objString.add("FP");
+       //    String.format("%s,%s","IED","FP");
+            eventType = String.format("%s,%s","IED","FP");
+        }
         String accessToken = PreferenceConnector.readString(getActivity(),
                 getActivity().getString(R.string.accessToken), "");
-        MFFApiWrapper.getInstance().service.getPortfolioCollectionDetails(accessToken, contractUuid, "")
+        MFFApiWrapper.getInstance().service.getPortfolioCollectionDetails(accessToken, contractUuid, eventType)
                 .enqueue(new Callback<CollectionPortfolioDetailsResponse>() {
                     @Override
                     public void onResponse(Call<CollectionPortfolioDetailsResponse> call,
@@ -161,8 +169,15 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle arguments = getArguments();
-        linkedProfileData = arguments.
-                getParcelable(Constants.KeyExtras.LINKED_PROFILE);
+        type = arguments.getString("type");
+        if (type.equalsIgnoreCase("1")) {
+            linkedProfileData = arguments.
+                    getParcelable(Constants.KeyExtras.LINKED_PROFILE);
+        } else {
+            linkedProfileData1 = arguments.
+                    getParcelable(Constants.KeyExtras.LINKED_PROFILE);
+        }
+
         contractUuid = arguments.
                 getString(Constants.KeyExtras.CONTRACT_ID);
 //        profileCollections = arguments.getParcelableArrayList(Constants.KeyExtras.LINKED_PROFILE_COLLECTION);
@@ -172,9 +187,14 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
         bottomLayout = view.findViewById(R.id.bottom_layout);
 
         TextView textName = view.findViewById(R.id.nameTV);
-        textName.setText(linkedProfileData.contractCodes.name);
         TextView textRole = view.findViewById(R.id.text_role);
-        textRole.setText(linkedProfileData.contractCodes.identifier);
+        if (type.equalsIgnoreCase("1")) {
+            textName.setText(linkedProfileData.contractCodes.name);
+            textRole.setText(linkedProfileData.contractCodes.identifier);
+        } else {
+            textName.setText(linkedProfileData1.loanContractCodes.getName());
+            textRole.setText(linkedProfileData1.loanContractCodes.getIdentifier());
+        }
 
         getPortfolioDetails();
 //        int balanceAmount = linkedProfileData.contractCodes.nextTotalCollection;
@@ -237,12 +257,22 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
         recyclerView.setAdapter(installmentsAdapter);
         if (adapterInstallments == null || adapterInstallments.size() == 0) {
             recyclerView.setVisibility(View.GONE);
-            bottomLayout.setVisibility(View.GONE);
+            //  bottomLayout.setVisibility(View.GONE);
+            containerEditPay.setVisibility(View.GONE);
+            containerCollect.setVisibility(View.GONE);
             textNoRepayment.setVisibility(View.VISIBLE);
+            if (showPrint) {
+                btnprint.setVisibility(View.VISIBLE);
+            } else {
+                btnprint.setVisibility(View.GONE);
+            }
         } else {
             recyclerView.setVisibility(View.VISIBLE);
-            bottomLayout.setVisibility(View.VISIBLE);
+            //   bottomLayout.setVisibility(View.VISIBLE);
+            containerEditPay.setVisibility(View.GONE);
+            containerCollect.setVisibility(View.GONE);
             textNoRepayment.setVisibility(View.GONE);
+            btnprint.setVisibility(View.VISIBLE);
         }
     }
 
@@ -296,21 +326,39 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
             builder.setMessage(message).setPositiveButton("Yes", (dialogInterface, i) -> {
                 // Start the Bluetooth
 //                bluetoothData = installmentsAdapter.getBluetoothData();
-                BluetoothDeviceFragment deviceFragment = new BluetoothDeviceFragment(new BluetoothDeviceFragment.DeviceConnected() {
-                    @Override
-                    public void deviceConnected(boolean isConnected) {
+                if (type.equalsIgnoreCase("1")) {
+                    BluetoothDeviceFragment deviceFragment = new BluetoothDeviceFragment(new BluetoothDeviceFragment.DeviceConnected() {
+                        @Override
+                        public void deviceConnected(boolean isConnected) {
 
-                    }
+                        }
 
-                    @Override
-                    public void printSuccessfully() {
-                        getActivity().onBackPressed();
-                    }
-                }, linkedProfileData.contractCodes, collectedAmount, bluetoothData.interest,
-                        bluetoothData.principal, bluetoothData.total, recieptId);
+                        @Override
+                        public void printSuccessfully() {
+                            getActivity().onBackPressed();
+                        }
+                    }, linkedProfileData.contractCodes, collectedAmount, bluetoothData.interest,
+                            bluetoothData.principal, bluetoothData.total, recieptId, type);
+                    deviceFragment.show(getActivity().getSupportFragmentManager(),
+                            BluetoothDeviceFragment.class.getSimpleName());
+                } else {
+                    BluetoothDeviceFragment deviceFragment = new BluetoothDeviceFragment(new BluetoothDeviceFragment.DeviceConnected() {
+                        @Override
+                        public void deviceConnected(boolean isConnected) {
 
-                deviceFragment.show(getActivity().getSupportFragmentManager(),
-                        BluetoothDeviceFragment.class.getSimpleName());
+                        }
+
+                        @Override
+                        public void printSuccessfully() {
+                            getActivity().onBackPressed();
+                        }
+                    }, linkedProfileData1.loanContractCodes, collectedAmount, bluetoothData.interest,
+                            bluetoothData.principal, bluetoothData.total, recieptId, type);
+                    deviceFragment.show(getActivity().getSupportFragmentManager(),
+                            BluetoothDeviceFragment.class.getSimpleName());
+                }
+
+
             }).setNegativeButton("Cancel", null).show();
         } else {
             Toast.makeText(getActivity(), "You didn't collect the loan", Toast.LENGTH_LONG).show();
@@ -339,6 +387,7 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
                         JSONArray data = installmentsAdapter.getSavedPortfolioData();
                         bluetoothData = installmentsAdapter.getBluetoothData(bluetoothData);
                         showLoading();
+                        showPrint = true;
 //                        savePortfolioCollectedLoan(data);
                         loansPresenter.savePayment(0, data);
 //                        loansPresenter.saveContractData(((DashboardActivity) getActivity()).addLoanCollectionUseCase, editLoanAmount.getText().toString(),
@@ -347,21 +396,39 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
                         if (recieptId != -1 && bluetoothData != null) {
                             // Start the Bluetooth
 //                            bluetoothData = installmentsAdapter.getBluetoothData();
-                            BluetoothDeviceFragment deviceFragment = new BluetoothDeviceFragment(new BluetoothDeviceFragment.DeviceConnected() {
-                                @Override
-                                public void deviceConnected(boolean isConnected) {
+                            if (type.equalsIgnoreCase("1")) {
+                                BluetoothDeviceFragment deviceFragment = new BluetoothDeviceFragment(new BluetoothDeviceFragment.DeviceConnected() {
+                                    @Override
+                                    public void deviceConnected(boolean isConnected) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void printSuccessfully() {
-                                    getActivity().onBackPressed();
-                                }
-                            }, linkedProfileData.contractCodes, collectedAmount, bluetoothData.interest,
-                                    bluetoothData.principal, bluetoothData.principal, recieptId);
+                                    @Override
+                                    public void printSuccessfully() {
+                                        getActivity().onBackPressed();
+                                    }
+                                }, linkedProfileData.contractCodes, collectedAmount, bluetoothData.interest,
+                                        bluetoothData.principal, bluetoothData.principal, recieptId, type);
 
-                            deviceFragment.show(getActivity().getSupportFragmentManager(),
-                                    BluetoothDeviceFragment.class.getSimpleName());
+                                deviceFragment.show(getActivity().getSupportFragmentManager(),
+                                        BluetoothDeviceFragment.class.getSimpleName());
+                            } else {
+                                BluetoothDeviceFragment deviceFragment = new BluetoothDeviceFragment(new BluetoothDeviceFragment.DeviceConnected() {
+                                    @Override
+                                    public void deviceConnected(boolean isConnected) {
+
+                                    }
+
+                                    @Override
+                                    public void printSuccessfully() {
+                                        getActivity().onBackPressed();
+                                    }
+                                }, linkedProfileData1.loanContractCodes, collectedAmount, bluetoothData.interest,
+                                        bluetoothData.principal, bluetoothData.principal, recieptId, type);
+
+                                deviceFragment.show(getActivity().getSupportFragmentManager(),
+                                        BluetoothDeviceFragment.class.getSimpleName());
+                            }
                         } else {
                             Toast.makeText(getActivity(), "You didn't collect the loan", Toast.LENGTH_LONG).show();
                         }
