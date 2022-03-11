@@ -5,10 +5,7 @@ import base.MFFResponseNew;
 import dashboard.models.DashboardCount;
 import dashboard.models.GraphCount;
 import dashboard.models.ProfileCount;
-import loans.model.CollectionPortfolioDetailsResponse;
-import loans.model.CollectionPortfolioResponse;
-import loans.model.DashBoardGraphResponse;
-import loans.model.SavedPortfolioResponse;
+import loans.model.*;
 import login.model.EntityResponse;
 import login.model.LoginRequest;
 import login.model.LoginResponse;
@@ -59,4 +56,42 @@ public interface MFFApiService {
 
     @GET("/PortfolioService/contracts/delinquency/count/{date}")
     Call<DashBoardGraphResponse> getGraphDetails(@Path("date") String date, @Query("access_token") String accessToken);
+
+    @GET("/PortfolioService/bulkReceiveAndDeals")
+    Call<LoansPortfolioResponse> getLoans(@Query("access_token") String accessToken,
+                                          @Query("pageNumber") int pageNumber,
+                                          @Query("numberOfRecords") int numberOfRecords,
+                                          @Query("eventType") String eventType);
+
+    @GET("/PortfolioService/bulkReceiveAndDeals")
+    Call<LoansPortfolioResponse> searchLoansUsingName(@Query("access_token") String accessToken,
+                                                      @Query("Name") String name,
+                                                      @Query("pageNumber") int pageNumber,
+                                                      @Query("numberOfRecords") int numberOfRecords,
+                                                      @Query("eventType") String eventType);
+    @GET("/PortfolioService/bulkReceiveAndDeals")
+    Call<LoansPortfolioResponse> searchLoansUsingHierarchy(@Query("access_token") String accessToken,
+                                                      @Query("Hierarchy") String name,
+                                                      @Query("pageNumber") int pageNumber,
+                                                      @Query("numberOfRecords") int numberOfRecords,
+                                                      @Query("eventType") String eventType);
+
+    @GET("/PortfolioService/bulkReceiveAndDeals")
+    Call<LoansPortfolioResponse> searchLoansUsingNationalId(@Query("access_token") String accessToken,
+                                                           @Query("nationalId") String name,
+                                                           @Query("pageNumber") int pageNumber,
+                                                           @Query("numberOfRecords") int numberOfRecords,
+                                                           @Query("eventType") String eventType);
+
+    @GET("/PortfolioService/bulkReceiveAndDeals")
+    Call<LoansPortfolioResponse> searchLoansUsingIdentifier(@Query("access_token") String accessToken,
+                                                           @Query("identifier") String name,
+                                                           @Query("pageNumber") int pageNumber,
+                                                           @Query("numberOfRecords") int numberOfRecords,
+                                                           @Query("eventType") String eventType);
+
+    @GET("/ProfileService/files/{profileID}/business")
+    Call<BusinessDocumentsModel> getBusinessDocuments(@Path("profileID") String name,@Query("access_token") String accessToken);
+
+
 }

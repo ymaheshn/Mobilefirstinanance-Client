@@ -124,5 +124,6 @@
     <string name="select_service">Please, select one or more methods of verification.</string>
     <string name="something_went_wrong">Something went wrong. Please try after some time.</string>
     <string name="profiles">Profiles</string>
+    <string name="business_documents">Business Documents</string>
 
 </resources>

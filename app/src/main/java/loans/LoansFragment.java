@@ -112,11 +112,11 @@ public class LoansFragment extends BaseFragment implements LoansFragmentCallback
         loansPresenter = new LoansPresenter(getActivity(), this);
         radioGroupContracts.setOnCheckedChangeListener(this);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+      /*  LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         disbursalsRecyclerView.setLayoutManager(linearLayoutManager);
         disbursalsRecyclerView.setAdapter(new DisbursalsAdapter(getActivity(), datum -> {
 
-        }));
+        }));*/
     }
 
 
