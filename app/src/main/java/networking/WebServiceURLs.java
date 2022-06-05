@@ -19,6 +19,9 @@ public class WebServiceURLs {
     public static String UPDATE_KYC_DATA_URL = "/ProfileService/profiles/PROFILE_ID?access_token=";
     public static String ALL_PROFILES_URL = "/ProfileService/profiles?pageNumber=PAGE_NUMBER&numberOfRecords=NUMBER_OF_RECORDS&access_token=";
     public static String SEARCH_PROFILES_URL = "/ProfileService/searchProfiles?name=NAME&access_token=";
+    public static String SEARCH_PROFILES_URL_HIERARCHY = "/ProfileService/searchProfiles?group=HIERARCHY&access_token=";
+    public static String SEARCH_PROFILES_URL_NATIONAL_ID = "/ProfileService/searchProfiles?nationalId=NATIONALID&access_token=";
+    public static String SEARCH_PROFILES_URL_IDENTIFIER = "/ProfileService/searchProfiles?identifier=IDENTIFIER&access_token=";
     public static String GET_LINKED_PORTFOLIO_URL = "/PortfolioService/getLinkedportfolio?access_token=";
     public static String GET_EVENTS_BY_CONTRACTUUID_URL = "/PortfolioService/geteventsBycontractUUID?access_token=";
     public static String PROFILE_LINK_STATUS_URL = "/WorkflowService/mobileApp/PROFILE_ID?access_token=";

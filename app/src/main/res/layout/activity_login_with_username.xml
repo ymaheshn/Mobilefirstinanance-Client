@@ -257,6 +257,7 @@
                     android:layout_marginStart="@dimen/_10dp"
                     android:layout_marginLeft="@dimen/_10dp"
                     android:layout_weight="0.8"
+                    android:visibility="gone"
                     android:background="@drawable/round_bg"
                     android:gravity="center"
                     android:onClick="facebookSignIn"

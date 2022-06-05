@@ -1,5 +1,20 @@
 package dashboard;
 
+import static Utilities.Constants.ADD_CLIENT_FRAGMENT;
+import static Utilities.Constants.CURRENT_FRAGMENT;
+import static Utilities.Constants.DASHBOARD_FRAGMENT;
+import static Utilities.Constants.KYC_FRAGMENT;
+import static Utilities.Constants.LOANS_FRAGMENT;
+import static Utilities.Constants.LOAN_COLLECTIONS_FRAGMENT;
+import static Utilities.Constants.MAP_FRAGMENT;
+import static Utilities.Constants.ONBOARD_FRAGMENT;
+import static Utilities.Constants.PROFILE_DETAILS_FRAGMENT;
+import static Utilities.Constants.SAVINGS_FRAGMENT;
+import static Utilities.Constants.SCAN;
+import static Utilities.Constants.SEARCH_PROFILE_LIST_FRAGMENT;
+import static Utilities.Constants.SHUFPTI_FRAGMENT;
+import static Utilities.Constants.VAS_FRAGMENT;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -9,10 +24,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.MenuInflater;
 import android.view.View;
@@ -22,6 +33,11 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -34,8 +50,9 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.odedtech.mff.mff_android.EmptyFragment;
 import com.odedtech.mff.mffapp.R;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -47,6 +64,7 @@ import base.BaseFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import collections.CollectionsFragment;
 import database.db.DBOperations;
 import domain.AddLoanCollectionUseCase;
 import domain.GetLoanCollectionsUseCase;
@@ -63,17 +81,13 @@ import networking.MyApplication;
 import onboard.ClientDataDTO;
 import onboard.OnBoardFragment;
 import pub.devrel.easypermissions.EasyPermissions;
-import savings.SavingsFragment;
 import search_profiles_list.SearchProfilesListFragment;
 import services.LocationUpdatesBroadcastReceiver;
 import shufpti.ShufptiVerificationServicesFragment;
 import vas.VasFragment;
 
-import java.util.ArrayList;
-
-import static Utilities.Constants.*;
-
-public class DashboardActivity extends BaseActivity implements IOnFragmentChangeListener, MaterialSearchView.OnQueryTextListener, MaterialSearchView.SearchViewListener {
+public class DashboardActivity extends BaseActivity implements IOnFragmentChangeListener,
+        MaterialSearchView.OnQueryTextListener, MaterialSearchView.SearchViewListener {
     private static final int RC_LOCATION = 9;
 
     private static final int LOCATION_SETTINGS_REQUEST = 8;
@@ -140,7 +154,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
             EasyPermissions.requestPermissions(this, getString(R.string.location_rationilze),
                     RC_LOCATION, perms);
         }
-
+        clientClickRV.setBackgroundResource(R.color.theme_dark);
         materialSearchView.setOnQueryTextListener(this);
         materialSearchView.setOnSearchViewListener(this);
         materialSearchView.setSubmitOnClick(false);
@@ -232,33 +246,52 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
     @OnClick({R.id.clientClickRV, R.id.loansClickRV, R.id.savingsClickRV, R.id.reportsClickRV, R.id.adharScannerIV,
             R.id.img_search, R.id.img_more, R.id.toolbar_back, R.id.profileClickRV})
     public void onButtonClick(View view) {
-        switch (view.getId()) {
-            case R.id.clientClickRV:
-                replaceFragment(DASHBOARD_FRAGMENT, null);
-                break;
-            case R.id.loansClickRV:
-                replaceFragment(LOANS_FRAGMENT, null);
-                break;
-            case R.id.savingsClickRV:
-                replaceFragment(VAS_FRAGMENT, null);
-                break;
-            case R.id.reportsClickRV:
-                replaceFragment(SAVINGS_FRAGMENT, null);
-            case R.id.profileClickRV:
-                replaceFragment(ONBOARD_FRAGMENT, null);
-                break;
-            case R.id.adharScannerIV:
-                iOnHeaderItemsClickListener.onHeaderItemClick(SCAN);
-                break;
-            case R.id.img_search:
-                materialSearchView.showSearch(true);
-                break;
-            case R.id.img_more:
-                showPopup(view);
-                break;
-            case R.id.toolbar_back:
-                onBackPressed();
-                break;
+        if (view.getId() == R.id.clientClickRV) {
+            clientClickRV.setBackgroundResource(R.color.theme_dark);
+            loansClickRV.setBackgroundResource(R.color.colorBlack);
+            savingsClickRV.setBackgroundResource(R.color.colorBlack);
+            reportsClickRV.setBackgroundResource(R.color.colorBlack);
+            profileClickRV.setBackgroundResource(R.color.colorBlack);
+            replaceFragment(DASHBOARD_FRAGMENT, null);
+        } else if (view.getId() == R.id.loansClickRV) {
+            clientClickRV.setBackgroundResource(R.color.colorBlack);
+            loansClickRV.setBackgroundResource(R.color.theme_dark);
+            savingsClickRV.setBackgroundResource(R.color.colorBlack);
+            reportsClickRV.setBackgroundResource(R.color.colorBlack);
+            profileClickRV.setBackgroundResource(R.color.colorBlack);
+            replaceFragment(LOANS_FRAGMENT, null);
+        } else if (view.getId() == R.id.savingsClickRV) {
+            clientClickRV.setBackgroundResource(R.color.colorBlack);
+            savingsClickRV.setBackgroundResource(R.color.colorBlack);
+            loansClickRV.setBackgroundResource(R.color.colorBlack);
+            savingsClickRV.setBackgroundResource(R.color.theme_dark);
+            reportsClickRV.setBackgroundResource(R.color.colorBlack);
+            profileClickRV.setBackgroundResource(R.color.colorBlack);
+            replaceFragment(VAS_FRAGMENT, null);
+        } else if (view.getId() == R.id.reportsClickRV) {
+            clientClickRV.setBackgroundResource(R.color.colorBlack);
+            reportsClickRV.setBackgroundResource(R.color.colorBlack);
+            loansClickRV.setBackgroundResource(R.color.colorBlack);
+            savingsClickRV.setBackgroundResource(R.color.colorBlack);
+            reportsClickRV.setBackgroundResource(R.color.theme_dark);
+            profileClickRV.setBackgroundResource(R.color.colorBlack);
+            replaceFragment(SAVINGS_FRAGMENT, null);
+        } else if (view.getId() == R.id.profileClickRV) {
+            clientClickRV.setBackgroundResource(R.color.colorBlack);
+            profileClickRV.setBackgroundResource(R.color.colorBlack);
+            loansClickRV.setBackgroundResource(R.color.colorBlack);
+            savingsClickRV.setBackgroundResource(R.color.colorBlack);
+            reportsClickRV.setBackgroundResource(R.color.colorBlack);
+            profileClickRV.setBackgroundResource(R.color.theme_dark);
+            replaceFragment(ONBOARD_FRAGMENT, null);
+        } else if (view.getId() == R.id.adharScannerIV) {
+            iOnHeaderItemsClickListener.onHeaderItemClick(SCAN);
+        } else if (view.getId() == R.id.img_search) {
+            materialSearchView.showSearch(true);
+        } else if (view.getId() == R.id.img_more) {
+            showPopup(view);
+        } else if (view.getId() == R.id.toolbar_back) {
+            onBackPressed();
         }
     }
 
@@ -294,7 +327,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
             CURRENT_FRAGMENT = fragmentName;
             switch (fragmentName) {
                 case ONBOARD_FRAGMENT:
-                    headerView.setVisibility(View.GONE);
+                    headerView.setVisibility(View.VISIBLE);
                     headerTitleTV.setText(R.string.profiles);
                     currentFragment = new OnBoardFragment();
                     addFragmentToContent(currentFragment, "client");
@@ -312,7 +345,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     addFragmentToContent(currentFragment, "Contracts");
                     break;
                 case MAP_FRAGMENT:
-                    headerView.setVisibility(View.GONE);
+                    headerView.setVisibility(View.VISIBLE);
                     currentFragment = new MapViewFragment();
                     addFragmentToContent(currentFragment, getString(R.string.onboard));
                     break;
@@ -326,12 +359,14 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                 case SAVINGS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFragment = new EmptyFragment();
+                    headerTitleTV.setText("Collections");
+                    currentFragment = new CollectionsFragment();
                     addFragmentToContent(currentFragment, "Reports");
                     break;
                 case SHUFPTI_FRAGMENT:
                     currentFragment = new ShufptiVerificationServicesFragment();
                     addFragmentToContent(currentFragment, "Shufpti Pro");
+                    break;
             }
         }
     }
@@ -353,7 +388,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
         if (currentFragment instanceof OnBoardFragment) {
             ((OnBoardFragment) currentFragment).getAllClients();
         } else if (currentFragment instanceof LoansFragmentNew) {
-            ((LoansFragmentNew) currentFragment).getCollectionPortfolio();
+            ((LoansFragmentNew) currentFragment).getLoans();
         }
     }
 
@@ -365,18 +400,18 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
             CURRENT_FRAGMENT = fragmentName;
             switch (fragmentName) {
                 case ONBOARD_FRAGMENT:
-                    headerView.setVisibility(View.GONE);
+                    headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFragment = new OnBoardFragment();
                     imgSearch.setVisibility(View.VISIBLE);
+                    currentFragment = new OnBoardFragment();
                     headerTitleTV.setText(getString(R.string.profiles));
                     replaceFragmentToContent(currentFragment, getString(R.string.profiles));
                     break;
                 case DASHBOARD_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFragment = new DashboardFragment();
                     imgSearch.setVisibility(View.VISIBLE);
+                    currentFragment = new DashboardFragment();
                     headerTitleTV.setText(getString(R.string.dashboard));
                     replaceFragmentToContent(currentFragment, "dashboard");
                     break;
@@ -411,9 +446,10 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                 case SAVINGS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFragment = new SavingsFragment();
-                    headerTitleTV.setText(getString(R.string.savings));
-                    replaceFragmentToContent(currentFragment, getString(R.string.savings));
+                    imgSearch.setVisibility(View.VISIBLE);
+                    headerTitleTV.setText("Payments");
+                    currentFragment = new CollectionsFragment();
+                    replaceFragmentToContent(currentFragment, "Payments");
                     break;
                 case ADD_CLIENT_FRAGMENT:
                     currentFragment = new AddClientFragment();

@@ -15,9 +15,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -30,6 +27,10 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import com.odedtech.mff.mffapp.R;
 import com.prowesspride.api.Printer_GEN;
@@ -98,6 +99,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
     private int interest;
     private int pricipal;
     private int total;
+    private Context context;
 
     public interface DeviceConnected {
         void deviceConnected(boolean isConnected);
@@ -112,7 +114,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
 
     @SuppressLint("ValidFragment")
     public BluetoothDeviceFragment(DeviceConnected deviceConnected, ContractCodes contractCodes, int collectedAmount,
-                                   int interest, int pricipal, int total, int recipetId,String type) {
+                                   int interest, int pricipal, int total, int recipetId, String type,Context context) {
         this.recipetId = recipetId;
         this.deviceConnected = deviceConnected;
         this.contractCodes = contractCodes;
@@ -121,11 +123,12 @@ public class BluetoothDeviceFragment extends DialogFragment {
         this.pricipal = pricipal;
         this.total = total;
         this.type = type;
+        this.context=context;
     }
 
     @SuppressLint("ValidFragment")
     public BluetoothDeviceFragment(DeviceConnected deviceConnected, LoanContractCodes contractCodes, int collectedAmount,
-                                   int interest, int pricipal, int total, int recipetId,String type) {
+                                   int interest, int pricipal, int total, int recipetId, String type,Context context) {
         this.recipetId = recipetId;
         this.deviceConnected = deviceConnected;
         this.contractCodes1 = contractCodes;
@@ -134,12 +137,14 @@ public class BluetoothDeviceFragment extends DialogFragment {
         this.pricipal = pricipal;
         this.total = total;
         this.type = type;
+        this.context=context;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_bluetooth_device_list, container, false);
+        View view = inflater.inflate(R.layout.dialog_bluetooth_device_list, container, false);
+        return view;
     }
 
     @Override
@@ -780,14 +785,14 @@ public class BluetoothDeviceFragment extends DialogFragment {
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Receipt No: " + recipetId);
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Date:" + UtilityMethods.getDateFormat());
-                if (type.equalsIgnoreCase("1")){
+                if (type.equalsIgnoreCase("1")) {
                     prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Name: " + contractCodes.name);
 
                     // TODO: Dont miuss this
                     // ptr.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "LAST NAME:" + ll.getLastName());
                     prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "CC: " + contractCodes.contractUUID);
                     prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Client ID: " + contractCodes.identifier);
-                }else {
+                } else {
                     prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Name: " + contractCodes1.getName());
 
                     // TODO: Dont miuss this
@@ -797,8 +802,8 @@ public class BluetoothDeviceFragment extends DialogFragment {
                 }
 
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Principal:       " + pricipal + ".00");
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Interest:         " + interest + ".00");
+                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Loan Amount:       " + pricipal + ".00");
+                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Fee:         " + interest + ".00");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Total Amount:    " + total + ".00");
 //                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Collected Amount:" + collectedAmount + ".0");
 //                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Collected Amount:" + collectedAmount + "0");
@@ -865,19 +870,20 @@ public class BluetoothDeviceFragment extends DialogFragment {
 
     /* Handler to display UI response messages */
     Handler ptrHandler = new Handler() {
+        @SuppressLint("HandlerLeak")
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case 1:
-                    Toast.makeText(getContext(), (String) msg.obj, Toast.LENGTH_LONG)
-                            .show();
+                    Toast.makeText(context, (CharSequence) msg.obj, Toast.LENGTH_LONG).show();
+                 //   Toast.makeText(context.getApplicationContext(), (CharSequence) msg.obj, Toast.LENGTH_LONG).show();
                     break;
                 case 2:
                     String str1 = (String) msg.obj;
-                    Toast.makeText(getActivity(), (String) msg.obj, Toast.LENGTH_LONG)
+                    Toast.makeText(context, (String) msg.obj, Toast.LENGTH_LONG)
                             .show();
                     break;
                 case 3:
-                    Toast.makeText(getActivity(), (String) msg.obj, Toast.LENGTH_LONG)
+                    Toast.makeText(context, (String) msg.obj, Toast.LENGTH_LONG)
                             .show();
                     break;
                 default:

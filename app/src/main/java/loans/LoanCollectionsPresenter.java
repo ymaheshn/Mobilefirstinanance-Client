@@ -64,8 +64,6 @@ public class LoanCollectionsPresenter {
                                 .getJSONObject(0).getInt("receiptID");
                         loansFragmentCallback.onSaveContractData(message, receiptID, (int) totalAmount);
                         return;
-                    } else {
-                        message = null;
                     }
                 } catch (JSONException e) {
                     message = null;

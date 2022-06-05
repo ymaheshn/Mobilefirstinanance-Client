@@ -1,180 +1,183 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/app_bg"
-                android:orientation="vertical"
-                tools:context="onboard.OnBoardFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical"
+    tools:context="onboard.OnBoardFragment">
 
-    <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/toolbar_color"
-            android:padding="@dimen/_10dp"
-            android:visibility="gone">
+    <!--  <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@color/toolbar_color"
+          android:padding="@dimen/_10dp"
+          android:visibility="gone">
 
-        <TextView
-                android:id="@+id/text_load_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableRight="@drawable/calendar"
-                android:drawablePadding="@dimen/_5dp"
-                android:gravity="center_vertical"
-                android:padding="@dimen/_10dp"
-                android:text="12-25-2019"
-                android:textColor="@color/colorWhite"/>
+          <TextView
+              android:id="@+id/text_load_date"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:drawableRight="@drawable/calendar"
+              android:drawablePadding="@dimen/_5dp"
+              android:gravity="center_vertical"
+              android:padding="@dimen/_10dp"
+              android:text="12-25-2019"
+              android:textColor="@color/colorWhite" />
 
-        <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switch_pending"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:text="@string/pending"
-                android:textColor="@color/colorWhite"
-                android:theme="@style/Switch_Style_Theme"
-                app:switchPadding="@dimen/_5dp"
-                app:trackTint="@color/textColorHint"/>
-    </RelativeLayout>
+          <android.support.v7.widget.SwitchCompat
+              android:id="@+id/switch_pending"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:text="@string/pending"
+              android:textColor="@color/colorWhite"
+              android:theme="@style/Switch_Style_Theme"
+              app:switchPadding="@dimen/_5dp"
+              app:trackTint="@color/textColorHint" />
+      </RelativeLayout>-->
 
-    <RadioGroup
-            android:id="@+id/radio_contracts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10dp"
-            android:background="@drawable/rounded_corner_white"
-            android:orientation="horizontal">
+    <!--  <RadioGroup
+          android:id="@+id/radio_contracts"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/_10dp"
+          android:background="@drawable/rounded_corner_white"
+          android:orientation="horizontal">
 
-        <RadioButton
-                android:id="@+id/radio_collections"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/radio_bg_selector"
-                android:button="@null"
-                android:checked="true"
-                android:gravity="center"
-                android:padding="@dimen/_10dp"
-                android:text="@string/collections"
-                android:textColor="@color/radio_text_selector"/>
+          <RadioButton
+              android:id="@+id/radio_collections"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:background="@drawable/radio_bg_selector"
+              android:button="@null"
+              android:checked="true"
+              android:gravity="center"
+              android:padding="@dimen/_10dp"
+              android:text="@string/collections"
+              android:textColor="@color/radio_text_selector" />
 
-        <RadioButton
-                android:id="@+id/radio_disbursals"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/radio_bg_selector"
-                android:button="@null"
-                android:gravity="center"
-                android:padding="@dimen/_10dp"
-                android:text="@string/loans"
-                android:textColor="@color/radio_text_selector"/>
+          <RadioButton
+              android:id="@+id/radio_disbursals"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:background="@drawable/radio_bg_selector"
+              android:button="@null"
+              android:gravity="center"
+              android:padding="@dimen/_10dp"
+              android:text="@string/loans"
+              android:textColor="@color/radio_text_selector" />
 
-    </RadioGroup>
+      </RadioGroup>-->
+
     <FrameLayout
-            android:visibility="gone"
-            android:layout_below="@+id/radio_contracts"
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/tab_bg">
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/tab_bg"
+        android:visibility="gone">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/select"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:background="@drawable/tab_selector"
+                android:text="" />
 
             <TextView
-                    android:id="@+id/select"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:background="@drawable/tab_selector"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="" />
 
             <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text=""/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="" />
 
             <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text=""/>
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text=""/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/item1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-            <TextView
-                    android:id="@+id/item1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Name"
-                    android:textColor="@android:color/white"
-                    android:gravity="center"/>
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Name"
+                android:textColor="@android:color/white" />
 
             <TextView
-                    android:id="@+id/item2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Hierarchy"
-                    android:gravity="center"/>
+                android:id="@+id/item2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Hierarchy" />
 
             <TextView
-                    android:id="@+id/item3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="National Id"
-                    android:gravity="center"/>
+                android:id="@+id/item3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="National Id" />
+
             <TextView
-                    android:id="@+id/item4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Identifier"
-                    android:gravity="center"/>
+                android:id="@+id/item4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Identifier" />
 
         </LinearLayout>
     </FrameLayout>
 
     <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:layout_below="@+id/tabs"
-            android:background="@color/divider_color"/>
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_below="@+id/tabs"
+        android:background="@color/divider_color" />
 
 
     <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/divider"
-            android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
+        android:orientation="vertical">
 
         <FrameLayout
-                android:id="@+id/container_disbursals"
+            android:id="@+id/container_disbursals"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_loans"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone">
-
-            <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_loans"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                tools:listitem="@layout/item_disbursals" />
 
             <TextView
                 android:id="@+id/text_no_data_loans"
@@ -182,42 +185,20 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:visibility="gone"
                 android:text="No Disbursals Available"
-                android:textColor="@android:color/black" />
-        </FrameLayout>
-
-        <FrameLayout
-                android:id="@+id/container_collections"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/container_disbursals">
-
-            <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_collections"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-
-            <TextView
-                    android:id="@+id/text_no_data_collections"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="No Collections Available"
-                    android:textColor="@android:color/black"
-                    android:visibility="gone"/>
+                android:textColor="@android:color/black"
+                android:visibility="gone" />
         </FrameLayout>
 
         <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white_color"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:padding="@dimen/_10dp"
-                android:visibility="gone"/>
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/white_color"
+            android:padding="@dimen/_10dp"
+            android:visibility="gone" />
     </RelativeLayout>
 
 

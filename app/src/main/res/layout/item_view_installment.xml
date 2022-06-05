@@ -9,10 +9,9 @@
         android:id="@+id/check_installment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10dp"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:clickable="false"
-        android:layout_margin="@dimen/_10dp" />
+        android:focusableInTouchMode="false" />
     <!--Date-->
     <LinearLayout
         android:layout_width="wrap_content"
@@ -37,7 +36,7 @@
 
 
     <LinearLayout
-            android:id="@+id/ll_interest"
+        android:id="@+id/ll_interest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -66,7 +65,7 @@
         android:orientation="vertical">
 
         <TextView
-                android:id="@+id/tv_principal"
+            android:id="@+id/tv_principal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Principal"

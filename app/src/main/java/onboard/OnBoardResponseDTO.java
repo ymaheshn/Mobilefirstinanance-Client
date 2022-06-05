@@ -11,7 +11,6 @@ public class OnBoardResponseDTO implements Serializable {
     public List<OnBoardResponse> onBoardList = new ArrayList<>();
 
     class OnBoardResponse {
-
         @SerializedName("ProfileID")
         public String profileID;
         @SerializedName("ownerID")

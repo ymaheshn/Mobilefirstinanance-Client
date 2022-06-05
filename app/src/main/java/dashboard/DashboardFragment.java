@@ -3,16 +3,19 @@ package dashboard;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.odedtech.mff.mffapp.R;
@@ -67,7 +70,8 @@ public class DashboardFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        return view;
     }
 
 
@@ -75,7 +79,7 @@ public class DashboardFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        chart = (PieChartView) view.findViewById(R.id.piechart);
+        chart = view.findViewById(R.id.piechart);
         chart.setOnValueTouchListener(new ValueTouchListener());
         textTotalClients = view.findViewById(R.id.text_total_clients);
         textPar = view.findViewById(R.id.text_par);
@@ -132,7 +136,7 @@ public class DashboardFragment extends BaseFragment {
             data.setCenterText1("Hello!");
 
             // Get roboto-italic font.
-            Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Italic.ttf");
+            Typeface tf = Typeface.createFromAsset(requireActivity().getAssets(), "Roboto-Italic.ttf");
             data.setCenterText1Typeface(tf);
 
             // Get font size from dimens.xml and convert it to sp(library uses sp values).
@@ -142,7 +146,7 @@ public class DashboardFragment extends BaseFragment {
         if (hasCenterText2) {
             data.setCenterText2("Charts (Roboto Italic)");
 
-            Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Italic.ttf");
+            Typeface tf = Typeface.createFromAsset(requireActivity().getAssets(), "Roboto-Italic.ttf");
 
             data.setCenterText2Typeface(tf);
             data.setCenterText2FontSize(12);
@@ -246,23 +250,23 @@ public class DashboardFragment extends BaseFragment {
         MFFApiWrapper.getInstance().service.getGraphDetails(strDate, accessToken).enqueue(new Callback<DashBoardGraphResponse>() {
             @Override
             public void onResponse(Call<DashBoardGraphResponse> call, Response<DashBoardGraphResponse> response) {
-               if(response.body() != null) {
+                if (response.body() != null) {
 
 
-                   DashBoardGraphResponse body = response.body();
-                   GraphCount objCount = body.data.portfolio;
-                   graphProgress.setVisibility(View.GONE);
-                   if (objCount != null) {
-                       chart.setVisibility(View.VISIBLE);
-                       textPar.setVisibility(View.VISIBLE);
-                       generateData(objCount);
-                   } else {
-                       Toast.makeText(getActivity(),
-                               getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
-                   }
-               }else {
-                   graphProgress.setVisibility(View.GONE);
-               }
+                    DashBoardGraphResponse body = response.body();
+                    GraphCount objCount = body.data.portfolio;
+                    graphProgress.setVisibility(View.GONE);
+                    if (objCount != null) {
+                        chart.setVisibility(View.VISIBLE);
+                        textPar.setVisibility(View.VISIBLE);
+                        generateData(objCount);
+                    } else {
+                        Toast.makeText(getActivity(),
+                                getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    graphProgress.setVisibility(View.GONE);
+                }
             }
 
             @Override

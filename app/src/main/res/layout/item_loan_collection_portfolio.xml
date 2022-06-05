@@ -1,57 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_margin="@dimen/_5dp"
+    android:elevation="@dimen/_5dp"
+    app:cardCornerRadius="@dimen/_5dp">
 
-    <TextView
-        android:id="@+id/text_portfolio_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10dp"
-        android:paddingHorizontal="12dp"
-        android:textColor="@android:color/black"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        tools:text="Name" />
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_portfolio_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/text_color_black"
+                android:textSize="20sp"
+                tools:text="Name" />
 
 
-    <TextView
-        android:id="@+id/text_identifier"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5dp"
-        android:paddingHorizontal="12dp"
-        android:textColor="@color/theme"
-        android:textSize="18sp"
-        tools:text="Identifier" />
+            <TextView
+                android:id="@+id/text_identifier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dp"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/theme"
+                android:textSize="18sp"
+                tools:text="Identifier" />
+
+            <TextView
+                android:id="@+id/text_contract_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/theme"
+                android:textSize="18sp"
+                tools:text="ContractID" />
+
+            <TextView
+                android:id="@+id/text_group_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dp"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/text_color_black"
+                android:textSize="18sp"
+                tools:text="Group" />
 
 
-    <TextView
-        android:id="@+id/text_group_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5dp"
-        android:paddingHorizontal="12dp"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        tools:text="Group" />
+            <TextView
+                android:id="@+id/text_branch_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dp"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp"
+                tools:text="Branch" />
 
 
-    <TextView
-        android:id="@+id/text_branch_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5dp"
-        android:paddingHorizontal="12dp"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        tools:text="Branch" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/_10dp"
-        android:background="@color/colorBlack" />
-</LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:background="@color/colorBlack"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/_15dp"
+            android:layout_weight="0.5"
+            android:gravity="start"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            app:tint="#619A92" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

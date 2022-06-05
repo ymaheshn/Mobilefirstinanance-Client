@@ -1,14 +1,20 @@
 package loans;
 
-import Utilities.PreferenceConnector;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Toast;
-import base.BaseActivity;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.odedtech.mff.mffapp.R;
 import com.odedtech.mff.mffapp.databinding.FragmentBusinessDocumentsBinding;
+
+import java.util.List;
+
+import Utilities.PreferenceConnector;
+import base.BaseActivity;
 import loans.model.BusinessDocumentsModel;
 import loans.model.DocumentData;
 import loans.model.DocumentsAdapter;
@@ -16,8 +22,6 @@ import network.MFFApiWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import java.util.List;
 
 public class BusinessDocumentsActivity extends BaseActivity {
 
@@ -44,8 +48,8 @@ public class BusinessDocumentsActivity extends BaseActivity {
                 getString(R.string.accessToken), "");
         MFFApiWrapper.getInstance().service.getBusinessDocuments(profileId, accessToken).enqueue(new Callback<BusinessDocumentsModel>() {
             @Override
-            public void onResponse(Call<BusinessDocumentsModel> call,
-                                   Response<BusinessDocumentsModel> response) {
+            public void onResponse(@NonNull Call<BusinessDocumentsModel> call,
+                                   @NonNull Response<BusinessDocumentsModel> response) {
                 binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     loadDocuments(response.body());
@@ -55,7 +59,7 @@ public class BusinessDocumentsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<BusinessDocumentsModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<BusinessDocumentsModel> call, @NonNull Throwable t) {
                 dismissLoading();
                 Toast.makeText(context,
                         getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();

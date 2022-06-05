@@ -1,51 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/LinearLayout01"
-              android:layout_width="match_parent"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:padding="20dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout01"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <TextView
-            android:id="@+id/text_title"
-            tools:text="Title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/colorBlack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:orientation="horizontal">
-
-
-    <EditText
-        android:id="@+id/EditBox"
-        android:layout_marginTop="@dimen/_10dp"
+        android:id="@+id/text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:layout_weight="0.9"
-        android:hint="Search"
-        android:maxLines="1"></EditText>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/colorBlack"
+        tools:text="Title" />
 
-    <ImageView
-        android:id="@+id/search_img"
-        android:layout_weight="0.1"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_search_new"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-   </LinearLayout>
+
+        <EditText
+            android:id="@+id/EditBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_weight="0.9"
+            android:gravity="left"
+            android:hint="Search"
+            android:maxLines="1"></EditText>
+
+        <ImageView
+            android:id="@+id/search_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.1"
+            android:src="@drawable/ic_search_new" />
+
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="@color/semi_trans">
+        android:background="@color/semi_trans"
+        android:visibility="gone">
 
         <ProgressBar
             android:layout_width="30dp"
@@ -53,10 +54,10 @@
             android:layout_gravity="center"
             android:indeterminateTint="@color/colorWhite" />
     </FrameLayout>
-    <android.support.v7.widget.RecyclerView
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/List"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_10dp"
-      />
+        android:layout_marginTop="@dimen/_10dp" />
 </LinearLayout>

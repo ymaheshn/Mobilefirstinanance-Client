@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +21,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.odedtech.mff.mffapp.R;
@@ -241,7 +242,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
     public void getCashFlowData(String workFlowId, String workFlowProfileId) {
         this.workFlowId = workFlowId;
         this.workFlowProfileId = workFlowProfileId;
-        if (UtilityMethods.isNetworkAvailable(getActivity())) {
+        if (UtilityMethods.isNetworkAvailable(requireActivity())) {
             showProgressBar();
             String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.CASH_FLOW_GET_INFO_URL +
@@ -484,7 +485,11 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
                             if (TextUtils.isEmpty(tabName)) {
                                 tabName = "";
                             }
+                            Toast.makeText(getActivity(), "Successfully Updated!!", Toast.LENGTH_SHORT).show();
+                            System.out.println("Success Update");
                             Log.d("tabName", "tabName :" + tabName);
+                            btnSave.setEnabled(false);
+                            btnSave.setBackgroundColor(getResources().getColor(R.color.divider_color));
                         }
 
                         @Override
@@ -589,28 +594,29 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
         String url = WebServiceURLs.BASE_URL + WebServiceURLs.VERIFY_WORKFLOW +
                 PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
         try {
-            WebService.getInstance().apiPutRequestCallJSON(url, new JSONObject(jsonPayload), new WebService.OnServiceResponseListener() {
-                @Override
-                public void onApiCallResponseSuccess(String url, String object) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(object);
-                        int status = jsonObject.getInt("status");
-                        if (status == 200) {
-                            Toast.makeText(getActivity(), "Verified Successfully!!", Toast.LENGTH_SHORT).show();
-                            btnVerify.setVisibility(View.GONE);
-                            btnSave.setVisibility(View.GONE);
+            WebService.getInstance().apiPutRequestCallJSON(url, new JSONObject(jsonPayload),
+                    new WebService.OnServiceResponseListener() {
+                        @Override
+                        public void onApiCallResponseSuccess(String url, String object) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(object);
+                                int status = jsonObject.getInt("status");
+                                if (status == 200) {
+                                    Toast.makeText(getActivity(), "Verified Successfully!!", Toast.LENGTH_SHORT).show();
+                                    btnVerify.setVisibility(View.GONE);
+                                    btnSave.setVisibility(View.GONE);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            hideProgressBar();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    hideProgressBar();
-                }
 
-                @Override
-                public void onApiCallResponseFailure(String errorMessage) {
-                    hideProgressBar();
-                }
-            });
+                        @Override
+                        public void onApiCallResponseFailure(String errorMessage) {
+                            hideProgressBar();
+                        }
+                    });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -644,7 +650,8 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
+                                Toast.makeText(getActivity(), "Successfully Submitted!!", Toast.LENGTH_SHORT).show();
+                              //  System.out.println(jsonObject.getString("message"));
                             }
 
                         }

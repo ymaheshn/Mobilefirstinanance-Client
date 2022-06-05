@@ -3,8 +3,9 @@ package com.odedtech.mff.mff_android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.odedtech.mff.mffapp.BuildConfig;
 import com.odedtech.mff.mffapp.R;

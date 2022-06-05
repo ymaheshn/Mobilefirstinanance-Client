@@ -5,8 +5,6 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.TextInputEditText
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.InputFilter
 import android.text.Spanned
@@ -16,6 +14,8 @@ import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
 import com.odedtech.mff.mffapp.R
 import kotlinx.android.synthetic.main.activity_transfer.*
 
@@ -35,7 +35,8 @@ class TransferActivity : AppCompatActivity() {
         textAmount.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 if (text_amount.text.toString().isNotEmpty()) {
-                    val output = Currency.convertToIndianCurrency(text_amount.text.toString().trim())
+                    val output =
+                        Currency.convertToIndianCurrency(text_amount.text.toString().trim())
                     text_words.text = output
                     text_words.visibility = View.VISIBLE
                 } else {
@@ -124,12 +125,12 @@ class TransferActivity : AppCompatActivity() {
         }
 
         override fun filter(
-                source: CharSequence,
-                start: Int,
-                end: Int,
-                dest: Spanned,
-                dStart: Int,
-                dEnd: Int
+            source: CharSequence,
+            start: Int,
+            end: Int,
+            dest: Spanned,
+            dStart: Int,
+            dEnd: Int
         ): CharSequence? {
             try {
                 val input = Integer.parseInt(dest.toString() + source.toString())

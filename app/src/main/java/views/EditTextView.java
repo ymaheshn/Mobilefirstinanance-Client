@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.widget.AppCompatEditText;
+
 import com.odedtech.mff.mffapp.R;
 
 import interfaces.IOnKeyBoardDownListener;
 
-public class EditTextView extends android.support.v7.widget.AppCompatEditText {
+public class EditTextView extends AppCompatEditText {
 
     IOnKeyBoardDownListener iOnKeyBoardDownListener;
 

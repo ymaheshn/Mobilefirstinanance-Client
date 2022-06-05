@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.odedtech.mff.mff_android.SplashActivity;
 import com.odedtech.mff.mffapp.R;
@@ -57,4 +58,5 @@ public class AlertDialogUtils {
         alert11.setCancelable(false);
         alert11.show();
     }
+
 }

@@ -8,17 +8,19 @@ import addclient.AddClientFragment;
 import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import base.BaseFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -188,7 +190,7 @@ public class SearchProfilesListFragment extends BaseFragment implements IOnBoard
 
     public void setAdapter(ArrayList<ClientDataDTO> clients) {
         searchProfileListAdapter = new SearchProfileListAdapter(getActivity(), clients, clientDataDTO -> {
-            if (UtilityMethods.isNetworkAvailable(getActivity())) {
+            if (UtilityMethods.isNetworkAvailable(requireActivity())) {
                 Constants.clientDataDTO = clientDataDTO;
                 Constants.isFromAddClient = false;
                 searchProfilesListPresenter.getIsLinkedStatusAPI(clientDataDTO.profileId);

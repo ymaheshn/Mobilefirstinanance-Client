@@ -1,23 +1,23 @@
 package search_profiles_list;
 
-import Utilities.PreferenceConnector;
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.odedtech.mff.mffapp.R;
-import de.hdodenhof.circleimageview.CircleImageView;
-import onboard.ClientDataDTO;
-import onboard.OnBoardAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import Utilities.PreferenceConnector;
+import de.hdodenhof.circleimageview.CircleImageView;
+import onboard.ClientDataDTO;
 
 public class SearchProfileListAdapter extends RecyclerView.Adapter<SearchProfileListAdapter.ViewModel> {
     private final IOnNoDataFiltered iOnNoDataFiltered;
@@ -50,7 +50,7 @@ public class SearchProfileListAdapter extends RecyclerView.Adapter<SearchProfile
     }
 
     @Override
-    public void onBindViewHolder(ViewModel holder, int position) {
+    public void onBindViewHolder(ViewModel holder, @SuppressLint("RecyclerView") int position) {
         ClientDataDTO clientDataDTO = clients.get(position);
         holder.nameTV.setText(clientDataDTO.name);
         holder.textRole.setText(clientDataDTO.identifier);

@@ -1,5 +1,8 @@
 package Utilities;
 
+import static Utilities.Constants.FLAVOR_CLIENT;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -163,5 +166,18 @@ public class PreferenceConnector {
      */
     public static void removeKey(Context context, String key) {
         getEditor(context).remove(key).commit();
+    }
+    private static SharedPreferences getSharedPreferences(Context context) {
+        return context.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE);
+    }
+
+    private static SharedPreferences.Editor getSharedPrefEditor(Context context) {
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        return sharedPreferences.edit();
+    }
+    public static void clearPref(Context context) {
+        SharedPreferences.Editor editor = getSharedPrefEditor(context);
+        editor.clear();
+        editor.apply();
     }
 }

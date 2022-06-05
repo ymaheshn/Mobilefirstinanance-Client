@@ -344,6 +344,7 @@ public class KycPresenter {
                         public void onApiCallResponseSuccess(String url, String object) {
                             iKycFragmentCallback.hideProgressBar();
                             iKycFragmentCallback.showMessage("Profile updated successfully");
+                            Toast.makeText(context, "Successfully Updated", Toast.LENGTH_LONG).show();
                             iKycFragmentCallback.navigateToOnBoard();
                         }
 

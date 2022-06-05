@@ -2,13 +2,15 @@ package loans;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.odedtech.mff.mffapp.R;
@@ -18,28 +20,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Utilities.AlertDialogUtils;
-import loans.model.CollectionPortfolio;
 import loans.model.CollectionPortfolioDetails;
 import loans.model.Installments;
 import loans.model.LoanBluetoothData;
-import loans.model.ProfileCollection;
 
 public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapter.ViewHolder> {
 
     private final ArrayList<Installments> collections;
-    private final OnUpdateAmount onUpdateAmount;
+    private final OnUpdateAmountInterface onUpdateAmountInterface;
     private final Context context;
     private int totalAmount;
     private int selectedPosition = -1;
+    int x = 0;
 
 
     public InstallmentsAdapter(Context context, ArrayList<Installments> collections,
-                               OnUpdateAmount onUpdateAmount) {
+                               OnUpdateAmountInterface onUpdateAmountInterface) {
         this.context = context;
         this.collections = collections;
-        this.onUpdateAmount = onUpdateAmount;
+        this.onUpdateAmountInterface = onUpdateAmountInterface;
     }
 
     @NonNull
@@ -49,16 +51,16 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
         return new ViewHolder(view);
     }
 
+
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Installments installments = collections.get(i);
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        Installments installments = collections.get(position);
         CollectionPortfolioDetails profileCollection = installments.collectionPR;
         CollectionPortfolioDetails profileCollectionNext = installments.collectionIP;
         viewHolder.textDate.setText(profileCollection.event_time);
-        if (selectedPosition==i){
+        if (selectedPosition == position) {
             viewHolder.checkInstallment.setChecked(installments.isChecked);
-        }
-        else {
+        } else {
             installments.isChecked = false;
             viewHolder.checkInstallment.setChecked(false);
         }
@@ -73,12 +75,50 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
             viewHolder.textInterest.setText(String.valueOf(profileCollection.event_value));
         }
         viewHolder.textTotal.setText(String.valueOf(Integer.parseInt(profileCollection.event_value) + Integer.parseInt(profileCollectionNext.event_value)));
-     //   viewHolder.checkInstallment.setOnCheckedChangeListener(null);
-       // viewHolder.checkInstallment.setChecked(installments.isChecked);
+        //   viewHolder.checkInstallment.setOnCheckedChangeListener(null);
+        // viewHolder.checkInstallment.setChecked(installments.isChecked);
         viewHolder.checkInstallment.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (buttonView.isChecked()) {
+                collections.get(position).isChecked = true;
+                x += Integer.parseInt(viewHolder.textTotal.getText().toString());
+              //  installments.isChecked = !installments.isChecked;
+            } else {
+                collections.get(position).isChecked = false;
+                x -= Integer.parseInt(viewHolder.textTotal.getText().toString());
+               // installments.isChecked = !installments.isChecked;
+            }
+            onUpdateAmountInterface.onUpdate(x);
+            //  boolean previousSelection = checkPreviousSelection(viewHolder.getAdapterPosition());
+              /*  if (previousSelection) {
+                    deselectThePreviousSelections(viewHolder.getAdapterPosition());
+                    int totalAmountInstallment = Integer.parseInt(viewHolder.textTotal.getText().toString());
+                    // if (!installments.isChecked) {
+                    onUpdateAmountInterface.onUpdate(totalAmountInstallment);
+                    // installments.isChecked = !installments.isChecked;
+                    notifyDataSetChanged();
+                    if (!installments.isChecked) {
+                        totalAmount = totalAmount + totalAmountInstallment;
+                    } else {
+                        deselectThePreviousSelections(viewHolder.getAdapterPosition());
+                        totalAmount = totalAmount - totalAmountInstallment;
+                    }
 
+                    onUpdateAmountInterface.onUpdate(totalAmountInstallment);
+                    installments.isChecked = !installments.isChecked;
+                    notifyDataSetChanged();
+                }*/
+                /* else{
+                    if (installments.get 0) {
+                        AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select only one installment at a time");
+
+                    } else {
+                        AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select the previous installments");
+                    }
+                }*/
         });
+
     }
+
 
     @Override
     public int getItemCount() {
@@ -100,73 +140,30 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
             textPrincipal = itemView.findViewById(R.id.text_prinicpal);
             textTotal = itemView.findViewById(R.id.text_total);
             checkInstallment = itemView.findViewById(R.id.check_installment);
-            itemView.setOnClickListener(v -> {
-                Installments installments = collections.get(getAdapterPosition());
 
-                selectedPosition = getAdapterPosition();
-                if(selectedPosition == 0){
-                    if(installments.isChecked){
-                        onUpdateAmount.onUpdate(0.0);
-                       installments.isChecked = !installments.isChecked;
-                        notifyDataSetChanged();
-                        return;
-                    }else{
-                        int totalAmountInstallment = Integer.parseInt(textTotal.getText().toString());
-                        // if (!installments.isChecked) {
-                        onUpdateAmount.onUpdate(totalAmountInstallment);
-                        installments.isChecked = !installments.isChecked;
-                        notifyDataSetChanged();
-                    }
-                    boolean previousSelection = checkPreviousSelection(getAdapterPosition());
-               if (previousSelection) {
-                  /* deselectThePreviousSelections(getAdapterPosition());
-                   int totalAmountInstallment = Integer.parseInt(textTotal.getText().toString());
-                  // if (!installments.isChecked) {
-                       onUpdateAmount.onUpdate(totalAmountInstallment);
-                       // installments.isChecked = !installments.isChecked;
-                       notifyDataSetChanged();*/
-                  // }
-               }
-                  /*  if (!installments.isChecked) {
-                        totalAmount = totalAmount + totalAmountInstallment;
-                    } else {
-                        deselectThePreviousSelections(getAdapterPosition());
-                        totalAmount = totalAmount - totalAmountInstallment;
-                    }*/
-                  // onUpdateAmount.onUpdate(totalAmountInstallment);
-                   // installments.isChecked = !installments.isChecked;
-                //   notifyDataSetChanged();
-               }
-                else {
-                    if(selectedPosition > 0){
-                        AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select only one installment at a time");
 
-                    }
-                    }
-            //    } else {
-              //      AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select the previous installments");
-                //}
-            });
         }
 
-        private void deselectThePreviousSelections(int adapterPosition) {
-            for (int i = adapterPosition + 1; i < collections.size(); i++) {
-                Installments installment = collections.get(i);
-                if (installment.isChecked) {
-                    installment.isChecked = false;
-                    totalAmount = totalAmount - (Integer.parseInt(installment.collectionPR.event_value) + Integer.parseInt(installment.collectionIP.event_value));
-                }
+
+    }
+
+    private void deselectThePreviousSelections(int adapterPosition) {
+        for (int i = adapterPosition + 1; i < collections.size(); i++) {
+            Installments installment = collections.get(i);
+            if (installment.isChecked) {
+                installment.isChecked = false;
+                totalAmount = totalAmount - (Integer.parseInt(installment.collectionPR.event_value) + Integer.parseInt(installment.collectionIP.event_value));
             }
         }
+    }
 
-        private boolean checkPreviousSelection(int adapterPosition) {
-            for (int i = adapterPosition - 1; i >= 0; i--) {
-                if (!collections.get(i).isChecked) {
-                    return false;
-                }
+    private boolean checkPreviousSelection(int adapterPosition) {
+        for (int i = adapterPosition - 1; i >= 0; i--) {
+            if (!collections.get(i).isChecked) {
+                return false;
             }
-            return true;
         }
+        return true;
     }
 
     public JSONArray getSavedPortfolioData() {
@@ -245,7 +242,7 @@ public class InstallmentsAdapter extends RecyclerView.Adapter<InstallmentsAdapte
         return bluetoothData;
     }
 
-    public interface OnUpdateAmount {
+    public interface OnUpdateAmountInterface {
         void onUpdate(double value);
     }
 }

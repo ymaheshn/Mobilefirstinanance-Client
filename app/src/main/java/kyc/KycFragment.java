@@ -11,13 +11,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -45,6 +38,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -101,6 +95,13 @@ import onboard.TabDto;
 import onboard.WorkFlowTemplateDto;
 
 import static Utilities.CustomDialogues.showBranch;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -176,6 +177,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     private String workFlowProfileId;
     private List<BranchTree> branchTrees;
     private List<String> branchNamesInString = new ArrayList<>();
+    private View view;
 
     public KycFragment() {
         // Required empty public constructor
@@ -186,7 +188,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_kyc, container, false);
+        view = inflater.inflate(R.layout.fragment_kyc, container, false);
         unbinder = ButterKnife.bind(this, view);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -213,35 +215,35 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
         ((DashboardActivity) getActivity()).setToolBarBackVisible(true);
         iOnFragmentChangeListener = (IOnFragmentChangeListener) getActivity();
         // iOnFragmentChangeListener.onHeaderUpdate(Constants.KYC_FRAGMENT, "KYC");
-        iOnFragmentChangeListener.setHeaderItemClickListener(this);
         kycPresenter = new KycPresenter(getActivity(), this);
+        iOnFragmentChangeListener.setHeaderItemClickListener(this);
         if (radioTypeSelection != null) {
-            radioTypeSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
-                    CharSequence selectedText = radioButton.getText();
-                    if (selectedText.equals("Personal")) {
-                        coApplicantPictureLL.setVisibility(View.VISIBLE);
-                    } else {
-                        coApplicantPictureLL.setVisibility(View.GONE);
-                    }
-                    if (allDynamicFormHashMap != null) {
-                        loadDynamicForm(allDynamicFormHashMap.get(selectedText).allProfileFormsList);
-                        selectedFormId = allDynamicFormHashMap.get(selectedText).profileFormId;
-                        if (!TextUtils.isEmpty(profileId) && !TextUtils.isEmpty(profileFormId)) {
-                            if (profileFormId.equals(selectedFormId))
-                                mapSavedDataToViews(profileJsonString);
-                            else {
+            radioTypeSelection.setOnCheckedChangeListener((radioGroup, i) -> {
+                RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
+                CharSequence selectedText = radioButton.getText();
+                if (selectedText.equals("Personal")) {
+                    coApplicantPictureLL.setVisibility(View.VISIBLE);
+                } else {
+                    coApplicantPictureLL.setVisibility(View.GONE);
+                }
+                if (allDynamicFormHashMap != null) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    loadDynamicForm(allDynamicFormHashMap.get(selectedText).allProfileFormsList);
+                    selectedFormId = allDynamicFormHashMap.get(selectedText).profileFormId;
+                    if (!TextUtils.isEmpty(profileId) && !TextUtils.isEmpty(profileFormId)) {
+                        if (profileFormId.equals(selectedFormId))
+                            mapSavedDataToViews(profileJsonString);
+                        else {
 //                            for (int j = 0; j < adapterView.getCount(); j++) {
 //                                if (profileFormId.equals(allDymamicFormHashmap.get(adapterView.getItemAtPosition(i)).profileFormId)) {
 //                                    typeSelectionSP.setSelection(j);
 //                                    break;
 //                                }
 //                            }
-                            }
                         }
                     }
+                }else {
+                    progressBar.setVisibility(View.GONE);
                 }
             });
         }
@@ -274,19 +276,16 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
         pullToRefresh.setColorSchemeResources(R.color.colorAccent, R.color.colorAccent,
                 R.color.colorAccent, R.color.colorAccent);
 
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                pullToRefresh.setRefreshing(false);
-                if (UtilityMethods.isNetworkAvailable(getActivity())) {
-                    if (TextUtils.isEmpty(profileId)) {
-                        kycPresenter.getAllDynamicFormsFromServer();
-                    } else {
-                        kycPresenter.getAllDynamicSelectedFormFromServer(profileFormId);
-                    }
+        pullToRefresh.setOnRefreshListener(() -> {
+            pullToRefresh.setRefreshing(false);
+            if (UtilityMethods.isNetworkAvailable(requireActivity())) {
+                if (TextUtils.isEmpty(profileId)) {
+                    kycPresenter.getAllDynamicFormsFromServer();
                 } else {
-                    Toast.makeText(getActivity(), "Please check your internet", Toast.LENGTH_SHORT).show();
+                    kycPresenter.getAllDynamicSelectedFormFromServer(profileFormId);
                 }
+            } else {
+                Toast.makeText(getActivity(), "Please check your internet", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -333,7 +332,8 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
                 TabDto tabDto = workFlowTemplateDt.tabDtoArrayList.get(index);
                 getCashFlowData(String.valueOf(tabDto.tabId), workFlowTemplateDt.workFlowProfileId);
             }
-        } else {
+        }
+        else {
             final String response = ClientFormsDAO.getInstance().getOfflineForms(DataBaseContext.getDBObject(0));
             if (!TextUtils.isEmpty(response) && response.length() > 0) {
                 new Handler().postDelayed(new Runnable() {
@@ -359,7 +359,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     public void getCashFlowData(String workFlowId, String workFlowProfileId) {
         this.workFlowId = workFlowId;
         this.workFlowProfileId = workFlowProfileId;
-        if (UtilityMethods.isNetworkAvailable(getActivity())) {
+        if (UtilityMethods.isNetworkAvailable(requireActivity())) {
             showProgressBar();
             String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.CASH_FLOW_GET_INFO_URL +
@@ -435,7 +435,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     }
 
     public void getBranchTrees(WebService.OnServiceResponseListener responseListener) {
-        if (UtilityMethods.isNetworkAvailable(getActivity())) {
+        if (UtilityMethods.isNetworkAvailable(requireActivity())) {
             showProgressBar();
             String url = WebServiceURLs.BASE_URL +
                     WebServiceURLs.VERIFY_BRANCHES +
@@ -577,8 +577,8 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
         valuesHM.put("Gender", "mff");
         valuesHM.put("Last Name", "mff");
         valuesHM.put("Name", "mff");*/
-
         if (valuesHM.containsKey("profilePicture")) {
+            progressBar.setVisibility(View.GONE);
             String[] pictures = valuesHM.get("profilePicture").split("/");
             textApplicantPictureName.setText(pictures[pictures.length - 1]);
             String imageUrl = valuesHM.get("profilePicture") + "?access_token=" + PreferenceConnector.readString(getActivity(), getActivity().getString(R.string.accessToken), "");
@@ -586,7 +586,8 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
             imgCamera.setVisibility(View.GONE);
             applicantPictureLL.setClickable(false);
         }
-        if (mainLayout.getChildCount() > 0) {
+        if (mainLayout.getChildCount() >= 0) {
+            progressBar.setVisibility(View.GONE);
             for (int i = 0; i < mainLayout.getChildCount(); i++) {
                 View view = mainLayout.getChildAt(i);
                 if (view instanceof FrameLayout) {
@@ -924,6 +925,7 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     }
 
     private void addFieldToLayout(final ProfileForm profileform) {
+
         if (profileform.type.equalsIgnoreCase(Constants.DynamicUiTypes.TYPE_VARCHAR)
                 || profileform.type.equalsIgnoreCase(Constants.DynamicUiTypes.TYPE_NUMBER) ||
                 profileform.type.equalsIgnoreCase(Constants.DynamicUiTypes.TYPE_PHONE)) {

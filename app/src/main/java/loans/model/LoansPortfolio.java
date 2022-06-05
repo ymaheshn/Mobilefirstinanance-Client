@@ -2,8 +2,10 @@ package loans.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 
 public class LoansPortfolio implements Parcelable {
 
@@ -67,6 +69,12 @@ public class LoansPortfolio implements Parcelable {
     @Expose
     public LoanContractCodes loanContractCodes;
 
+
+
+    /*@SerializedName("profilejson")
+    @Expose
+    public Profilejson profilejson;*/
+
     protected LoansPortfolio(Parcel in) {
         userid = in.readString();
         units = in.readString();
@@ -83,6 +91,24 @@ public class LoansPortfolio implements Parcelable {
         event_time = in.readString();
         sync_date = in.readString();
         loanContractCodes = in.readParcelable(LoanContractCodes.class.getClassLoader());
+        //  profilejson = in.readParcelable(Profilejson.class.getClassLoader());
+    }
+
+    public static final Creator<LoansPortfolio> CREATOR = new Creator<LoansPortfolio>() {
+        @Override
+        public LoansPortfolio createFromParcel(Parcel in) {
+            return new LoansPortfolio(in);
+        }
+
+        @Override
+        public LoansPortfolio[] newArray(int size) {
+            return new LoansPortfolio[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
@@ -102,22 +128,7 @@ public class LoansPortfolio implements Parcelable {
         dest.writeString(event_time);
         dest.writeString(sync_date);
         dest.writeParcelable(loanContractCodes, flags);
+        //  dest.writeParcelable(profilejson, flags);
+
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<LoansPortfolio> CREATOR = new Creator<LoansPortfolio>() {
-        @Override
-        public LoansPortfolio createFromParcel(Parcel in) {
-            return new LoansPortfolio(in);
-        }
-
-        @Override
-        public LoansPortfolio[] newArray(int size) {
-            return new LoansPortfolio[size];
-        }
-    };
 }

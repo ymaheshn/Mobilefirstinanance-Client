@@ -1,229 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.v7.widget.CardView
+<androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cardView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="4"
-        app:cardCornerRadius="0dp"
+        app:cardCornerRadius="5dp"
         android:layout_margin="@dimen/_10dp"
         app:cardElevation="@dimen/_10dp"
         app:cardMaxElevation="@dimen/_10dp"
         app:contentPadding="@dimen/_10dp">
 
     <LinearLayout
-            android:layout_width="363dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
-                android:id="@+id/text_product_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:textSize="12sp"
-                android:background="@drawable/theme_bg"
-                android:textColor="@color/colorWhite"/>
+            android:id="@+id/text_product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/theme_bg"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
 
         <LinearLayout
+            android:weightSum="2"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_weight="0"
+                android:layout_height="wrap_content">
 
-            <TextView
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:gravity="end"
                     android:text="Client ID: "
-                    android:textColor="#619A92"/>
+                    android:textColor="#619A92" />
 
-            <TextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:padding="4dp"
+                    android:text="Client Name: "
+                    android:textColor="#619A92" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:padding="4dp"
+                    android:text="National ID: "
+                    android:textColor="#619A92" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="Contract ID: "
+                    android:padding="4dp"
+                    android:textColor="#619A92" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:padding="4dp"
+                    android:text="Branch Name: "
+                    android:textColor="#619A92" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:gravity="end"
+                    android:text="Hierarchy Name: "
+                    android:textColor="#619A92" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:gravity="end"
+                    android:text="Status: "
+                    android:textColor="#619A92" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1.7"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
                     android:id="@+id/tv_client_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:text=""
-                    android:textColor="@color/colorBlack"/>
-        </LinearLayout>
+                    android:textColor="@color/colorBlack" />
 
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Client Name: "
-                    android:textColor="#619A92"/>
-
-            <TextView
+                <TextView
                     android:id="@+id/tv_client_name"
                     android:layout_width="wrap_content"
+                    android:padding="4dp"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textColor="@color/colorBlack"/>
-        </LinearLayout>
+                    android:textColor="@color/colorBlack" />
 
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="National ID: "
-                    android:textColor="#619A92"/>
-
-            <TextView
+                <TextView
                     android:id="@+id/tv_nat_id"
                     android:layout_width="wrap_content"
+                    android:padding="4dp"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textColor="@color/colorBlack"/>
-        </LinearLayout>
+                    android:textColor="@color/colorBlack" />
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="wrap_content">
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="0.9"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Contract ID: "
-                        android:textColor="#619A92"/>
-
-                <TextView
+                    <TextView
                         android:id="@+id/tv_contract_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1.9"
+                        android:padding="4dp"
                         android:text=""
-                        android:textColor="@color/colorBlack"/>
+                        android:textColor="@color/colorBlack" />
 
-            </LinearLayout>
-            <ImageView android:layout_width="18dp"
-                       android:tint="#619A92"
-                       android:layout_marginEnd="@dimen/_10dp"
-                       android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-                       android:layout_height="18dp"/>
-        </LinearLayout>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="0.1"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
+                        android:layout_marginEnd="@dimen/_10dp"
+                        android:gravity="end"
+                        android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                        app:tint="#619A92" />
+                </LinearLayout>
 
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Branch Name: "
-                    android:textColor="#619A92"/>
-
-            <TextView
+                <TextView
                     android:id="@+id/tv_branch_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:text=""
-                    android:textColor="@color/colorBlack"/>
-        </LinearLayout>
+                    android:textColor="@color/colorBlack" />
 
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hierarchy Name: "
-                    android:textColor="#619A92"/>
-
-            <TextView
+                <TextView
                     android:id="@+id/tv_hierarchy_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="4dp"
                     android:text=""
-                    android:textColor="@color/colorBlack"/>
-        </LinearLayout>
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                    android:textColor="@color/colorBlack" />
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Status: "
-                    android:textColor="#619A92"/>
-
-            <TextView
+                <TextView
                     android:id="@+id/tv_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:text=""
-                    android:textColor="@color/colorBlack"/>
+                    android:textColor="@color/colorBlack" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_10dp">
+
+            <TextView
+                android:id="@+id/tv_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:orientation="horizontal"
-                android:paddingHorizontal="@dimen/_10dp">
+                android:padding="@dimen/_10dp"
+                android:text="View"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sp_16" />
 
             <TextView
-                    android:id="@+id/tv_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_10dp"
-                    android:text="View"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_18"/>
+                android:id="@+id/text_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10dp"
+                android:text="Sign"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sp_16" />
 
             <TextView
-                    android:id="@+id/text_sign"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_10dp"
-                    android:text="Sign"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_18"/>
+                android:id="@+id/tv_terms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10dp"
+                android:text="Terms"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sp_16" />
 
             <TextView
-                    android:id="@+id/tv_terms"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_10dp"
-                    android:text="Terms"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_18"/>
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_10dp"
-                    android:text="Pay"
-                    android:visibility="gone"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_18"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10dp"
+                android:text="Pay"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sp_16"
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>
-</android.support.v7.widget.CardView>
+
+</androidx.cardview.widget.CardView>

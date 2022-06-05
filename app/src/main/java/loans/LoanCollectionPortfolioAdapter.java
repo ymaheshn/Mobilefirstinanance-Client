@@ -1,10 +1,12 @@
 package loans;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.odedtech.mff.mffapp.databinding.ItemLoanCollectionPortfolioBinding;
 
@@ -71,6 +73,12 @@ public class LoanCollectionPortfolioAdapter extends
             binding.textIdentifier.setText(item.contractCodes.identifier);
             binding.textGroupName.setText(item.contractCodes.groupName);
             binding.textBranchName.setText(item.contractCodes.branchName);
+            binding.textContractId.setVisibility(View.GONE);
+            if (item.contractCodes.contractID != null) {
+                binding.textContractId.setVisibility(View.VISIBLE);
+                binding.textContractId.setText(item.contractCodes.contractID);
+            }
+
             binding.getRoot().setOnClickListener(view -> {
                 iOnItemClickListener.onItemClicked(getItems(), getItems().get(getLayoutPosition()));
             });

@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -65,17 +67,17 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
         super.onViewCreated(view, savedInstanceState);
 
         initViews();
-        getCollectionPortfolio();
+        // getCollectionPortfolio();
         getLoans();
 
         iOnFragmentChangeListener = (IOnFragmentChangeListener) getActivity();
-        iOnFragmentChangeListener.onHeaderUpdate(Constants.LOANS_FRAGMENT, "Loans");
+        iOnFragmentChangeListener.onHeaderUpdate(Constants.LOANS_FRAGMENT, "Accounts");
 
         setPagingListeners();
     }
 
     private void initViews() {
-        binding.radioContracts.setOnCheckedChangeListener((radioGroup, i) -> {
+        /*binding.radioContracts.setOnCheckedChangeListener((radioGroup, i) -> {
             if (i == R.id.radio_collections) {
                 binding.containerDisbursals.setVisibility(View.GONE);
                 binding.containerCollections.setVisibility(View.VISIBLE);
@@ -85,7 +87,7 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
                 binding.containerCollections.setVisibility(View.GONE);
                 isCollections = false;
             }
-        });
+        });*/
         def = binding.item2.getTextColors();
         binding.item1.setOnClickListener(this);
         binding.item2.setOnClickListener(this);
@@ -131,7 +133,7 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
     }
 
     private void setPagingListeners() {
-        binding.rvCollections.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        /*binding.rvCollections.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -161,7 +163,7 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
                     }
                 }
             }
-        });
+        });*/
 
         binding.rvLoans.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -197,7 +199,7 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
     }
 
 
-    public void getCollectionPortfolio() {
+   /* public void getCollectionPortfolio() {
         if (pageIndex == 0) {
             showLoading();
         } else {
@@ -205,12 +207,12 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
         }
 
         String accessToken = PreferenceConnector.readString(getActivity(),
-                getActivity().getString(R.string.accessToken), "");
+                getActivity().getString(R.String.accessToken), "");
         MFFApiWrapper.getInstance().service.getCollections(accessToken,
                 pageIndex, 10).enqueue(new Callback<CollectionPortfolioResponse>() {
             @Override
-            public void onResponse(Call<CollectionPortfolioResponse> call,
-                                   Response<CollectionPortfolioResponse> response) {
+            public void onResponse(@NonNull Call<CollectionPortfolioResponse> call,
+                                   @NonNull Response<CollectionPortfolioResponse> response) {
                 dismissLoading();
                 if (response.isSuccessful()) {
                     loadCollectionPortfolio(response.body());
@@ -220,45 +222,16 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
             }
 
             @Override
-            public void onFailure(Call<CollectionPortfolioResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<CollectionPortfolioResponse> call, @NonNull Throwable t) {
                 dismissLoading();
                 Toast.makeText(getActivity(),
-                        getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                        getString(R.String.something_went_wrong), Toast.LENGTH_SHORT).show();
             }
         });
-    }
 
-    public void getSearchCollection(String search) {
-        if (searchPageIndex == 0) {
-            showLoading();
-        } else {
-            binding.progressBar.setVisibility(View.VISIBLE);
-        }
-        String accessToken = PreferenceConnector.readString(getActivity(),
-                getActivity().getString(R.string.accessToken), "");
-        MFFApiWrapper.getInstance().service.searchCollectionUsingName(accessToken,
-                search, searchPageIndex, 10).enqueue(new Callback<CollectionPortfolioResponse>() {
-            @Override
-            public void onResponse(Call<CollectionPortfolioResponse> call,
-                                   Response<CollectionPortfolioResponse> response) {
-                dismissLoading();
-                if (response.isSuccessful()) {
-                    loadSearchedCollectionPortfolio(response.body());
-                } else {
-                    checkResponseError(response);
-                }
-            }
+    }*/
 
-            @Override
-            public void onFailure(Call<CollectionPortfolioResponse> call, Throwable t) {
-                dismissLoading();
-                Toast.makeText(getActivity(),
-                        getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void getLoans() {
+    public void getLoans() {
         if (loansPageIndex == 0) {
             showLoading();
         } else {
@@ -266,12 +239,12 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
         }
 
         String accessToken = PreferenceConnector.readString(getActivity(),
-                getActivity().getString(R.string.accessToken), "");
+                requireActivity().getString(R.string.accessToken), "");
         MFFApiWrapper.getInstance().service.getLoans(accessToken,
                 loansPageIndex, 10, "IED").enqueue(new Callback<LoansPortfolioResponse>() {
             @Override
-            public void onResponse(Call<LoansPortfolioResponse> call,
-                                   Response<LoansPortfolioResponse> response) {
+            public void onResponse(@NonNull Call<LoansPortfolioResponse> call,
+                                   @NonNull Response<LoansPortfolioResponse> response) {
                 dismissLoading();
                 if (response.isSuccessful()) {
                     loadCollectionDisbursals(response.body());
@@ -281,7 +254,7 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
             }
 
             @Override
-            public void onFailure(Call<LoansPortfolioResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<LoansPortfolioResponse> call, @NonNull Throwable t) {
                 dismissLoading();
                 Toast.makeText(getActivity(),
                         getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
@@ -297,13 +270,13 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
             binding.progressBar.setVisibility(View.VISIBLE);
         }
         String accessToken = PreferenceConnector.readString(getActivity(),
-                getActivity().getString(R.string.accessToken), "");
+                requireActivity().getString(R.string.accessToken), "");
         if (search_selection == 1) {
             MFFApiWrapper.getInstance().service.searchLoansUsingName(accessToken,
                     search, loansSearchPageIndex, 10, "IED").enqueue(new Callback<LoansPortfolioResponse>() {
                 @Override
-                public void onResponse(Call<LoansPortfolioResponse> call,
-                                       Response<LoansPortfolioResponse> response) {
+                public void onResponse(@NonNull Call<LoansPortfolioResponse> call,
+                                       @NonNull Response<LoansPortfolioResponse> response) {
                     dismissLoading();
                     if (response.isSuccessful()) {
                         loadSearchDisbursals(response.body());
@@ -313,7 +286,7 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
                 }
 
                 @Override
-                public void onFailure(Call<LoansPortfolioResponse> call, Throwable t) {
+                public void onFailure(@NonNull Call<LoansPortfolioResponse> call, @NonNull Throwable t) {
                     dismissLoading();
                     Toast.makeText(getActivity(),
                             getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
@@ -323,8 +296,8 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
             MFFApiWrapper.getInstance().service.searchLoansUsingHierarchy(accessToken,
                     search, loansSearchPageIndex, 10, "IED").enqueue(new Callback<LoansPortfolioResponse>() {
                 @Override
-                public void onResponse(Call<LoansPortfolioResponse> call,
-                                       Response<LoansPortfolioResponse> response) {
+                public void onResponse(@NonNull Call<LoansPortfolioResponse> call,
+                                       @NonNull Response<LoansPortfolioResponse> response) {
                     dismissLoading();
                     if (response.isSuccessful()) {
                         loadSearchDisbursals(response.body());
@@ -344,8 +317,8 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
             MFFApiWrapper.getInstance().service.searchLoansUsingNationalId(accessToken,
                     search, loansSearchPageIndex, 10, "IED").enqueue(new Callback<LoansPortfolioResponse>() {
                 @Override
-                public void onResponse(Call<LoansPortfolioResponse> call,
-                                       Response<LoansPortfolioResponse> response) {
+                public void onResponse(@NonNull Call<LoansPortfolioResponse> call,
+                                       @NonNull Response<LoansPortfolioResponse> response) {
                     dismissLoading();
                     if (response.isSuccessful()) {
                         loadSearchDisbursals(response.body());
@@ -355,7 +328,7 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
                 }
 
                 @Override
-                public void onFailure(Call<LoansPortfolioResponse> call, Throwable t) {
+                public void onFailure(@NonNull Call<LoansPortfolioResponse> call, @NonNull Throwable t) {
                     dismissLoading();
                     Toast.makeText(getActivity(),
                             getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
@@ -386,7 +359,7 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
 
     }
 
-    private void loadSearchedCollectionPortfolio(CollectionPortfolioResponse response) {
+/*    private void loadSearchedCollectionPortfolio(CollectionPortfolioResponse response) {
         binding.containerCollections.setVisibility(View.VISIBLE);
         binding.containerDisbursals.setVisibility(View.GONE);
         isLoading = false;
@@ -401,9 +374,9 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
         }
 
         adapter.setData(response.data.portfolio, searchPageIndex == 0);
-    }
+    }*/
 
-    private void loadCollectionPortfolio(CollectionPortfolioResponse response) {
+   /* private void loadCollectionPortfolio(CollectionPortfolioResponse response) {
         // binding.containerCollections.setVisibility(View.VISIBLE);
         //binding.containerDisbursals.setVisibility(View.GONE);
         if (pageIndex == 0) {
@@ -421,11 +394,11 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
                 intent.putExtra(Constants.KeyExtras.CONTRACT_ID, collectionPortfolio.contractUUID);
                 intent.putExtra(Constants.KeyExtras.LINKED_PROFILE, collectionPortfolio);
                 startActivity(intent);
-               /* Bundle bundle = new Bundle();
+               *//* Bundle bundle = new Bundle();
                 bundle.putString("type", "1");
                 bundle.putString(Constants.KeyExtras.CONTRACT_ID, collectionPortfolio.contractUUID);
                 bundle.putParcelable(Constants.KeyExtras.LINKED_PROFILE, collectionPortfolio);
-                iOnFragmentChangeListener.onFragmentChanged(Constants.LOAN_COLLECTIONS_FRAGMENT, bundle);*/
+                iOnFragmentChangeListener.onFragmentChanged(Constants.LOAN_COLLECTIONS_FRAGMENT, bundle);*//*
             });
 
             adapter.setData(response.data.portfolio, true);
@@ -445,7 +418,7 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
             }
             adapter.setData(response.data.portfolio, false);
         }
-    }
+    }*/
 
     private void loadCollectionDisbursals(LoansPortfolioResponse response) {
         //  binding.containerCollections.setVisibility(View.GONE);
@@ -520,18 +493,20 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
             isLoading = false;
             pageIndex = 0;
             loansPageIndex = 0;
-            if (isCollections) {
+            getLoans();
+          /*  if (isCollections) {
                 getCollectionPortfolio();
             } else {
-                getLoans();
-            }
+
+            }*/
 
         } else {
-            if (isCollections) {
+            getSearchLoans(query);
+          /*  if (isCollections) {
                 getSearchCollection(query);
             } else {
-                getSearchLoans(query);
-            }
+
+            }*/
 
         }
         return false;
@@ -544,11 +519,12 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
             isLoading = false;
             pageIndex = 0;
             loansPageIndex = 0;
-            if (isCollections) {
+            getLoans();
+         /*   if (isCollections) {
                 getCollectionPortfolio();
             } else {
-                getLoans();
-            }
+
+            }*/
         }
         return false;
     }
@@ -570,6 +546,13 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
     public void onItemViewClick(String profileId) {
         Intent intent = new Intent(getActivity(), BusinessDocumentsActivity.class);
         intent.putExtra("profileId", profileId);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemViewTermsClick(String contractUUID) {
+        Intent intent = new Intent(getActivity(), TermsLoanActivity.class);
+        intent.putExtra("contractUUID", contractUUID);
         startActivity(intent);
     }
 }

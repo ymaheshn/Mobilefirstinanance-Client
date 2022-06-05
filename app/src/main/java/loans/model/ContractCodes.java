@@ -6,6 +6,9 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 public class ContractCodes implements Parcelable {
 
     @SerializedName("Hierarchy")
@@ -28,6 +31,10 @@ public class ContractCodes implements Parcelable {
     @Expose
     public String contractUUID;
 
+    @SerializedName("ContractID")
+    @Expose
+    public String contractID;
+
     @SerializedName("Name")
     @Expose
     public String name;
@@ -44,55 +51,24 @@ public class ContractCodes implements Parcelable {
     @Expose
     public String branchName;
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.hierarchy);
-        dest.writeString(this.identifier);
-        dest.writeString(this.contractprofileID);
-        dest.writeString(this.branchId);
-        dest.writeString(this.contractUUID);
-        dest.writeString(this.name);
-        dest.writeString(this.nationalID);
-        dest.writeString(this.groupName);
-        dest.writeString(this.branchName);
-    }
-
-    public void readFromParcel(Parcel source) {
-        this.hierarchy = source.readString();
-        this.identifier = source.readString();
-        this.contractprofileID = source.readString();
-        this.branchId = source.readString();
-        this.contractUUID = source.readString();
-        this.name = source.readString();
-        this.nationalID = source.readString();
-        this.groupName = source.readString();
-        this.branchName = source.readString();
-    }
-
-    public ContractCodes() {
-    }
 
     protected ContractCodes(Parcel in) {
-        this.hierarchy = in.readString();
-        this.identifier = in.readString();
-        this.contractprofileID = in.readString();
-        this.branchId = in.readString();
-        this.contractUUID = in.readString();
-        this.name = in.readString();
-        this.nationalID = in.readString();
-        this.groupName = in.readString();
-        this.branchName = in.readString();
+        hierarchy = in.readString();
+        identifier = in.readString();
+        contractprofileID = in.readString();
+        branchId = in.readString();
+        contractUUID = in.readString();
+        contractID = in.readString();
+        name = in.readString();
+        nationalID = in.readString();
+        groupName = in.readString();
+        branchName = in.readString();
     }
 
-    public static final Parcelable.Creator<ContractCodes> CREATOR = new Parcelable.Creator<ContractCodes>() {
+    public static final Creator<ContractCodes> CREATOR = new Creator<ContractCodes>() {
         @Override
-        public ContractCodes createFromParcel(Parcel source) {
-            return new ContractCodes(source);
+        public ContractCodes createFromParcel(Parcel in) {
+            return new ContractCodes(in);
         }
 
         @Override
@@ -100,4 +76,25 @@ public class ContractCodes implements Parcelable {
             return new ContractCodes[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(hierarchy);
+        dest.writeString(identifier);
+        dest.writeString(contractprofileID);
+        dest.writeString(branchId);
+        dest.writeString(contractUUID);
+        dest.writeString(contractID);
+        dest.writeString(name);
+        dest.writeString(nationalID);
+        dest.writeString(groupName);
+        dest.writeString(branchName);
+    }
+
+
 }

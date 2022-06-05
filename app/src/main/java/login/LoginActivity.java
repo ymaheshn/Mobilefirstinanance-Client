@@ -1,16 +1,19 @@
 package login;
 
+import static Utilities.Constants.CONTACT_URL;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.odedtech.mff.mffapp.R;
 
@@ -37,8 +40,6 @@ import otp.OTPActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static Utilities.Constants.CONTACT_URL;
 
 public class LoginActivity extends AppCompatActivity implements WebService.OnServiceResponseListener {
 

@@ -1,7 +1,7 @@
 package onboard;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.odedtech.mff.mffapp.R;
@@ -20,8 +22,6 @@ import Utilities.PreferenceConnector;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OnBoardAdapter extends RecyclerView.Adapter<OnBoardAdapter.ViewModel> implements Filterable {
-
-
     private final IOnNoDataFiltered iOnNoDataFiltered;
     private Context mContext;
     private ArrayList<ClientDataDTO> clients;
@@ -53,7 +53,7 @@ public class OnBoardAdapter extends RecyclerView.Adapter<OnBoardAdapter.ViewMode
     }
 
     @Override
-    public void onBindViewHolder(ViewModel holder, int position) {
+    public void onBindViewHolder(ViewModel holder, @SuppressLint("RecyclerView") int position) {
         ClientDataDTO clientDataDTO = filteredList.get(position);
         holder.nameTV.setText(clientDataDTO.name);
         holder.textRole.setText(clientDataDTO.identifier);
@@ -80,7 +80,7 @@ public class OnBoardAdapter extends RecyclerView.Adapter<OnBoardAdapter.ViewMode
         return filteredList != null ? filteredList.size() : 0;
     }
 
-    class ViewModel extends RecyclerView.ViewHolder {
+    static class ViewModel extends RecyclerView.ViewHolder {
         TextView textRole;
         CircleImageView profile_image;
         TextView nameTV;

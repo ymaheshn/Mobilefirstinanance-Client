@@ -62,7 +62,7 @@
     <string name="onboard">On-board</string>
     <string name="dashboard">Dashboard</string>
     <string name="contracts">Contracts</string>
-    <string name="vas">Your Bank</string>
+    <string name="vas">Services</string>
     <string name="savings">Savings</string>
     <string name="verify">Verify</string>
     <string name="details_are_missing">Details are missing!!</string>
@@ -73,7 +73,7 @@
     <string name="vas3m">Mobile Recharge</string>
     <string name="vas4w">Water Bill</string>
     <string name="vas5f">Flight Booking</string>
-      <string name="vas6d">DTH</string>
+    <string name="vas6d">DTH</string>
     <string name="vas7c">Credit Card</string>
     <string name="vas8t">Train Tickets</string>
     <string name="login">Login</string>

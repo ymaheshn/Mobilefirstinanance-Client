@@ -38,4 +38,6 @@
 
     <color name="theme">#619A92</color>
     <color name="theme_dark">#3D6E67</color>
+    <color name="text_color">#02B17A</color>
+    <color name="text_color_black">#101010</color>
 </resources>

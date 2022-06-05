@@ -4,9 +4,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -90,12 +93,34 @@ public class ExpandableListDialog extends Dialog implements View.OnClickListener
         /*if (cityList != null && cityList.size() > 0) {
             setMyAdapter(viewItems);
         }*/
+        filterText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() >= 1){
+                    callSearchApi(filterText.getText().toString());
+                }
+                else{
+                    Toast.makeText(mContext,
+                            "You have to enter at least 1 digit!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         searchImg.setOnClickListener(v -> {
-            if(filterText.getText().length() >= 4){
+            if(filterText.getText().length() >= 1){
                 callSearchApi(filterText.getText().toString());
             }else{
                 Toast.makeText(mContext,
-                        "you have to enter at least 4 digit!", Toast.LENGTH_SHORT).show();
+                        "You have to enter at least 1 digit!", Toast.LENGTH_SHORT).show();
             }
         });
 

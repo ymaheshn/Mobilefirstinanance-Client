@@ -3,12 +3,14 @@ package network;
 import base.MFFResponse;
 import base.MFFResponseNew;
 import dashboard.models.DashboardCount;
-import dashboard.models.GraphCount;
 import dashboard.models.ProfileCount;
 import loans.model.*;
 import login.model.EntityResponse;
 import login.model.LoginRequest;
 import login.model.LoginResponse;
+import onboard.ClientDataDTO;
+import onboard.DataProfilesDTO;
+import onboard.ProfileDetailsDTO;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -36,6 +38,23 @@ public interface MFFApiService {
                                                                 @Query("pageNumber") int pageNumber,
                                                                 @Query("numberOfRecords") int numberOfRecords);
 
+    @GET("/PortfolioService/searchPortfolio")
+    Call<CollectionPortfolioResponse> searchCollectionUsingHierarchy(@Query("access_token") String accessToken,
+                                                                     @Query("group") String name,
+                                                                     @Query("pageNumber") int pageNumber,
+                                                                     @Query("numberOfRecords") int numberOfRecords);
+
+    @GET("/PortfolioService/searchPortfolio")
+    Call<CollectionPortfolioResponse> searchCollectionUsingNationalId(@Query("access_token") String accessToken,
+                                                                      @Query("nationalId") String name,
+                                                                      @Query("pageNumber") int pageNumber,
+                                                                      @Query("numberOfRecords") int numberOfRecords);
+
+    @GET("/PortfolioService/searchPortfolio")
+    Call<CollectionPortfolioResponse> searchCollectionUsingIdentifier(@Query("access_token") String accessToken,
+                                                                      @Query("Identifier") String name,
+                                                                      @Query("pageNumber") int pageNumber,
+                                                                      @Query("numberOfRecords") int numberOfRecords);
 
     @GET("/PortfolioService/geteventsBycontractUUID")
     Call<CollectionPortfolioDetailsResponse> getPortfolioCollectionDetails(@Query("access_token") String accessToken,
@@ -69,29 +88,58 @@ public interface MFFApiService {
                                                       @Query("pageNumber") int pageNumber,
                                                       @Query("numberOfRecords") int numberOfRecords,
                                                       @Query("eventType") String eventType);
+
     @GET("/PortfolioService/bulkReceiveAndDeals")
     Call<LoansPortfolioResponse> searchLoansUsingHierarchy(@Query("access_token") String accessToken,
-                                                      @Query("Hierarchy") String name,
-                                                      @Query("pageNumber") int pageNumber,
-                                                      @Query("numberOfRecords") int numberOfRecords,
-                                                      @Query("eventType") String eventType);
+                                                           @Query("group") String name,
+                                                           @Query("pageNumber") int pageNumber,
+                                                           @Query("numberOfRecords") int numberOfRecords,
+                                                           @Query("eventType") String eventType);
 
     @GET("/PortfolioService/bulkReceiveAndDeals")
     Call<LoansPortfolioResponse> searchLoansUsingNationalId(@Query("access_token") String accessToken,
-                                                           @Query("nationalId") String name,
-                                                           @Query("pageNumber") int pageNumber,
-                                                           @Query("numberOfRecords") int numberOfRecords,
-                                                           @Query("eventType") String eventType);
+                                                            @Query("nationalId") String name,
+                                                            @Query("pageNumber") int pageNumber,
+                                                            @Query("numberOfRecords") int numberOfRecords,
+                                                            @Query("eventType") String eventType);
 
     @GET("/PortfolioService/bulkReceiveAndDeals")
     Call<LoansPortfolioResponse> searchLoansUsingIdentifier(@Query("access_token") String accessToken,
-                                                           @Query("identifier") String name,
-                                                           @Query("pageNumber") int pageNumber,
-                                                           @Query("numberOfRecords") int numberOfRecords,
-                                                           @Query("eventType") String eventType);
+                                                            @Query("identifier") String name,
+                                                            @Query("pageNumber") int pageNumber,
+                                                            @Query("numberOfRecords") int numberOfRecords,
+                                                            @Query("eventType") String eventType);
 
     @GET("/ProfileService/files/{profileID}/business")
-    Call<BusinessDocumentsModel> getBusinessDocuments(@Path("profileID") String name,@Query("access_token") String accessToken);
+    Call<BusinessDocumentsModel> getBusinessDocuments(@Path("profileID") String name, @Query("access_token") String accessToken);
 
+    @GET("/ProfileService/searchProfiles?")
+    Call<ClientDataDTO> getProfileDetailsByName(@Query("access_token") String accessToken,
+                                                  @Query("pageNumber") int pageNumber,
+                                                  @Query("numberOfRecords") int numberOfRecords,
+                                                  @Query("name") String name);
 
+    @GET("/ProfileService/searchProfiles?")
+    Call<ProfileDetailsDTO> getProfileDetailsByHierarchy(@Query("access_token") String accessToken,
+                                                         @Query("pageNumber") int pageNumber,
+                                                         @Query("numberOfRecords") int numberOfRecords,
+                                                         @Query("hierarchy") String name);
+
+    @GET("/ProfileService/searchProfiles?")
+    Call<ProfileDetailsDTO> getProfileDetailsByNationalId(@Query("access_token") String accessToken,
+                                                          @Query("pageNumber") int pageNumber,
+                                                          @Query("numberOfRecords") int numberOfRecords,
+                                                          @Query("nationalId") String name);
+
+    @GET("/ProfileService/searchProfiles?")
+    Call<ProfileDetailsDTO> getProfileDetailsByIdentifier(@Query("access_token") String accessToken,
+                                                          @Query("pageNumber") int pageNumber,
+                                                          @Query("numberOfRecords") int numberOfRecords,
+                                                          @Query("identifier") String name);
+
+    @GET("/PortfolioService/getcontractsBycontractUUID?")
+    Call<TermsDataDTO> getTermsDetails(@Query("contractUUID") String contractUUID,
+                                       @Query("access_token") String accessToken,
+                                       @Query("pageNumber") int pageNumber,
+                                       @Query("numberOfRecords") int numberOfRecords);
 }

@@ -1,7 +1,8 @@
 package domain.services.jobs;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.WorkerThread;
+
+import androidx.annotation.WorkerThread;
 
 import domain.DeleteLoanCollectionUseCase;
 import domain.UpdateLoanCollectionUseCase;
@@ -37,7 +38,7 @@ public class SyncCommentResponseObserver {
         }
     }
 
-    @SuppressLint("RxLeakedSubscription")
+    @SuppressLint({"RxLeakedSubscription", "CheckResult"})
     @WorkerThread
     private void onSyncCommentSuccess(LoanCollection comment) {
         updateCommentUseCase.updateComment(comment)
@@ -47,7 +48,7 @@ public class SyncCommentResponseObserver {
                         });
     }
 
-    @SuppressLint("RxLeakedSubscription")
+    @SuppressLint({"RxLeakedSubscription", "CheckResult"})
     @WorkerThread
     private void onSyncCommentFailed(LoanCollection comment) {
         deleteCommentUseCase.deleteComment(comment)

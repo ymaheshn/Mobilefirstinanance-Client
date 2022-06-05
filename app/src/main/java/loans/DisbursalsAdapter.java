@@ -1,23 +1,19 @@
 package loans;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.odedtech.mff.mffapp.R;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.odedtech.mff.mffapp.databinding.ItemDisbursalsBinding;
-import com.odedtech.mff.mffapp.databinding.ItemLoanCollectionPortfolioBinding;
-import loans.model.CollectionPortfolio;
-import loans.model.Datum;
-import loans.model.LoansPortfolio;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import loans.model.LoansPortfolio;
 
 public class DisbursalsAdapter extends
         RecyclerView.Adapter<DisbursalsAdapter.ViewHolder> {
@@ -94,6 +90,11 @@ public class DisbursalsAdapter extends
                     itemViewClickListener.onItemViewClick(item.loanContractCodes.getProfileID());
                 }
             });
+            binding.tvTerms.setOnClickListener(v -> {
+                if (itemViewClickListener != null) {
+                    itemViewClickListener.onItemViewTermsClick(item.loanContractCodes.getContractUUID());
+                }
+            });
             binding.getRoot().setOnClickListener(view -> {
                 iOnItemClickListener.onItemClicked(getItems(), getItems().get(getLayoutPosition()));
             });
@@ -106,6 +107,7 @@ public class DisbursalsAdapter extends
 
     public interface ItemViewClickListener {
         void onItemViewClick(String profileId);
+        void onItemViewTermsClick(String contractUUID);
     }
 }
 

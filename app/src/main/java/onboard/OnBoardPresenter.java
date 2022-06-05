@@ -1,8 +1,12 @@
 package onboard;
 
 import android.content.Context;
+
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.odedtech.mff.mffapp.R;
 
@@ -14,59 +18,204 @@ import org.json.JSONTokener;
 import java.util.ArrayList;
 
 import Utilities.PreferenceConnector;
+import network.MFFApiWrapper;
 import networking.WebService;
 import networking.WebServiceURLs;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OnBoardPresenter implements WebService.OnServiceResponseListener {
     private Context context;
     private IOnBoardFragmentCallback iOnBoardFragmentCallback;
+    private int SearchClientPageIndex;
 
     public OnBoardPresenter(Context context, IOnBoardFragmentCallback iOnBoardFragmentCallback) {
         this.context = context;
         this.iOnBoardFragmentCallback = iOnBoardFragmentCallback;
     }
 
-    public void getAllClients(int pageNumber, boolean clearAll) {
-        if (pageNumber == 0) {
-            iOnBoardFragmentCallback.showProgressBar();
-        }
+    public void getAllClients(int pageNumber, boolean clearAll, boolean isFromSearch, int searchClientPageIndex, String searchKey) {
         String url = WebServiceURLs.BASE_URL +
                 WebServiceURLs.ALL_PROFILES_URL +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
         url = url.replaceAll("PAGE_NUMBER", "" + pageNumber).replaceAll("NUMBER_OF_RECORDS", "10");
 
-        WebService.getInstance().apiGetRequestCallJSON(url,
-                new WebService.OnServiceResponseListener() {
-                    @Override
-                    public void onApiCallResponseSuccess(String url, String object) {
-                        iOnBoardFragmentCallback.hideProgressBar();
-                        ArrayList<ClientDataDTO> clients = getAndParseAllClients(object);
-                        iOnBoardFragmentCallback.loadRecyclerView(clients, false, clearAll);
+        if (isFromSearch) {
+            if (searchClientPageIndex == 1) {
+                String searchProfileUrl = WebServiceURLs.BASE_URL +
+                        WebServiceURLs.SEARCH_PROFILES_URL +
+                        PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
+                searchProfileUrl = searchProfileUrl.replaceAll("NAME", searchKey);
+                iOnBoardFragmentCallback.showProgressBar();
+                WebService.getInstance().apiGetRequestCallJSON(searchProfileUrl,
+                        new WebService.OnServiceResponseListener() {
+                            @Override
+                            public void onApiCallResponseSuccess(String url, String object) {
+                                iOnBoardFragmentCallback.hideProgressBar();
+                                ArrayList<ClientDataDTO> clients = getAndParseAllClients(object);
+                                iOnBoardFragmentCallback.loadRecyclerView(clients, true, clearAll);
 
-                    }
+                            }
 
-                    @Override
-                    public void onApiCallResponseFailure(String errorMessage) {
-                        iOnBoardFragmentCallback.hideProgressBar();
-                        if (errorMessage.contains("AuthFailureError")) {
-                            iOnBoardFragmentCallback.showLogoutAlert();
-                        } else {
-                            iOnBoardFragmentCallback.showMessage(errorMessage);
+                            @Override
+                            public void onApiCallResponseFailure(String errorMessage) {
+                                iOnBoardFragmentCallback.hideProgressBar();
+                                if (errorMessage.contains("AuthFailureError")) {
+                                    iOnBoardFragmentCallback.showLogoutAlert();
+                                } else {
+                                    iOnBoardFragmentCallback.showMessage(errorMessage);
+                                }
+                            }
+                        });
+            } else if (searchClientPageIndex == 2) {
+                String searchProfileUrl = WebServiceURLs.BASE_URL +
+                        WebServiceURLs.SEARCH_PROFILES_URL_HIERARCHY +
+                        PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
+                searchProfileUrl = searchProfileUrl.replaceAll("HIERARCHY", searchKey);
+                iOnBoardFragmentCallback.showProgressBar();
+                WebService.getInstance().apiGetRequestCallJSON(searchProfileUrl,
+                        new WebService.OnServiceResponseListener() {
+                            @Override
+                            public void onApiCallResponseSuccess(String url, String object) {
+                                iOnBoardFragmentCallback.hideProgressBar();
+                                ArrayList<ClientDataDTO> clients = getAndParseAllClients(object);
+                                iOnBoardFragmentCallback.loadRecyclerView(clients, false, clearAll);
+
+                            }
+
+                            @Override
+                            public void onApiCallResponseFailure(String errorMessage) {
+                                iOnBoardFragmentCallback.hideProgressBar();
+                                if (errorMessage.contains("AuthFailureError")) {
+                                    iOnBoardFragmentCallback.showLogoutAlert();
+                                } else {
+                                    iOnBoardFragmentCallback.showMessage(errorMessage);
+                                }
+                            }
+                        });
+            } else if (searchClientPageIndex == 3) {
+                String searchProfileUrl = WebServiceURLs.BASE_URL +
+                        WebServiceURLs.SEARCH_PROFILES_URL_NATIONAL_ID +
+                        PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
+                searchProfileUrl = searchProfileUrl.replaceAll("NATIONALID", searchKey);
+                iOnBoardFragmentCallback.showProgressBar();
+                WebService.getInstance().apiGetRequestCallJSON(searchProfileUrl,
+                        new WebService.OnServiceResponseListener() {
+                            @Override
+                            public void onApiCallResponseSuccess(String url, String object) {
+                                iOnBoardFragmentCallback.hideProgressBar();
+                                ArrayList<ClientDataDTO> clients = getAndParseAllClients(object);
+                                iOnBoardFragmentCallback.loadRecyclerView(clients, true, clearAll);
+
+                            }
+
+                            @Override
+                            public void onApiCallResponseFailure(String errorMessage) {
+                                iOnBoardFragmentCallback.hideProgressBar();
+                                if (errorMessage.contains("AuthFailureError")) {
+                                    iOnBoardFragmentCallback.showLogoutAlert();
+                                } else {
+                                    iOnBoardFragmentCallback.showMessage(errorMessage);
+                                }
+                            }
+                        });
+            } else if (searchClientPageIndex == 4) {
+                String searchProfileUrl = WebServiceURLs.BASE_URL +
+                        WebServiceURLs.SEARCH_PROFILES_URL_IDENTIFIER +
+                        PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
+                searchProfileUrl = searchProfileUrl.replaceAll("IDENTIFIER", searchKey);
+                iOnBoardFragmentCallback.showProgressBar();
+                WebService.getInstance().apiGetRequestCallJSON(searchProfileUrl,
+                        new WebService.OnServiceResponseListener() {
+                            @Override
+                            public void onApiCallResponseSuccess(String url, String object) {
+                                iOnBoardFragmentCallback.hideProgressBar();
+                                ArrayList<ClientDataDTO> clients = getAndParseAllClients(object);
+                                iOnBoardFragmentCallback.loadRecyclerView(clients, true, clearAll);
+
+                            }
+
+                            @Override
+                            public void onApiCallResponseFailure(String errorMessage) {
+                                iOnBoardFragmentCallback.hideProgressBar();
+                                if (errorMessage.contains("AuthFailureError")) {
+                                    iOnBoardFragmentCallback.showLogoutAlert();
+                                } else {
+                                    iOnBoardFragmentCallback.showMessage(errorMessage);
+                                }
+                            }
+                        });
+            }
+        } else {
+            if (pageNumber == 0) {
+                iOnBoardFragmentCallback.showProgressBar();
+            }
+            WebService.getInstance().apiGetRequestCallJSON(url,
+                    new WebService.OnServiceResponseListener() {
+                        @Override
+                        public void onApiCallResponseSuccess(String url, String object) {
+                            iOnBoardFragmentCallback.hideProgressBar();
+                            ArrayList<ClientDataDTO> clients = getAndParseAllClients(object);
+                            iOnBoardFragmentCallback.loadRecyclerView(clients, false, clearAll);
+
                         }
-                    }
-                });
+
+                        @Override
+                        public void onApiCallResponseFailure(String errorMessage) {
+                            iOnBoardFragmentCallback.hideProgressBar();
+                            if (errorMessage.contains("AuthFailureError")) {
+                                iOnBoardFragmentCallback.showLogoutAlert();
+                            } else {
+                                iOnBoardFragmentCallback.showMessage(errorMessage);
+                            }
+                        }
+                    });
+        }
     }
 
+    public void getSearchedData(DataProfilesDTO dataProfilesDTO) {
+        ArrayList<Profile> clients = dataProfilesDTO.profiles;
+        //  iOnBoardFragmentCallback.loadSearchedRecyclerView(clients, true);
 
-    public void getSearch(String searchQuery) {
+    }
+
+    /*public void getSearch(String searchQuery) {
         if (TextUtils.isEmpty(searchQuery)) {
             return;
         }
         iOnBoardFragmentCallback.showProgressBar();
-        String url = WebServiceURLs.BASE_URL +
+        String accessToken = PreferenceConnector.readString(context,
+                context.getString(R.string.accessToken), "");
+        //   if (search_selection == 1) {
+        MFFApiWrapper.getInstance().service.getProfileDetailsByName(accessToken,
+                SearchClientPageIndex, 10, searchQuery).enqueue(new Callback<ClientDataDTO>() {
+            @Override
+            public void onResponse(@NonNull Call<ClientDataDTO> call,
+                                   @NonNull Response<ClientDataDTO> response) {
+                 iOnBoardFragmentCallback.hideProgressBar();
+                if (response.isSuccessful()) {
+                    ClientDataDTO clients = response.body();
+                    ArrayList<ClientDataDTO> clientDataDTOS = new ArrayList<>();
+                    clientDataDTOS.add(clients);
+                    iOnBoardFragmentCallback.loadRecyclerView(clientDataDTOS, true, true);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ClientDataDTO> call, @NonNull Throwable t) {
+                iOnBoardFragmentCallback.hideProgressBar();
+                if (t.getMessage().contains("AuthFailureError")) {
+                    iOnBoardFragmentCallback.showLogoutAlert();
+                } else {
+                    iOnBoardFragmentCallback.showMessage(t.getMessage());
+                }
+            }
+        });
+       *//* String url = WebServiceURLs.BASE_URL +
                 WebServiceURLs.SEARCH_PROFILES_URL +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
-        url = url.replaceAll("NAME", "" + searchQuery);
+        url = url.replaceAll("Name", "" + searchQuery);
         WebService.getInstance().apiGetRequestCall(url,
                 new WebService.OnServiceResponseListener() {
                     @Override
@@ -85,8 +234,8 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
                             iOnBoardFragmentCallback.showMessage(errorMessage);
                         }
                     }
-                });
-    }
+                });*//*
+    }*/
 
 
     private ArrayList<ClientDataDTO> getAndParseAllClients(String object) {
@@ -337,9 +486,6 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
                     }
                 }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

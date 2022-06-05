@@ -1,26 +1,28 @@
 package loans;
 
-import Utilities.AlertDialogUtils;
-import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.odedtech.mff.mffapp.R;
-import loans.model.CollectionPortfolioDetails;
-import loans.model.Installments;
-import loans.model.LoanBluetoothData;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import loans.model.CollectionPortfolioDetails;
+import loans.model.Installments;
+import loans.model.LoanBluetoothData;
 
 public class LoansCollectionAdapter extends RecyclerView.Adapter<LoansCollectionAdapter.ViewHolder> {
 
@@ -29,10 +31,12 @@ public class LoansCollectionAdapter extends RecyclerView.Adapter<LoansCollection
     private final Context context;
     private int totalAmount;
     private int selectedPosition = -1;
+    private boolean[] checkedArr;
+    int x = 0;
 
 
     public LoansCollectionAdapter(Context context, ArrayList<Installments> collections,
-                               OnUpdateAmount onUpdateAmount) {
+                                  OnUpdateAmount onUpdateAmount) {
         this.context = context;
         this.collections = collections;
         this.onUpdateAmount = onUpdateAmount;
@@ -50,19 +54,38 @@ public class LoansCollectionAdapter extends RecyclerView.Adapter<LoansCollection
         Installments installments = collections.get(i);
         CollectionPortfolioDetails profileCollection = installments.collectionPR;
         viewHolder.textDate.setText(profileCollection.event_time);
-        if (selectedPosition==i){
+        viewHolder.checkInstallment.setChecked(installments.isChecked);
+     /*   if (selectedPosition==i){
             viewHolder.checkInstallment.setChecked(installments.isChecked);
         }
         else {
             installments.isChecked = false;
             viewHolder.checkInstallment.setChecked(false);
-        }
+        }*/
         viewHolder.ll_interest.setVisibility(View.GONE);
         viewHolder.tv_principal.setText("Event Type");
         viewHolder.textPrincipal.setText(profileCollection.event_type);
-        viewHolder.textTotal.setText(String.valueOf(Integer.parseInt(profileCollection.event_value)));
-        viewHolder.checkInstallment.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        String totalText = profileCollection.event_value;
+        if (profileCollection.event_value.contains("-")) {
+            viewHolder.textTotal.setText(totalText.substring(1));
+        } else {
+            viewHolder.textTotal.setText(totalText);
+        }
 
+        viewHolder.checkInstallment.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (buttonView.isChecked()) {
+                x += Integer.parseInt(viewHolder.textTotal.getText().toString());
+                collections.get(i).isChecked = true;
+                // sumAllCheckedAndNotify();
+                // int totalAmountInstallment = Integer.parseInt(viewHolder.textTotal.getText().toString());
+                // onUpdateAmount.onUpdate(x);
+            } else {
+                //sumAllCheckedAndNotifyNew();
+                collections.get(i).isChecked = false;
+                x -= Integer.parseInt(viewHolder.textTotal.getText().toString());
+                //  int totalAmountInstallment = Integer.parseInt(viewHolder.textTotal.getText().toString());
+            }
+            onUpdateAmount.onUpdate(x);
         });
     }
 
@@ -90,7 +113,7 @@ public class LoansCollectionAdapter extends RecyclerView.Adapter<LoansCollection
             checkInstallment = itemView.findViewById(R.id.check_installment);
             tv_principal = itemView.findViewById(R.id.tv_principal);
             ll_interest = itemView.findViewById(R.id.ll_interest);
-            itemView.setOnClickListener(v -> {
+          /*  itemView.setOnClickListener(v -> {
                 Installments installments = collections.get(getAdapterPosition());
 
                 selectedPosition = getAdapterPosition();
@@ -109,25 +132,25 @@ public class LoansCollectionAdapter extends RecyclerView.Adapter<LoansCollection
                     }
                     boolean previousSelection = checkPreviousSelection(getAdapterPosition());
                     if (previousSelection) {
-                  /* deselectThePreviousSelections(getAdapterPosition());
+                  *//* deselectThePreviousSelections(getAdapterPosition());
                    int totalAmountInstallment = Integer.parseInt(textTotal.getText().toString());
                   // if (!installments.isChecked) {
                        onUpdateAmount.onUpdate(totalAmountInstallment);
                        // installments.isChecked = !installments.isChecked;
-                       notifyDataSetChanged();*/
+                       notifyDataSetChanged();*//*
                         // }
                     }
                // }
-               /* else {
+               *//* else {
                     if(selectedPosition > 0){
                         AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select only one installment at a time");
 
                     }
-                }*/
+                }*//*
                 //    } else {
                 //      AlertDialogUtils.getAlertDialogUtils().showOkAlert((Activity) context, "Please select the previous installments");
                 //}
-            });
+            });*/
         }
 
         private void deselectThePreviousSelections(int adapterPosition) {
@@ -217,7 +240,7 @@ public class LoansCollectionAdapter extends RecyclerView.Adapter<LoansCollection
             if (collection.isChecked) {
                 principal = principal + Integer.parseInt(collection.collectionPR.event_value);
                 interest = interest + Integer.parseInt(collection.collectionPR.event_value);
-                total = total + Integer.parseInt(collection.collectionPR.event_value) ;
+                total = total + Integer.parseInt(collection.collectionPR.event_value);
             }
         }
         bluetoothData.interest = bluetoothData.interest + interest;
