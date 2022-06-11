@@ -213,6 +213,43 @@
 
         </androidx.cardview.widget.CardView>
 
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_logout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_weight="4"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_10dp"
+            app:contentPadding="@dimen/_15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:src="@drawable/ic_round_logout_24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:padding="@dimen/_5dp"
+                    android:text="Logout"
+                    android:textColor="@color/theme_dark"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/logout_button"
             android:layout_width="match_parent"
@@ -224,7 +261,10 @@
             android:gravity="center"
             android:text="Logout"
             android:textColor="@color/white_color"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_16"
+            android:visibility="gone" />
+
+
     </LinearLayout>
 
 </ScrollView>

@@ -38,7 +38,7 @@ import retrofit2.Response;
 
 import java.util.List;
 
-public class LoansFragmentNew extends BaseFragment implements MaterialSearchView.OnQueryTextListener,
+public class AccountsFragment extends BaseFragment implements MaterialSearchView.OnQueryTextListener,
         MaterialSearchView.SearchViewListener, DisbursalsAdapter.ItemViewClickListener, View.OnClickListener {
 
     private FragmentLoansNewBinding binding;
@@ -49,7 +49,6 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
     private int searchPageIndex;
     private int loansPageIndex;
     private int loansSearchPageIndex;
-    private LoanCollectionPortfolioAdapter adapter;
     private DisbursalsAdapter disbursalsAdapter;
     private String queryText;
     private boolean isCollections = true;
@@ -237,9 +236,9 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
         } else {
             binding.progressBar.setVisibility(View.VISIBLE);
         }
-
         String accessToken = PreferenceConnector.readString(getActivity(),
                 requireActivity().getString(R.string.accessToken), "");
+        showLoading();
         MFFApiWrapper.getInstance().service.getLoans(accessToken,
                 loansPageIndex, 10, "IED").enqueue(new Callback<LoansPortfolioResponse>() {
             @Override
@@ -338,8 +337,8 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
             MFFApiWrapper.getInstance().service.searchLoansUsingIdentifier(accessToken,
                     search, loansSearchPageIndex, 10, "IED").enqueue(new Callback<LoansPortfolioResponse>() {
                 @Override
-                public void onResponse(Call<LoansPortfolioResponse> call,
-                                       Response<LoansPortfolioResponse> response) {
+                public void onResponse(@NonNull Call<LoansPortfolioResponse> call,
+                                       @NonNull Response<LoansPortfolioResponse> response) {
                     dismissLoading();
                     if (response.isSuccessful()) {
                         loadSearchDisbursals(response.body());
@@ -349,7 +348,7 @@ public class LoansFragmentNew extends BaseFragment implements MaterialSearchView
                 }
 
                 @Override
-                public void onFailure(Call<LoansPortfolioResponse> call, Throwable t) {
+                public void onFailure(@NonNull Call<LoansPortfolioResponse> call, @NonNull Throwable t) {
                     dismissLoading();
                     Toast.makeText(getActivity(),
                             getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();

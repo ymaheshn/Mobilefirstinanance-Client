@@ -113,8 +113,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_bottom_header_login"
                         android:layout_marginTop="@dimen/margin_top_header_login"
+                        android:layout_marginBottom="@dimen/margin_bottom_header_login"
                         android:fontFamily="sans-serif"
                         android:text="@string/login_header_text"
                         android:textColor="@android:color/black"
@@ -132,8 +132,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -149,8 +149,8 @@
                             android:inputType="number"
                             android:maxLength="3"
                             android:maxLines="1"
-                            android:paddingEnd="5dp"
                             android:paddingStart="5dp"
+                            android:paddingEnd="5dp"
                             android:text="+91"
                             android:textColor="@android:color/black" />
 
@@ -159,17 +159,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginLeft="10dp"
                             android:layout_marginStart="10dp"
+                            android:layout_marginLeft="10dp"
                             android:background="@drawable/login_btn_selector"
+                            android:focusable="true"
                             android:gravity="start|center_vertical"
                             android:imeOptions="actionDone"
                             android:inputType="number"
                             android:maxLength="10"
                             android:maxLines="1"
-                            android:focusable="true"
-                            android:paddingEnd="15dp"
                             android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
                             android:textColor="@android:color/black" />
                     </LinearLayout>
 
@@ -188,7 +188,8 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
@@ -213,7 +214,8 @@
                 android:padding="@dimen/_15dp"
                 android:text="@string/login_with"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="@dimen/sp_16" />
+                android:textSize="@dimen/sp_16"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -222,6 +224,7 @@
                 android:layout_marginBottom="@dimen/_15dp"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:weightSum="2">
 
                 <LinearLayout
@@ -257,12 +260,12 @@
                     android:layout_marginStart="@dimen/_10dp"
                     android:layout_marginLeft="@dimen/_10dp"
                     android:layout_weight="0.8"
-                    android:visibility="gone"
                     android:background="@drawable/round_bg"
                     android:gravity="center"
                     android:onClick="facebookSignIn"
                     android:orientation="horizontal"
-                    android:padding="@dimen/_10dp">
+                    android:padding="@dimen/_10dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"

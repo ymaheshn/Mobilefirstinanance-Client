@@ -4,4 +4,5 @@ public class LoanBluetoothData {
     public int interest;
     public int principal;
     public int total;
+    public String eventType;
 }

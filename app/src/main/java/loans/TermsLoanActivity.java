@@ -92,7 +92,7 @@ public class TermsLoanActivity extends BaseActivity {
         productName.setText(termsDataDTO.data.portfolioNew.ContractjsonObject.terms.get(0).contractID);
         loadId.setText(termsDataDTO.data.portfolioNew.ContractjsonObject.terms.get(0).contractID);
         loanAmount.setText(termsDataDTO.data.portfolioNew.ContractjsonObject.terms.get(0).notionalPrincipal);
-        disbursementDate.setText(termsDataDTO.data.portfolioNew.ContractjsonObject.terms.get(0).contractDealDate);
+        disbursementDate.setText(termsDataDTO.data.portfolioNew.ContractjsonObject.terms.get(0).initialExchangeDate);
         maturityDate.setText(termsDataDTO.data.portfolioNew.ContractjsonObject.terms.get(0).maturityDate);
         interestDate.setText(termsDataDTO.data.portfolioNew.ContractjsonObject.terms.get(0).nominalInterestRate);
     }

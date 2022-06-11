@@ -73,7 +73,14 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
             numberET.setSelection(phoneNumber.length());
         }
 
-        loginWithMobileNumber.setOnClickListener(view -> viewSwitcher.showNext());
+        loginWithMobileNumber.setOnClickListener(v -> {
+            if (loginWithMobileNumber.getText().toString().equals("Login with Mobile Number")) {
+                loginWithMobileNumber.setText("Login with User name and Password");
+            } else if (loginWithMobileNumber.getText().toString().equals("Login with User name and Password")) {
+                loginWithMobileNumber.setText("Login with Mobile Number");
+            }
+            viewSwitcher.showNext();
+        });
     }
 
     /**

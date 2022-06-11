@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:gravity="center_vertical"
-    android:orientation="vertical">
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="@dimen/_5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,13 +14,11 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/default_profile"
-            app:civ_border_color="#575757"
-            app:civ_border_width="2dp" />
+            android:src="@drawable/user_profile" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -27,7 +26,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:paddingLeft="10dp">
+            android:paddingStart="10dp">
 
             <TextView
                 android:id="@+id/nameTV"
@@ -35,15 +34,14 @@
                 android:layout_height="wrap_content"
                 android:text="Name"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/text_role"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Individual"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/theme"
                 android:textSize="14sp" />
 
             <TextView
@@ -67,13 +65,10 @@
             android:id="@+id/img_loan_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/ic_check_circle_black_24dp"
             android:visibility="gone" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-</LinearLayout>
+
+</androidx.cardview.widget.CardView>

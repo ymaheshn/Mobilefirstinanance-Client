@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
-    tools:context="collections.CollectionsFragment">
+    tools:context="collections.PaymentsFragment">
 
     <FrameLayout
         android:id="@+id/tabs"
@@ -96,6 +96,7 @@
             android:id="@+id/rv_collections"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/_5dp"
             tools:listitem="@layout/item_loan_collection_portfolio" />
 
         <TextView

@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_5dp"
-    android:elevation="@dimen/_5dp"
-    app:cardCornerRadius="@dimen/_5dp">
+    app:cardCornerRadius="@dimen/_10dp"
+    app:cardElevation="@dimen/_5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_marginTop="@dimen/_10dp"
                 android:paddingHorizontal="12dp"
                 android:textColor="@color/text_color_black"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 tools:text="Name" />
 
 
@@ -38,7 +38,7 @@
                 android:layout_marginTop="@dimen/_5dp"
                 android:paddingHorizontal="12dp"
                 android:textColor="@color/theme"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="Identifier" />
 
             <TextView
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="12dp"
                 android:textColor="@color/theme"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="ContractID" />
 
             <TextView
@@ -57,7 +57,7 @@
                 android:layout_marginTop="@dimen/_5dp"
                 android:paddingHorizontal="12dp"
                 android:textColor="@color/text_color_black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="Group" />
 
 
@@ -69,9 +69,8 @@
                 android:layout_marginBottom="@dimen/_10dp"
                 android:paddingHorizontal="12dp"
                 android:textColor="@color/colorBlack"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="Branch" />
-
 
 
             <View

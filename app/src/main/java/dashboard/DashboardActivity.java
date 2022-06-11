@@ -64,7 +64,7 @@ import base.BaseFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import collections.CollectionsFragment;
+import collections.PaymentsFragment;
 import database.db.DBOperations;
 import domain.AddLoanCollectionUseCase;
 import domain.GetLoanCollectionsUseCase;
@@ -75,7 +75,7 @@ import interfaces.IOnHeaderItemsClickListener;
 import kyc.KycFragment;
 import loans.LoanCollectionFragment;
 import loans.LoansFragment;
-import loans.LoansFragmentNew;
+import loans.AccountsFragment;
 import maps.MapViewFragment;
 import networking.MyApplication;
 import onboard.ClientDataDTO;
@@ -360,7 +360,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
                     headerTitleTV.setText("Collections");
-                    currentFragment = new CollectionsFragment();
+                    currentFragment = new PaymentsFragment();
                     addFragmentToContent(currentFragment, "Reports");
                     break;
                 case SHUFPTI_FRAGMENT:
@@ -387,8 +387,8 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
         query = null;
         if (currentFragment instanceof OnBoardFragment) {
             ((OnBoardFragment) currentFragment).getAllClients();
-        } else if (currentFragment instanceof LoansFragmentNew) {
-            ((LoansFragmentNew) currentFragment).getLoans();
+        } else if (currentFragment instanceof AccountsFragment) {
+            ((AccountsFragment) currentFragment).getLoans();
         }
     }
 
@@ -420,7 +420,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     adharScannerIV.setVisibility(View.GONE);
                     headerTitleTV.setText(getString(R.string.contracts));
                     imgSearch.setVisibility(View.VISIBLE);
-                    currentFragment = new LoansFragmentNew();
+                    currentFragment = new AccountsFragment();
                     replaceFragmentToContent(currentFragment, getString(R.string.contracts));
                     break;
                 case LOAN_COLLECTIONS_FRAGMENT:
@@ -448,7 +448,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     adharScannerIV.setVisibility(View.GONE);
                     imgSearch.setVisibility(View.VISIBLE);
                     headerTitleTV.setText("Payments");
-                    currentFragment = new CollectionsFragment();
+                    currentFragment = new PaymentsFragment();
                     replaceFragmentToContent(currentFragment, "Payments");
                     break;
                 case ADD_CLIENT_FRAGMENT:

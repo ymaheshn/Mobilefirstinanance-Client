@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cardView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="4"
-        app:cardCornerRadius="5dp"
-        android:layout_margin="@dimen/_10dp"
-        app:cardElevation="@dimen/_10dp"
-        app:cardMaxElevation="@dimen/_10dp"
-        app:contentPadding="@dimen/_10dp">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_10dp"
+    android:layout_weight="4"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="@dimen/_10dp"
+    app:cardMaxElevation="@dimen/_10dp"
+    app:contentPadding="@dimen/_10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,23 +30,23 @@
             android:textSize="12sp" />
 
         <LinearLayout
-            android:weightSum="2"
             android:layout_width="match_parent"
-            android:orientation="horizontal"
             android:layout_height="wrap_content"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:orientation="vertical"
+                android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:layout_height="wrap_content">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="4dp"
                     android:gravity="end"
+                    android:padding="4dp"
                     android:text="Client ID: "
                     android:textColor="#619A92" />
 
@@ -72,8 +71,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:text="Contract ID: "
                     android:padding="4dp"
+                    android:text="Contract ID: "
                     android:textColor="#619A92" />
 
                 <TextView
@@ -83,19 +82,20 @@
                     android:padding="4dp"
                     android:text="Branch Name: "
                     android:textColor="#619A92" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="4dp"
                     android:gravity="end"
+                    android:padding="4dp"
                     android:text="Hierarchy Name: "
                     android:textColor="#619A92" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="4dp"
                     android:gravity="end"
+                    android:padding="4dp"
                     android:text="Status: "
                     android:textColor="#619A92" />
 
@@ -104,9 +104,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1.7"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_client_id"
@@ -119,16 +119,16 @@
                 <TextView
                     android:id="@+id/tv_client_name"
                     android:layout_width="wrap_content"
-                    android:padding="4dp"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:text=""
                     android:textColor="@color/colorBlack" />
 
                 <TextView
                     android:id="@+id/tv_nat_id"
                     android:layout_width="wrap_content"
-                    android:padding="4dp"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:text=""
                     android:textColor="@color/colorBlack" />
 
@@ -150,11 +150,11 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_weight="0.1"
                         android:layout_gravity="center"
-                        android:padding="4dp"
                         android:layout_marginEnd="@dimen/_10dp"
+                        android:layout_weight="0.1"
                         android:gravity="end"
+                        android:padding="4dp"
                         android:src="@drawable/ic_baseline_arrow_forward_ios_24"
                         app:tint="#619A92" />
                 </LinearLayout>

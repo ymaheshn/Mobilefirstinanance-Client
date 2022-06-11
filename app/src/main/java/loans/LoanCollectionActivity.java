@@ -42,7 +42,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-
+/*This is Accounts Screen Activity*/
 public class LoanCollectionActivity extends BaseActivity implements LoanCollectionsFragmentCallback, View.OnClickListener {
 
     private static final int RC_LOCATION = 9;
@@ -185,7 +185,7 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
             }
         });
         binding.rcInstallments.setAdapter(loansCollectionAdapter);
-        if (adapterInstallments.size() == 0) {
+        if (adapterInstallments == null || adapterInstallments.size() == 0) {
             noData();
         } else {
             dataAvl();
@@ -219,7 +219,7 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
             CollectionPortfolioDetails collection = installments.get(i);
             if (collection.event_type.equals("PR")) {
                 inst.collectionPR = collection;
-                inst.collectionIP = installments.get(i);
+                inst.collectionIP = installments.get(i + 1);
             } else {
                 inst.collectionIP = collection;
                 inst.collectionPR = installments.get(i + 1);
@@ -234,7 +234,7 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
             binding.containerPayEdit.setVisibility(View.VISIBLE);
         });
         binding.rcInstallments.setAdapter(installmentsAdapter);
-        if (adapterInstallments.size() == 0) {
+        if (adapterInstallments == null || adapterInstallments.size() == 0) {
             noData();
         } else {
             dataAvl();
@@ -243,7 +243,7 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
 
     private void noData() {
         binding.rcInstallments.setVisibility(View.GONE);
-        binding.bottomLayout.setVisibility(View.GONE);
+        //  binding.bottomLayout.setVisibility(View.GONE);
         binding.containerPayEdit.setVisibility(View.GONE);
         binding.containerCollect.setVisibility(View.GONE);
         binding.textNoRepayments.setVisibility(View.VISIBLE);
@@ -256,7 +256,7 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
 
     private void dataAvl() {
         binding.rcInstallments.setVisibility(View.VISIBLE);
-        binding.bottomLayout.setVisibility(View.VISIBLE);
+        //   binding.bottomLayout.setVisibility(View.VISIBLE);
         binding.containerPayEdit.setVisibility(View.GONE);
         binding.containerCollect.setVisibility(View.GONE);
         binding.textNoRepayments.setVisibility(View.GONE);
@@ -355,7 +355,6 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
                 showLoading();
                 showPrint = true;
 //                        savePortfolioCollectedLoan(data);
-                double value = Double.parseDouble(binding.editLoanAmount.getText().toString());
                 loansPresenter.savePayment(0, data);
 //                        loansPresenter.saveContractData(((DashboardActivity) getActivity()).addLoanCollectionUseCase, editLoanAmount.getText().toString(),
 //                                linkedProfileData.contractCodes.contractCode);
@@ -375,7 +374,7 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
                                 onBackPressed();
                             }
                         }, linkedProfileData.contractCodes, collectedAmount, bluetoothData.interest,
-                                bluetoothData.principal, bluetoothData.principal, receiptId, type, context);
+                                bluetoothData.principal, bluetoothData.principal, bluetoothData.eventType, receiptId, type, context);
 
                         deviceFragment.show(getSupportFragmentManager(),
                                 BluetoothDeviceFragment.class.getSimpleName());
@@ -391,7 +390,7 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
                                 onBackPressed();
                             }
                         }, linkedProfileData1.loanContractCodes, collectedAmount, bluetoothData.interest,
-                                bluetoothData.principal, bluetoothData.principal, receiptId, type, context);
+                                bluetoothData.principal, bluetoothData.principal, bluetoothData.eventType, receiptId, type, context);
 
                         deviceFragment.show(getSupportFragmentManager(),
                                 BluetoothDeviceFragment.class.getSimpleName());
@@ -422,7 +421,7 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
                             onBackPressed();
                         }
                     }, linkedProfileData.contractCodes, collectedAmount, bluetoothData.interest,
-                            bluetoothData.principal, bluetoothData.total, receiptId, type, context);
+                            bluetoothData.principal, bluetoothData.total, bluetoothData.eventType, receiptId, type, context);
                     deviceFragment.show(getSupportFragmentManager(),
                             BluetoothDeviceFragment.class.getSimpleName());
                 } else {
@@ -437,7 +436,7 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
                             onBackPressed();
                         }
                     }, linkedProfileData1.loanContractCodes, collectedAmount, bluetoothData.interest,
-                            bluetoothData.principal, bluetoothData.total, receiptId, type, context);
+                            bluetoothData.principal, bluetoothData.total, bluetoothData.eventType, receiptId, type, context);
                     deviceFragment.show(getSupportFragmentManager(),
                             BluetoothDeviceFragment.class.getSimpleName());
                 }

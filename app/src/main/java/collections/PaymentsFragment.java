@@ -37,8 +37,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-public class CollectionsFragment extends BaseFragment implements  MaterialSearchView.OnQueryTextListener,
+/*Payments Fragment*/
+public class PaymentsFragment extends BaseFragment implements  MaterialSearchView.OnQueryTextListener,
         MaterialSearchView.SearchViewListener, DisbursalsAdapter.ItemViewClickListener, View.OnClickListener {
 
 
@@ -56,12 +56,12 @@ public class CollectionsFragment extends BaseFragment implements  MaterialSearch
     private int loansPageIndex;
     private DisbursalsAdapter disbursalsAdapter;
 
-    public CollectionsFragment() {
+    public PaymentsFragment() {
         // Required empty public constructor
     }
 
-    public static CollectionsFragment newInstance(String param1, String param2) {
-        CollectionsFragment fragment = new CollectionsFragment();
+    public static PaymentsFragment newInstance(String param1, String param2) {
+        PaymentsFragment fragment = new PaymentsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

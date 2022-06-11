@@ -342,7 +342,7 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
                             requireActivity().onBackPressed();
                         }
                     }, linkedProfileData.contractCodes, collectedAmount, bluetoothData.interest,
-                            bluetoothData.principal, bluetoothData.total, recieptId, type, requireContext());
+                            bluetoothData.principal, bluetoothData.total, bluetoothData.eventType, recieptId, type, requireContext());
                     deviceFragment.show(requireActivity().getSupportFragmentManager(),
                             BluetoothDeviceFragment.class.getSimpleName());
                 } else {
@@ -357,7 +357,7 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
                             requireActivity().onBackPressed();
                         }
                     }, linkedProfileData1.loanContractCodes, collectedAmount, bluetoothData.interest,
-                            bluetoothData.principal, bluetoothData.total, recieptId, type, requireContext());
+                            bluetoothData.principal, bluetoothData.total, bluetoothData.eventType, recieptId, type, requireContext());
                     deviceFragment.show(requireActivity().getSupportFragmentManager(),
                             BluetoothDeviceFragment.class.getSimpleName());
                 }
@@ -411,7 +411,7 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
                                     getActivity().onBackPressed();
                                 }
                             }, linkedProfileData.contractCodes, collectedAmount, bluetoothData.interest,
-                                    bluetoothData.principal, bluetoothData.principal, recieptId, type, requireContext());
+                                    bluetoothData.principal, bluetoothData.total, bluetoothData.eventType, recieptId, type, requireContext());
 
                             deviceFragment.show(getActivity().getSupportFragmentManager(),
                                     BluetoothDeviceFragment.class.getSimpleName());
@@ -427,7 +427,8 @@ public class LoanCollectionFragment extends BaseFragment implements LoanCollecti
                                     getActivity().onBackPressed();
                                 }
                             }, linkedProfileData1.loanContractCodes, collectedAmount, bluetoothData.interest,
-                                    bluetoothData.principal, bluetoothData.principal, recieptId, type, requireContext());
+                                    bluetoothData.principal, bluetoothData.total,
+                                    bluetoothData.eventType, recieptId, type, requireContext());
 
                             deviceFragment.show(getActivity().getSupportFragmentManager(),
                                     BluetoothDeviceFragment.class.getSimpleName());

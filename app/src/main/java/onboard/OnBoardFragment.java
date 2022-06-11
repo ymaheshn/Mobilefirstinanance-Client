@@ -43,10 +43,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import dashboard.DashboardActivity;
 import interfaces.IOnFragmentChangeListener;
-import network.MFFApiWrapper;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCallback,
@@ -364,7 +360,7 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
 
     public void setAdapter(ArrayList<ClientDataDTO> clients) {
         onBoardAdapter = new OnBoardAdapter(getActivity(), clients, clientDataDTO -> {
-            if (UtilityMethods.isNetworkAvailable(getActivity())) {
+            if (UtilityMethods.isNetworkAvailable(requireActivity())) {
                 Constants.clientDataDTO = clientDataDTO;
                 Constants.isFromAddClient = false;
                 onBoardPresenter.getIsLinkedStatusAPI(clientDataDTO.profileId);
@@ -378,7 +374,7 @@ public class OnBoardFragment extends BaseFragment implements IOnBoardFragmentCal
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(clientsRV.getContext(), DividerItemDecoration.VERTICAL);
         clientsRV.addItemDecoration(dividerItemDecoration);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false);
         clientsRV.setLayoutManager(linearLayoutManager);
         clientsRV.setAdapter(onBoardAdapter);
 

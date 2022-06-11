@@ -180,24 +180,20 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/progressBar"
         android:layout_below="@+id/tabs_profile"
-        android:layout_marginTop="@dimen/_5dp" />
+        android:paddingTop="@dimen/_5dp"
+        tools:listitem="@layout/onboard_item" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searched_profile_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/progressBar"
-        android:layout_below="@+id/tabs_profile"
-        android:layout_marginTop="@dimen/_5dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:padding="@dimen/_10dp"
-        android:visibility="gone" />
-
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="3dp"
+        android:visibility="gone"
+        android:padding="@dimen/_10dp" />
 
     <TextView
         android:id="@+id/noClientsTV"

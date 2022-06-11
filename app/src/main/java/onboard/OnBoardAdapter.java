@@ -63,14 +63,11 @@ public class OnBoardAdapter extends RecyclerView.Adapter<OnBoardAdapter.ViewMode
                     PreferenceConnector.readString(mContext, mContext.getString(R.string.accessToken), "");
             Glide.with(mContext).load(imageUrl).placeholder(R.color.colorGray).into(holder.profile_image);
         } else {
-            Glide.with(mContext).load(R.drawable.default_profile).into(holder.profile_image);
+            Glide.with(mContext).load(R.drawable.user_profile).into(holder.profile_image);
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PreferenceConnector.writeInteger(mContext, "ListPosition", position);
-                iOnItemClickListener.onItemClicked(clientDataDTO);
-            }
+        holder.itemView.setOnClickListener(view -> {
+            PreferenceConnector.writeInteger(mContext, "ListPosition", position);
+            iOnItemClickListener.onItemClicked(clientDataDTO);
         });
 
     }

@@ -67,12 +67,9 @@ public class ProfilesListAdapter extends RecyclerView.Adapter<ProfilesListAdapte
         } else {
             Glide.with(mContext).load(R.drawable.default_profile).into(holder.profile_image);
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PreferenceConnector.writeInteger(mContext, "ListPosition", position);
-                iOnItemClickListener.onItemClicked(clientDataDTO);
-            }
+        holder.itemView.setOnClickListener(view -> {
+            PreferenceConnector.writeInteger(mContext, "ListPosition", position);
+            iOnItemClickListener.onItemClicked(clientDataDTO);
         });
 
     }

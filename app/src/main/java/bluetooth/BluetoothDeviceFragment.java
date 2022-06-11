@@ -42,6 +42,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -100,6 +101,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
     private int pricipal;
     private int total;
     private Context context;
+    private String eventType;
 
     public interface DeviceConnected {
         void deviceConnected(boolean isConnected);
@@ -112,9 +114,10 @@ public class BluetoothDeviceFragment extends DialogFragment {
 
     }
 
+    /*This is for Payments*/
     @SuppressLint("ValidFragment")
     public BluetoothDeviceFragment(DeviceConnected deviceConnected, ContractCodes contractCodes, int collectedAmount,
-                                   int interest, int pricipal, int total, int recipetId, String type,Context context) {
+                                   int interest, int pricipal, int total, String eventType, int recipetId, String type, Context context) {
         this.recipetId = recipetId;
         this.deviceConnected = deviceConnected;
         this.contractCodes = contractCodes;
@@ -122,13 +125,15 @@ public class BluetoothDeviceFragment extends DialogFragment {
         this.interest = interest;
         this.pricipal = pricipal;
         this.total = total;
+        this.eventType = eventType;
         this.type = type;
-        this.context=context;
+        this.context = context;
     }
 
+    /*This is for Accounts */
     @SuppressLint("ValidFragment")
     public BluetoothDeviceFragment(DeviceConnected deviceConnected, LoanContractCodes contractCodes, int collectedAmount,
-                                   int interest, int pricipal, int total, int recipetId, String type,Context context) {
+                                   int interest, int pricipal, int total, String eventType, int recipetId, String type, Context context) {
         this.recipetId = recipetId;
         this.deviceConnected = deviceConnected;
         this.contractCodes1 = contractCodes;
@@ -136,8 +141,9 @@ public class BluetoothDeviceFragment extends DialogFragment {
         this.interest = interest;
         this.pricipal = pricipal;
         this.total = total;
+        this.eventType = eventType;
         this.type = type;
-        this.context=context;
+        this.context = context;
     }
 
     @Nullable
@@ -151,7 +157,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        myApplication = (MyApplication) getActivity().getApplication();
+        myApplication = (MyApplication) requireActivity().getApplication();
 
         mlvList = view.findViewById(R.id.rv_devices_list);
         mlvList.setOnItemClickListener((parent, view1, position, id) -> {
@@ -688,7 +694,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
             if (CONN_SUCCESS == result) {
                 //wifiManager.setWifiEnabled(true);//To Enable wifi in mobile
                 // connection is successfull so start printing
-                if (myApplication.connection == true) {
+                if (myApplication.connection) {
                     genGetSerialNo genSerial = new genGetSerialNo();
                     genSerial.execute(0);
                 }
@@ -778,7 +784,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
         protected Integer doInBackground(Integer... params) {
             try {
                 prnGen.iFlushBuf();
-                String entityName = PreferenceConnector.readString(getActivity(), getString(R.string.entityname), "");
+                String entityName = PreferenceConnector.readString(requireActivity(), getString(R.string.entityname), "");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, entityName);
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
@@ -802,8 +808,23 @@ public class BluetoothDeviceFragment extends DialogFragment {
                 }
 
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "-----------------------");
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Loan Amount:       " + pricipal + ".00");
-                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Fee:         " + interest + ".00");
+                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Principal:       " + pricipal + ".00");
+                if (eventType.equals("nullFP")) {
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Fee:             " + eventType.substring(4));
+                }
+                else if (eventType.equals("nullIP")){
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Interest:         " + eventType.substring(4));
+                }
+                else if (eventType.equals("nullPR")){
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Principal:         " + eventType.substring(4));
+                }
+                else if (eventType.equals("nullIED")){
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Loan Amount:         " + eventType.substring(4));
+                }
+                else if (eventType == null){
+                    prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Interest:         " + interest + ".00");
+                }
+
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Total Amount:    " + total + ".00");
 //                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Collected Amount:" + collectedAmount + ".0");
 //                prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Collected Amount:" + collectedAmount + "0");
@@ -853,7 +874,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
                         .sendToTarget();
             } else if (iRetVal == Printer_GEN.INVALID_DEVICE_ID) {
                 ptrHandler.obtainMessage(1,
-                        "Connected  device is not authenticated.")
+                                "Connected  device is not authenticated.")
                         .sendToTarget();
             } else if (iRetVal == Printer_GEN.NOT_ACTIVATED) {
                 ptrHandler.obtainMessage(1, "Library not activated")
@@ -875,7 +896,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
             switch (msg.what) {
                 case 1:
                     Toast.makeText(context, (CharSequence) msg.obj, Toast.LENGTH_LONG).show();
-                 //   Toast.makeText(context.getApplicationContext(), (CharSequence) msg.obj, Toast.LENGTH_LONG).show();
+                    //   Toast.makeText(context.getApplicationContext(), (CharSequence) msg.obj, Toast.LENGTH_LONG).show();
                     break;
                 case 2:
                     String str1 = (String) msg.obj;

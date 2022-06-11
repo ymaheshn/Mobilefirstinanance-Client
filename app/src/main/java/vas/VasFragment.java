@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.cardview.widget.CardView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,7 @@ import base.BaseFragment;
 import login.LoginActivity;
 
 public class VasFragment extends BaseFragment {
-    public AppCompatButton logoutButton;
+    public CardView logoutButton;
     private View view;
 
     @Nullable
@@ -29,7 +30,7 @@ public class VasFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_vas_new, container, false);
-        logoutButton = view.findViewById(R.id.logout_button);
+        logoutButton = view.findViewById(R.id.card_logout);
 
         logoutButton.setOnClickListener(v -> {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
