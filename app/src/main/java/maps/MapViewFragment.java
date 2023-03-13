@@ -1,14 +1,15 @@
 package maps;
 
-import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
+import static Utilities.Constants.DASHBOARD_FRAGMENT;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -16,7 +17,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,8 +33,6 @@ import dashboard.DashboardActivity;
 import networking.WebService;
 import networking.WebServiceURLs;
 import onboard.ClientDataDTO;
-
-import static Utilities.Constants.DASHBOARD_FRAGMENT;
 
 
 public class MapViewFragment extends BaseFragment implements OnMapReadyCallback {

@@ -27,7 +27,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 import com.shutipro.sdk.Shuftipro;
 import com.shutipro.sdk.listeners.ShuftiVerifyListener;
 
@@ -41,7 +41,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import Utilities.AlertDialogUtils;
 import Utilities.Constants;
@@ -124,7 +123,13 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
 
 
         workFlowTemplateDt = Constants.workFlowTemplateDt;
-        TabDto tabDto = workFlowTemplateDt.tabDtoArrayList.get(index);
+        TabDto tabDto = new TabDto();
+        if (index >= 0 && index<workFlowTemplateDt.tabDtoArrayList.size()){
+            tabDto = workFlowTemplateDt.tabDtoArrayList.get(index);
+        }
+        // System.out.println(workFlowTemplateDt.tabDtoArrayList.get(i));
+
+
         for (TabFields fields :
                 tabDto.tabFieldsArrayList) {
             addFieldsToLayout(fields);
@@ -651,7 +656,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IOnDataRetri
                                     e.printStackTrace();
                                 }
                                 Toast.makeText(getActivity(), "Successfully Submitted!!", Toast.LENGTH_SHORT).show();
-                              //  System.out.println(jsonObject.getString("message"));
+                                //  System.out.println(jsonObject.getString("message"));
                             }
 
                         }

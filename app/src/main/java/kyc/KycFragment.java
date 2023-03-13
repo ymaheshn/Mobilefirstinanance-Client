@@ -1,6 +1,8 @@
 package kyc;
 
 
+import static Utilities.CustomDialogues.showBranch;
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -33,6 +35,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,7 +52,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,7 +77,6 @@ import Utilities.CustomDialogues;
 import Utilities.PreferenceConnector;
 import Utilities.UtilityMethods;
 import addclient.AddClientFragment;
-import base.BaseActivity;
 import base.BaseFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,15 +101,6 @@ import networking.WebService;
 import networking.WebServiceURLs;
 import onboard.TabDto;
 import onboard.WorkFlowTemplateDto;
-
-import static Utilities.CustomDialogues.showBranch;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -760,9 +759,9 @@ public class KycFragment extends BaseFragment implements IOnHeaderItemsClickList
     public void scanAdhaar() {
         // we need to check if the user has granted the camera permissions
         // otherwise scanner will not work
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
             return;
         }
 

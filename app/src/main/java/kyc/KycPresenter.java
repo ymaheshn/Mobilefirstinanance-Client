@@ -5,7 +5,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +21,6 @@ import database.dao.ClientFormsDAO;
 import database.db.DataBaseContext;
 import kyc.dto.KycDynamicForm;
 import kyc.dto.ProfileForm;
-import login.LoginActivity;
 import networking.WebService;
 import networking.WebServiceURLs;
 

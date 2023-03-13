@@ -87,11 +87,10 @@
                     android:textColor="@android:color/black" />
 
                 <EditText
-                    android:id="@+id/numberET"
+                    android:id="@+id/numberETLogin"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/login_btn_selector"
                     android:gravity="start|center_vertical"

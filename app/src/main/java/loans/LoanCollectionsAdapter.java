@@ -9,12 +9,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.odedtech.mff.mffapp.R;
-
-import java.util.ArrayList;
+import com.odedtech.mff.client.R;
 
 import loans.model.Datum;
-import loans.model.LinkedProfilesResponse;
 
 public class LoanCollectionsAdapter extends RecyclerView.Adapter<LoanCollectionsAdapter.ViewModel> {
 

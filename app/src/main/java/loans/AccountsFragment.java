@@ -4,39 +4,36 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.Toast;
-
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.odedtech.mff.mffapp.R;
-import com.odedtech.mff.mffapp.databinding.FragmentLoansNewBinding;
+import com.odedtech.mff.client.R;
+import com.odedtech.mff.client.databinding.FragmentLoansNewBinding;
+
+import java.util.ArrayList;
 
 import Utilities.Constants;
 import Utilities.PreferenceConnector;
+import Utilities.ProgressBar;
 import base.BaseFragment;
 import dashboard.DashboardActivity;
 import interfaces.IOnFragmentChangeListener;
-import loans.model.CollectionPortfolioResponse;
-import loans.model.LoansPortfolio;
 import loans.model.LoansPortfolioResponse;
 import network.MFFApiWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import java.util.List;
 
 public class AccountsFragment extends BaseFragment implements MaterialSearchView.OnQueryTextListener,
         MaterialSearchView.SearchViewListener, DisbursalsAdapter.ItemViewClickListener, View.OnClickListener {
@@ -55,8 +52,10 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
     ColorStateList def;
     private int search_selection = 1;
 
+    private int colorCode;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentLoansNewBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -68,9 +67,11 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
         initViews();
         // getCollectionPortfolio();
         getLoans();
-
-        iOnFragmentChangeListener = (IOnFragmentChangeListener) getActivity();
+        ((DashboardActivity) requireActivity()).setToolBarBackVisible(false);
+        iOnFragmentChangeListener = (IOnFragmentChangeListener) requireActivity();
         iOnFragmentChangeListener.onHeaderUpdate(Constants.LOANS_FRAGMENT, "Accounts");
+
+
 
         setPagingListeners();
     }
@@ -233,18 +234,21 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
     public void getLoans() {
         if (loansPageIndex == 0) {
             showLoading();
+            ProgressBar.showProgressDialog(requireContext());
         } else {
             binding.progressBar.setVisibility(View.VISIBLE);
         }
         String accessToken = PreferenceConnector.readString(getActivity(),
                 requireActivity().getString(R.string.accessToken), "");
         showLoading();
+        ProgressBar.showProgressDialog(requireContext());
         MFFApiWrapper.getInstance().service.getLoans(accessToken,
                 loansPageIndex, 10, "IED").enqueue(new Callback<LoansPortfolioResponse>() {
             @Override
             public void onResponse(@NonNull Call<LoansPortfolioResponse> call,
                                    @NonNull Response<LoansPortfolioResponse> response) {
                 dismissLoading();
+                ProgressBar.dismissDialog();
                 if (response.isSuccessful()) {
                     loadCollectionDisbursals(response.body());
                 } else {
@@ -255,6 +259,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
             @Override
             public void onFailure(@NonNull Call<LoansPortfolioResponse> call, @NonNull Throwable t) {
                 dismissLoading();
+                ProgressBar.dismissDialog();
                 Toast.makeText(getActivity(),
                         getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
             }
@@ -265,6 +270,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
     private void getSearchLoans(String search) {
         if (loansSearchPageIndex == 0) {
             showLoading();
+            ProgressBar.showProgressDialog(requireContext());
         } else {
             binding.progressBar.setVisibility(View.VISIBLE);
         }
@@ -277,6 +283,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
                 public void onResponse(@NonNull Call<LoansPortfolioResponse> call,
                                        @NonNull Response<LoansPortfolioResponse> response) {
                     dismissLoading();
+                    ProgressBar.dismissDialog();
                     if (response.isSuccessful()) {
                         loadSearchDisbursals(response.body());
                     } else {
@@ -287,6 +294,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
                 @Override
                 public void onFailure(@NonNull Call<LoansPortfolioResponse> call, @NonNull Throwable t) {
                     dismissLoading();
+                    ProgressBar.dismissDialog();
                     Toast.makeText(getActivity(),
                             getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 }
@@ -298,6 +306,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
                 public void onResponse(@NonNull Call<LoansPortfolioResponse> call,
                                        @NonNull Response<LoansPortfolioResponse> response) {
                     dismissLoading();
+                    ProgressBar.dismissDialog();
                     if (response.isSuccessful()) {
                         loadSearchDisbursals(response.body());
                     } else {
@@ -308,6 +317,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
                 @Override
                 public void onFailure(Call<LoansPortfolioResponse> call, Throwable t) {
                     dismissLoading();
+                    ProgressBar.dismissDialog();
                     Toast.makeText(getActivity(),
                             getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 }
@@ -319,6 +329,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
                 public void onResponse(@NonNull Call<LoansPortfolioResponse> call,
                                        @NonNull Response<LoansPortfolioResponse> response) {
                     dismissLoading();
+                    ProgressBar.dismissDialog();
                     if (response.isSuccessful()) {
                         loadSearchDisbursals(response.body());
                     } else {
@@ -329,6 +340,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
                 @Override
                 public void onFailure(@NonNull Call<LoansPortfolioResponse> call, @NonNull Throwable t) {
                     dismissLoading();
+                    ProgressBar.dismissDialog();
                     Toast.makeText(getActivity(),
                             getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 }
@@ -340,6 +352,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
                 public void onResponse(@NonNull Call<LoansPortfolioResponse> call,
                                        @NonNull Response<LoansPortfolioResponse> response) {
                     dismissLoading();
+                    ProgressBar.dismissDialog();
                     if (response.isSuccessful()) {
                         loadSearchDisbursals(response.body());
                     } else {
@@ -350,6 +363,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
                 @Override
                 public void onFailure(@NonNull Call<LoansPortfolioResponse> call, @NonNull Throwable t) {
                     dismissLoading();
+                    ProgressBar.dismissDialog();
                     Toast.makeText(getActivity(),
                             getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 }
@@ -431,13 +445,20 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
                 binding.textNoDataLoans.setVisibility(View.GONE);
                 binding.rvLoans.setVisibility(View.VISIBLE);
             }
-            disbursalsAdapter = new DisbursalsAdapter(getActivity(), this, (items, loansPortfolio) -> {
+            disbursalsAdapter = new DisbursalsAdapter(requireActivity(), this, (items,loansPortfolio,position) -> {
 
-                Intent intent = new Intent(getActivity(), LoanCollectionActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("loanData", (ArrayList<? extends Parcelable>) items);
+                bundle.putInt("position", position);
+                Intent intent = new Intent(requireActivity(), TransactionHistoryActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+              /*  Intent intent = new Intent(getActivity(), LoanCollectionActivity.class);
                 intent.putExtra("type", "2");
                 intent.putExtra(Constants.KeyExtras.CONTRACT_ID, loansPortfolio.contractuuid);
                 intent.putExtra(Constants.KeyExtras.LINKED_PROFILE, loansPortfolio);
-                startActivity(intent);
+                startActivity(intent);*/
 
                 //                Bundle bundle = new Bundle();
 //                bundle.putString("type", "2");
@@ -452,7 +473,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
         } else {
             isLoading = false;
             binding.progressBar.setVisibility(View.GONE);
-            if (response.data.portfolio == null && response.data.portfolio.size() == 0) {
+            if (response.data.portfolio == null) {
                 binding.textNoDataLoans.setVisibility(View.VISIBLE);
                 binding.rvLoans.setVisibility(View.GONE);
                 return;
@@ -469,7 +490,7 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
         //binding.containerDisbursals.setVisibility(View.VISIBLE);
         isLoading = false;
         binding.progressBar.setVisibility(View.GONE);
-        if (response.data.portfolio == null && response.data.portfolio.size() == 0) {
+        if (response.data.portfolio == null) {
             binding.textNoDataLoans.setVisibility(View.VISIBLE);
             binding.rvLoans.setVisibility(View.GONE);
             return;
@@ -543,15 +564,16 @@ public class AccountsFragment extends BaseFragment implements MaterialSearchView
 
     @Override
     public void onItemViewClick(String profileId) {
-        Intent intent = new Intent(getActivity(), BusinessDocumentsActivity.class);
+        Intent intent = new Intent(requireActivity(), BusinessDocumentsActivity.class);
         intent.putExtra("profileId", profileId);
         startActivity(intent);
     }
 
     @Override
     public void onItemViewTermsClick(String contractUUID) {
-        Intent intent = new Intent(getActivity(), TermsLoanActivity.class);
+        Intent intent = new Intent(requireActivity(), TermsLoanActivity.class);
         intent.putExtra("contractUUID", contractUUID);
         startActivity(intent);
     }
+
 }

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -17,9 +16,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,12 +27,10 @@ import java.util.Map;
 
 import Utilities.AlertDialogUtils;
 import Utilities.Constants;
-import base.WorkFlowProfile;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import credit_bureau.CreditBureauPresenter;
 import onboard.TabDto;
 import onboard.TabFields;
 import onboard.WorkFlowTemplateDto;

@@ -32,7 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 import com.prowesspride.api.Printer_GEN;
 
 import java.io.InputStream;
@@ -42,7 +42,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -300,6 +299,7 @@ public class BluetoothDeviceFragment extends DialogFragment {
         private static final int RET_BLUETOOTH_START_FAIL = 0x04;
         private static final int miWATI_TIME = 15;
         private static final int miSLEEP_TIME = 150;
+        // private static final Integer TODO = ;
         private ProgressDialog mpd;
 
         @Override
@@ -811,17 +811,13 @@ public class BluetoothDeviceFragment extends DialogFragment {
                 prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Principal:       " + pricipal + ".00");
                 if (eventType.equals("nullFP")) {
                     prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Fee:             " + eventType.substring(4));
-                }
-                else if (eventType.equals("nullIP")){
+                } else if (eventType.equals("nullIP")) {
                     prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Interest:         " + eventType.substring(4));
-                }
-                else if (eventType.equals("nullPR")){
+                } else if (eventType.equals("nullPR")) {
                     prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Principal:         " + eventType.substring(4));
-                }
-                else if (eventType.equals("nullIED")){
+                } else if (eventType.equals("nullIED")) {
                     prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Loan Amount:         " + eventType.substring(4));
-                }
-                else if (eventType == null){
+                } else if (eventType == null) {
                     prnGen.iAddData(Printer_GEN.FONT_LARGE_NORMAL, "Interest:         " + interest + ".00");
                 }
 

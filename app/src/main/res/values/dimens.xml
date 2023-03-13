@@ -8,12 +8,19 @@
 
     <dimen name="_10dp">10dp</dimen>
     <dimen name="_15dp">15dp</dimen>
+    <dimen name="_20dp">20dp</dimen>
     <dimen name="_5dp">5dp</dimen>
+    <dimen name="_6dp">6dp</dimen>
     <dimen name="divider_height">1dp</dimen>
     <dimen name="toolbar_icon_padding">15dp</dimen>
     <dimen name="toolbar_title">22sp</dimen>
     <dimen name="sp_16">16sp</dimen>
+    <dimen name="sp_20">20sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
     <dimen name="sp_10">10sp</dimen>
     <dimen name="_1dp">1dp</dimen>
     <dimen name="sp_18">18sp</dimen>
+    <dimen name="sp_22">22sp</dimen>
+    <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_40">40dp</dimen>
 </resources>

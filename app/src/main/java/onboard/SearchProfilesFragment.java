@@ -1,32 +1,34 @@
 package onboard;
 
-import Utilities.AlertDialogUtils;
-import Utilities.Constants;
-import Utilities.PreferenceConnector;
-import Utilities.UtilityMethods;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
-import com.odedtech.mff.mffapp.R;
-import dashboard.DashboardActivity;
-import loans.model.SearchData;
+import com.odedtech.mff.client.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import Utilities.AlertDialogUtils;
+import Utilities.UtilityMethods;
+import dashboard.DashboardActivity;
+import loans.model.SearchData;
 
 public class SearchProfilesFragment extends DialogFragment implements SearchProfilesFragmentCallbacks, SearchProfilesAdapter.OnItemClickListener {
     private ProgressDialog progressDialog = null;

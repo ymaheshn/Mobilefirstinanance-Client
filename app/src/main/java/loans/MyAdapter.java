@@ -11,17 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.multilevelview.MultiLevelAdapter;
 import com.multilevelview.MultiLevelRecyclerView;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import loans.model.Datum;
 

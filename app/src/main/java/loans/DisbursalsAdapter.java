@@ -1,18 +1,19 @@
 package loans;
 
 import android.content.Context;
-
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.odedtech.mff.mffapp.databinding.ItemDisbursalsBinding;
+import com.odedtech.mff.client.databinding.ItemDisbursalsBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Utilities.PreferenceConnector;
 import loans.model.LoansPortfolio;
 
 public class DisbursalsAdapter extends
@@ -28,7 +29,7 @@ public class DisbursalsAdapter extends
         this.itemViewClickListener = itemViewClickListener;
     }
 
-    private List<LoansPortfolio> items = new ArrayList<>();
+    private final List<LoansPortfolio> items = new ArrayList<>();
 
     public void setData(List<LoansPortfolio> data, boolean clearAll) {
         if (data != null && data.size() > 0) {
@@ -55,7 +56,7 @@ public class DisbursalsAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.bind(items.get(i));
+        viewHolder.bind(items.get(i), i);
     }
 
     @Override
@@ -71,15 +72,17 @@ public class DisbursalsAdapter extends
             this.binding = binding;
         }
 
-        public void bind(LoansPortfolio item) {
+        public void bind(LoansPortfolio item, int position) {
             binding.textProductName.setText(item.product_name);
-            binding.tvClientId.setText(item.loanContractCodes.getIdentifier());
-            binding.tvClientName.setText(item.loanContractCodes.getName());
-            binding.tvNatId.setText("" + item.loanContractCodes.getNationalID());
             binding.tvContractId.setText(item.loanContractCodes.getContractID());
-            binding.tvBranchName.setText(item.loanContractCodes.getBranchName());
-            binding.tvHierarchyName.setText(item.loanContractCodes.getGroupName());
-            binding.tvStatus.setText(item.status);
+            binding.balanceTv.setText(item.eventJSON.getTransaction().getNominalValue());
+
+            String colorTheme = PreferenceConnector.getThemeColor(mContext);
+            int colorCode = Color.parseColor(colorTheme);
+
+            binding.textProductName.setBackgroundColor(colorCode);
+            binding.balanceTv.setTextColor(colorCode);
+            binding.nextImage.setColorFilter(colorCode);
 
             binding.textSign.setOnClickListener(view -> {
                 SignatureDialog signatureDialog = new SignatureDialog(mContext);
@@ -96,17 +99,18 @@ public class DisbursalsAdapter extends
                 }
             });
             binding.getRoot().setOnClickListener(view -> {
-                iOnItemClickListener.onItemClicked(getItems(), getItems().get(getLayoutPosition()));
+                iOnItemClickListener.onItemClicked(getItems(), getItems().get(getLayoutPosition()), position);
             });
         }
     }
 
     public interface IOnItemClickListener {
-        void onItemClicked(List<LoansPortfolio> items, LoansPortfolio loansPortfolio);
+        void onItemClicked(List<LoansPortfolio> items, LoansPortfolio loansPortfolio, int position);
     }
 
     public interface ItemViewClickListener {
         void onItemViewClick(String profileId);
+
         void onItemViewTermsClick(String contractUUID);
     }
 }

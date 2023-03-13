@@ -7,16 +7,14 @@ import androidx.annotation.Nullable;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import Utilities.PreferenceConnector;
-import data.LoanCollectionUtils;
 import domain.services.SyncCommentRxBus;
 import domain.services.SyncResponseEventType;
-import domain.services.networking.RemoteCommentService;
 import domain.services.networking.RemoteException;
 import loans.model.LoanCollection;
 import networking.WebService;

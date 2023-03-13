@@ -2,11 +2,10 @@ package credit_bureau;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +16,6 @@ import java.util.Map;
 
 import Utilities.PreferenceConnector;
 import Utilities.UtilityMethods;
-import kyc.IKycFragmentCallback;
 import networking.WebService;
 import networking.WebServiceURLs;
 

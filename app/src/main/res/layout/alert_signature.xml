@@ -20,13 +20,15 @@
         android:layout_below="@+id/text_title"
         app:penColor="@android:color/black" />
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/_10dp"
-        android:background="@drawable/save_btn_bg"
+        android:layout_marginStart="@dimen/_10dp"
+        android:layout_marginTop="@dimen/_10dp"
+        android:layout_marginEnd="@dimen/_10dp"
+        android:layout_marginBottom="@dimen/_10dp"
         android:layout_toStartOf="@+id/btn_submit"
         android:paddingHorizontal="20dp"
         android:paddingVertical="@dimen/_10dp"
@@ -34,14 +36,13 @@
         android:textColor="@color/colorWhite"
         android:textSize="14sp" />
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/_10dp"
-        android:background="@drawable/save_btn_bg"
         android:paddingHorizontal="20dp"
         android:paddingVertical="@dimen/_10dp"
         android:text="Submit"

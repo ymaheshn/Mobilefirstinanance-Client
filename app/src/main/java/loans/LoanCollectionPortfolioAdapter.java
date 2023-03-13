@@ -1,6 +1,7 @@
 package loans;
 
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +9,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.odedtech.mff.mffapp.databinding.ItemLoanCollectionPortfolioBinding;
+import com.odedtech.mff.client.databinding.ItemLoanCollectionPortfolioBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Utilities.PreferenceConnector;
 import loans.model.CollectionPortfolio;
-import loans.model.Datum;
 
 public class LoanCollectionPortfolioAdapter extends
         RecyclerView.Adapter<LoanCollectionPortfolioAdapter.ViewHolder> {
@@ -78,6 +79,11 @@ public class LoanCollectionPortfolioAdapter extends
                 binding.textContractId.setVisibility(View.VISIBLE);
                 binding.textContractId.setText(item.contractCodes.contractID);
             }
+            String colorTheme = PreferenceConnector.getThemeColor(itemView.getContext());
+            int colorCode = Color.parseColor(colorTheme);
+            binding.textIdentifier.setTextColor(colorCode);
+            binding.textContractId.setTextColor(colorCode);
+            binding.nextArrow.setColorFilter(colorCode);
 
             binding.getRoot().setOnClickListener(view -> {
                 iOnItemClickListener.onItemClicked(getItems(), getItems().get(getLayoutPosition()));

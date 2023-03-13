@@ -2,5 +2,15 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">https://dev.mobilefirstfinance.com</domain>
+        <domain includeSubdomains="true">https://dev.mobilefirstfinance.com:7190</domain>
+        <domain includeSubdomains="true">https://app.shuftipro.com/</domain>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+
+            <pin-set expiration="2023">
+                <pin digest="SHA-256">{digest}</pin>
+            </pin-set>
+        </trust-anchors>
     </domain-config>
 </network-security-config>

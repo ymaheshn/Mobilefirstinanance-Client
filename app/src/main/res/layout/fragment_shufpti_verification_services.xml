@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:orientation="vertical"
-    tools:context="shufpti.ShufptiVerificationServicesFragment">
+    tools:context="shufpti.ShufptiVerificationServicesActivity">
 
     <LinearLayout
         android:id="@+id/topLayout"
@@ -143,10 +143,10 @@
                 android:id="@+id/doc2RelativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/docRelativeLayout"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/boarders"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/doc2ImageView"
@@ -191,7 +191,8 @@
                 android:layout_below="@+id/doc2RelativeLayout"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/boarders"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/addressImageView"
@@ -236,7 +237,8 @@
                 android:layout_below="@+id/addressRelativeLayout"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/boarders"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/consentImageView"
@@ -281,7 +283,8 @@
                 android:layout_below="@+id/consentRelativeLayout"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/boarders"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/phoneImageView"
@@ -326,7 +329,8 @@
                 android:layout_below="@+id/phoneRelativeLayout"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/boarders"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/bgImageView"
@@ -380,7 +384,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/terms_and_condition_retake"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/blue_round_button"
             android:padding="10dp"
             android:text="@string/start_verification"

@@ -7,7 +7,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import java.io.IOException;
 

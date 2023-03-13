@@ -1,10 +1,5 @@
 package search_profiles_list;
 
-import Utilities.AlertDialogUtils;
-import Utilities.Constants;
-import Utilities.PreferenceConnector;
-import Utilities.UtilityMethods;
-import addclient.AddClientFragment;
 import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,17 +20,25 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.odedtech.mff.client.R;
+
+import java.util.ArrayList;
+
+import Utilities.AlertDialogUtils;
+import Utilities.Constants;
+import Utilities.PreferenceConnector;
+import Utilities.UtilityMethods;
+import addclient.AddClientFragment;
 import base.BaseFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import com.odedtech.mff.mffapp.R;
 import dashboard.DashboardActivity;
 import interfaces.IOnFragmentChangeListener;
-import onboard.*;
-
-import java.util.ArrayList;
+import onboard.ClientDataDTO;
+import onboard.IOnBoardFragmentCallback;
+import onboard.WorkFlowTemplateDto;
 
 public class SearchProfilesListFragment extends BaseFragment implements IOnBoardFragmentCallback {
 

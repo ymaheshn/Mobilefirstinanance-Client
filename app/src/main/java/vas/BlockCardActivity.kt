@@ -1,37 +1,119 @@
 package vas
 
+import Utilities.AlertDialogUtils
+import Utilities.PreferenceConnector
+import Utilities.ProgressBar
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import android.view.Window
 import android.widget.Button
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.odedtech.mff.mffapp.R
+import androidx.core.content.ContextCompat
+import com.odedtech.mff.client.R
+import com.odedtech.mff.client.databinding.ActivityBlockCardBinding
+import interfaces.ApiCallResponseListener
+import network.ApiService
+import network.MFFApiWrapper
+import onboard.model.CreditCardResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import vas.models.BlockCardsPayload
+import vas.models.BlockedCardDetailsList
+import vas.models.CardBlockStatusResponse
 
-class BlockCardActivity : AppCompatActivity() {
+
+class BlockCardActivity : AppCompatActivity(),
+    IOnCheckBoxBlockCardClickListener, ApiCallResponseListener {
+
+    private val dashProgress: View? = null
+    private lateinit var binding: ActivityBlockCardBinding
+    private lateinit var cardResponse: CreditCardResponse
+
+    private var blockCardsPayload = BlockCardsPayload()
+
+    var cardDetailsList: List<BlockedCardDetailsList> = ArrayList()
+    var apiService: ApiService? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_block_card)
-        val backButton = findViewById<ImageView>(R.id.ic_back)
+        binding = ActivityBlockCardBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        backButton.setOnClickListener {
+        val colorTheme = PreferenceConnector.getThemeColor(applicationContext)
+        val colorCode = Color.parseColor(colorTheme)
+        binding.toolBarText.setTextColor(colorCode)
+        binding.icBack.setColorFilter(colorCode)
+
+        apiService = ApiService(this, this@BlockCardActivity)
+
+        binding.icBack.setOnClickListener {
             finish()
         }
+        binding.blockCardButton.setOnClickListener {
+            this.blockCardsPayload
+            blockCardsApi(blockCardsPayload)
+        }
+        getCardDetailsApi()
+    }
 
-        val rvTransactions: RecyclerView = findViewById(R.id.rv_accounts)
 
-        val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rvTransactions.layoutManager = linearLayoutManager
-        rvTransactions.adapter = AccountsBlockAdapter(this,
-                null)
+    private fun getCardDetailsApi() {
+        ProgressBar.showProgressDialog(this)
+        dashProgress?.visibility = View.VISIBLE
+        val accessToken: String? =
+            PreferenceConnector.readString(applicationContext, getString(R.string.accessToken), "")
+        val status = "active"
+        try {
+            MFFApiWrapper.getInstance().service.getCardDetails(status, accessToken)
+                .enqueue(object : Callback<CreditCardResponse?> {
+                    override fun onResponse(
+                        call: Call<CreditCardResponse?>,
+                        response: Response<CreditCardResponse?>
+                    ) {
+                        ProgressBar.dismissDialog()
+                        dashProgress?.visibility = View.GONE
+                        try {
+                            if (response.body() != null && response.code() == 200) {
+                                binding.blockCardButton.visibility = View.VISIBLE
+                                setToAdapter(response.body()!!)
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            Toast.makeText(applicationContext, e.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
 
-        findViewById<Button>(R.id.block_card).setOnClickListener {
-            showDialog()
+                    override fun onFailure(call: Call<CreditCardResponse?>, t: Throwable) {
+                        ProgressBar.dismissDialog()
+                        dashProgress?.visibility = View.GONE
+                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                    }
+                })
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ProgressBar.dismissDialog()
+            Toast.makeText(applicationContext, e.message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+    private fun setToAdapter(creditCardResponse: CreditCardResponse) {
+        cardResponse = creditCardResponse
+        if (cardResponse.data.cardDetails.size > 0) {
+            binding.rvAccounts.adapter =
+                AccountsBlockAdapter(applicationContext, creditCardResponse, this)
+        } else {
+            binding.noDataText.visibility = View.VISIBLE
+            binding.blockCardButton.visibility = View.GONE
+            binding.textAccountName.visibility = View.GONE
         }
     }
 
@@ -73,4 +155,48 @@ class BlockCardActivity : AppCompatActivity() {
         }
         dialog.show()
     }
+
+    override fun onCheckBoxItemClicked(
+        position: Int,
+        cardDetailsList: MutableList<BlockedCardDetailsList>?
+    ) {
+        if (cardDetailsList?.size!! >0) {
+            binding.blockCardButton.background =getDrawable(R.drawable.apply_button)
+            cardDetailsList.let {
+                blockCardsPayload.cardDetailsList = cardDetailsList
+            }
+        } else {
+            binding.blockCardButton.background = getDrawable(R.drawable.apply_button_grey)
+
+        }
+    }
+
+    private fun blockCardsApi(blockCardsPayload: BlockCardsPayload) {
+        this.blockCardsPayload = blockCardsPayload
+        val accessToken: String? =
+            PreferenceConnector.readString(applicationContext, getString(R.string.accessToken), "")
+        if (blockCardsPayload.cardDetailsList.size > 0) {
+            apiService?.blockCards(applicationContext, accessToken, blockCardsPayload)
+            binding.blockCardButton.setBackgroundColor(getColor(R.color.green_color_gradient))
+        } else {
+            Toast.makeText(applicationContext, getString(R.string.select_card), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onSuccess(responseData: Response<*>?) {
+        responseData?.let { it ->
+            it.body()?.let {
+                if (it is CardBlockStatusResponse) {
+                    AlertDialogUtils.getAlertDialogUtils().showSuccessBlockCardAlert(this, it.message)
+                    Toast.makeText(applicationContext, it.message.toString(), Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    override fun onFailure(error: String?) {
+        Toast.makeText(applicationContext, error.toString(), Toast.LENGTH_LONG).show()
+    }
+
+
 }

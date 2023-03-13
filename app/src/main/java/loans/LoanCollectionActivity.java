@@ -1,12 +1,9 @@
 package loans;
 
-import Utilities.AlertDialogUtils;
-import Utilities.Constants;
-import Utilities.PreferenceConnector;
-
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,24 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import base.BaseActivity;
-import base.LocalDatabase;
-import bluetooth.BluetoothDeviceFragment;
-
-import com.odedtech.mff.mffapp.R;
-import com.odedtech.mff.mffapp.databinding.ActivityLoanCollectionBinding;
+import com.odedtech.mff.client.R;
+import com.odedtech.mff.client.databinding.ActivityLoanCollectionBinding;
 import com.prowesspride.api.Setup;
 
-import loans.model.*;
-import network.MFFApiWrapper;
-import networking.MyApplication;
-
 import org.json.JSONArray;
-
-import pub.devrel.easypermissions.EasyPermissions;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -41,6 +25,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import Utilities.AlertDialogUtils;
+import Utilities.Constants;
+import Utilities.PreferenceConnector;
+import base.BaseActivity;
+import base.LocalDatabase;
+import bluetooth.BluetoothDeviceFragment;
+import loans.model.CollectionPortfolio;
+import loans.model.CollectionPortfolioDetails;
+import loans.model.CollectionPortfolioDetailsResponse;
+import loans.model.Datum;
+import loans.model.Installments;
+import loans.model.LoanBluetoothData;
+import loans.model.LoansPortfolio;
+import loans.model.ProfileCollection;
+import network.MFFApiWrapper;
+import networking.MyApplication;
+import pub.devrel.easypermissions.EasyPermissions;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /*This is Accounts Screen Activity*/
 public class LoanCollectionActivity extends BaseActivity implements LoanCollectionsFragmentCallback, View.OnClickListener {
@@ -79,6 +84,11 @@ public class LoanCollectionActivity extends BaseActivity implements LoanCollecti
             binding.tvTitle.setText("Contract Terms");
         }
         contractUuid = getIntent().getStringExtra(Constants.KeyExtras.CONTRACT_ID);
+
+        String colorTheme = PreferenceConnector.getThemeColor(getApplicationContext());
+        int colorCode = Color.parseColor(colorTheme);
+        binding.ivBack.setColorFilter(colorCode);
+        binding.tvTitle.setTextColor(colorCode);
 
         // Initial the Bluetooth printer setup
         if (MyApplication.setup == null) {

@@ -1,9 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/app_bg"
     tools:context="dashboard.DashboardFragment">
+
 
     <RelativeLayout
         android:id="@+id/container_total_clients"
@@ -14,12 +17,13 @@
         android:paddingLeft="@dimen/_15dp"
         android:paddingTop="8dp"
         android:paddingRight="@dimen/_15dp"
-        android:paddingBottom="8dp">
+        android:paddingBottom="8dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total Clients"
+            android:text="@string/total_clients"
             android:textColor="@color/colorWhite"
             android:textSize="18sp" />
 
@@ -27,7 +31,7 @@
             android:id="@+id/text_total_clients"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="right|center_vertical"
             android:text="0"
             android:textColor="@color/colorWhite"
@@ -51,7 +55,10 @@
             android:id="@+id/list_dashboard_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="horizontal" />
+            android:orientation="horizontal"
+            android:scrollbars="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/cards_view" />
     </RelativeLayout>
 
     <ProgressBar
@@ -68,7 +75,10 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/container_chart_details"
         android:layout_below="@+id/contaier_dash"
-        android:layout_margin="60dp" />
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="30dp" />
 
     <TextView
         android:id="@+id/text_par"
@@ -77,11 +87,14 @@
         android:layout_above="@+id/container_chart_details"
         android:layout_below="@+id/contaier_dash"
         android:layout_centerHorizontal="true"
-        android:layout_margin="60dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="60dp"
         android:gravity="center"
-        android:text="PAR"
+        android:text="Spend\nAnalyser"
         android:textColor="@color/colorBlack"
-        android:textSize="30sp" />
+        android:textSize="18sp" />
 
     <LinearLayout
         android:id="@+id/container_chart_details"
@@ -250,6 +263,4 @@
 
         </LinearLayout>
     </LinearLayout>
-
-
 </RelativeLayout>

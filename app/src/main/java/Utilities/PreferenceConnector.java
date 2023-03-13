@@ -1,7 +1,5 @@
 package Utilities;
 
-import static Utilities.Constants.FLAVOR_CLIENT;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -167,6 +165,7 @@ public class PreferenceConnector {
     public static void removeKey(Context context, String key) {
         getEditor(context).remove(key).commit();
     }
+
     private static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE);
     }
@@ -175,9 +174,37 @@ public class PreferenceConnector {
         SharedPreferences sharedPreferences = getSharedPreferences(context);
         return sharedPreferences.edit();
     }
+
     public static void clearPref(Context context) {
         SharedPreferences.Editor editor = getSharedPrefEditor(context);
         editor.clear();
         editor.apply();
+    }
+
+    public static void saveShuftiResponse(Context context,String key,String value) {
+        SharedPreferences.Editor editor = getSharedPrefEditor(context);
+        editor.putString("ShuftiResponse", key);
+        editor.commit();
+    }
+
+    public static void clearShuftiResponse(Context context) {
+        SharedPreferences.Editor editor = getSharedPrefEditor(context);
+        editor.remove("ShuftiResponse");
+        editor.commit();
+    }
+
+    public static String getShuftiResponse(Context context) {
+        return getSharedPreferences(context).getString("ShuftiResponse", "");
+    }
+
+
+    public static void themeColor(Context context,String colorTheme) {
+        SharedPreferences.Editor editor = getSharedPrefEditor(context);
+        editor.putString("themeColor",colorTheme);
+        editor.commit();
+    }
+
+    public static String getThemeColor(Context context) {
+        return getSharedPreferences(context).getString("themeColor", "");
     }
 }

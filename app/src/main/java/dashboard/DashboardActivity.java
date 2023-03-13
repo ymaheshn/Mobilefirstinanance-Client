@@ -16,12 +16,14 @@ import static Utilities.Constants.SHUFPTI_FRAGMENT;
 import static Utilities.Constants.VAS_FRAGMENT;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.location.Location;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -35,6 +37,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -47,10 +51,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import java.util.ArrayList;
 
@@ -73,9 +76,9 @@ import interfaces.IOnDataRetrievedFromGallery;
 import interfaces.IOnFragmentChangeListener;
 import interfaces.IOnHeaderItemsClickListener;
 import kyc.KycFragment;
+import loans.AccountsFragment;
 import loans.LoanCollectionFragment;
 import loans.LoansFragment;
-import loans.AccountsFragment;
 import maps.MapViewFragment;
 import networking.MyApplication;
 import onboard.ClientDataDTO;
@@ -83,7 +86,7 @@ import onboard.OnBoardFragment;
 import pub.devrel.easypermissions.EasyPermissions;
 import search_profiles_list.SearchProfilesListFragment;
 import services.LocationUpdatesBroadcastReceiver;
-import shufpti.ShufptiVerificationServicesFragment;
+import shufpti.ShufptiVerificationServicesActivity;
 import vas.VasFragment;
 
 public class DashboardActivity extends BaseActivity implements IOnFragmentChangeListener,
@@ -126,6 +129,35 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
     @BindView(R.id.search_view)
     MaterialSearchView materialSearchView;
 
+    @BindView(R.id.clientTV)
+    TextView clientTV;
+
+    @BindView(R.id.profileTV)
+    TextView profileTV;
+
+    @BindView(R.id.loansTV)
+    TextView loansTV;
+
+    @BindView(R.id.reportsTV)
+    TextView reportsTV;
+
+    @BindView(R.id.saavingsTV)
+    TextView saavingsTV;
+
+    @BindView(R.id.clientIV)
+    AppCompatImageView clientIV;
+
+    @BindView(R.id.profileIV)
+    AppCompatImageView profileIV;
+
+    @BindView(R.id.loansIV)
+    AppCompatImageView loansIV;
+
+    @BindView(R.id.reportsIV)
+    AppCompatImageView reportsIV;
+
+    @BindView(R.id.savingsIV)
+    AppCompatImageView savingsIV;
 
     boolean doubleBackToExitPressedOnce = false;
     private IOnHeaderItemsClickListener iOnHeaderItemsClickListener;
@@ -136,11 +168,18 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
     private BaseFragment currentFragment;
     private String query;
     private boolean isSubmitClick;
+    public String PREF_COLOR = String.valueOf(R.color.colorAccent);
 
+    int selectedBackgroundColorId;
+
+    private String colorTheme;
+    private int colorCode;
+
+    @SuppressLint("ResourceType")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_dashboard);
+
         ButterKnife.bind(this);
         DBOperations.getInstance(this);
         CURRENT_FRAGMENT = -1;
@@ -154,7 +193,19 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
             EasyPermissions.requestPermissions(this, getString(R.string.location_rationilze),
                     RC_LOCATION, perms);
         }
-        clientClickRV.setBackgroundResource(R.color.theme_dark);
+
+        colorTheme = PreferenceConnector.getThemeColor(getApplicationContext());
+        colorCode = Color.parseColor(colorTheme);
+
+        headerTitleTV.setTextColor(colorCode);
+
+        clientTV.setTextColor(colorCode);
+        clientIV.setColorFilter(colorCode);
+        loansIV.setColorFilter(getResources().getColor(R.color.colorBlack, getResources().newTheme()));
+        reportsIV.setColorFilter(getResources().getColor(R.color.colorBlack, getResources().newTheme()));
+        profileIV.setColorFilter(getResources().getColor(R.color.colorBlack, getResources().newTheme()));
+        savingsIV.setColorFilter(getResources().getColor(R.color.colorBlack, getResources().newTheme()));
+
         materialSearchView.setOnQueryTextListener(this);
         materialSearchView.setOnSearchViewListener(this);
         materialSearchView.setSubmitOnClick(false);
@@ -206,14 +257,17 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
 
     public void removeLocationUpdates() {
         if (mFusedLocationProviderClient != null) {
-            mFusedLocationProviderClient.removeLocationUpdates(getPendingIntent());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                mFusedLocationProviderClient.removeLocationUpdates(getPendingIntent());
+            }
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     private PendingIntent getPendingIntent() {
         Intent intent = new Intent(this, LocationUpdatesBroadcastReceiver.class);
         intent.setAction(LocationUpdatesBroadcastReceiver.ACTION_PROCESS_UPDATES);
-        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_MUTABLE);
     }
 
     public void requestLocationUpdates() {
@@ -224,15 +278,14 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, getPendingIntent());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, getPendingIntent());
+        }
         mFusedLocationProviderClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            MyApplication.getInstance().setCurrentLocation(location);
-                        }
+                .addOnSuccessListener(this, location -> {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        MyApplication.getInstance().setCurrentLocation(location);
                     }
                 });
     }
@@ -247,42 +300,75 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
             R.id.img_search, R.id.img_more, R.id.toolbar_back, R.id.profileClickRV})
     public void onButtonClick(View view) {
         if (view.getId() == R.id.clientClickRV) {
-            clientClickRV.setBackgroundResource(R.color.theme_dark);
-            loansClickRV.setBackgroundResource(R.color.colorBlack);
-            savingsClickRV.setBackgroundResource(R.color.colorBlack);
-            reportsClickRV.setBackgroundResource(R.color.colorBlack);
-            profileClickRV.setBackgroundResource(R.color.colorBlack);
+            clientTV.setTextColor(colorCode);
+            clientIV.setColorFilter(colorCode);
+            loansIV.setColorFilter(getColor(R.color.colorBlack));
+            reportsIV.setColorFilter(getColor(R.color.colorBlack));
+            profileIV.setColorFilter(getColor(R.color.colorBlack));
+            savingsIV.setColorFilter(getColor(R.color.colorBlack));
+
+
+            loansTV.setTextColor(getColor(R.color.text_color_black));
+            saavingsTV.setTextColor(getColor(R.color.text_color_black));
+            reportsTV.setTextColor(getColor(R.color.text_color_black));
+            profileTV.setTextColor(getColor(R.color.text_color_black));
+
             replaceFragment(DASHBOARD_FRAGMENT, null);
         } else if (view.getId() == R.id.loansClickRV) {
-            clientClickRV.setBackgroundResource(R.color.colorBlack);
-            loansClickRV.setBackgroundResource(R.color.theme_dark);
-            savingsClickRV.setBackgroundResource(R.color.colorBlack);
-            reportsClickRV.setBackgroundResource(R.color.colorBlack);
-            profileClickRV.setBackgroundResource(R.color.colorBlack);
+            loansTV.setTextColor(colorCode);
+
+            loansIV.setColorFilter(colorCode);
+            savingsIV.setColorFilter(getColor(R.color.colorBlack));
+            reportsIV.setColorFilter(getColor(R.color.colorBlack));
+            profileIV.setColorFilter(getColor(R.color.colorBlack));
+            clientIV.setColorFilter(getColor(R.color.colorBlack));
+
+            saavingsTV.setTextColor(getColor(R.color.text_color_black));
+            reportsTV.setTextColor(getColor(R.color.text_color_black));
+            profileTV.setTextColor(getColor(R.color.text_color_black));
+            clientTV.setTextColor(getColor(R.color.text_color_black));
             replaceFragment(LOANS_FRAGMENT, null);
         } else if (view.getId() == R.id.savingsClickRV) {
-            clientClickRV.setBackgroundResource(R.color.colorBlack);
-            savingsClickRV.setBackgroundResource(R.color.colorBlack);
-            loansClickRV.setBackgroundResource(R.color.colorBlack);
-            savingsClickRV.setBackgroundResource(R.color.theme_dark);
-            reportsClickRV.setBackgroundResource(R.color.colorBlack);
-            profileClickRV.setBackgroundResource(R.color.colorBlack);
+            saavingsTV.setTextColor(colorCode);
+
+            savingsIV.setColorFilter(colorCode);
+            loansIV.setColorFilter(getColor(R.color.colorBlack));
+            reportsIV.setColorFilter(getColor(R.color.colorBlack));
+            profileIV.setColorFilter(getColor(R.color.colorBlack));
+            clientIV.setColorFilter(getColor(R.color.colorBlack));
+
+            loansTV.setTextColor(getColor(R.color.text_color_black));
+            reportsTV.setTextColor(getColor(R.color.text_color_black));
+            profileTV.setTextColor(getColor(R.color.text_color_black));
+            clientTV.setTextColor(getColor(R.color.text_color_black));
             replaceFragment(VAS_FRAGMENT, null);
         } else if (view.getId() == R.id.reportsClickRV) {
-            clientClickRV.setBackgroundResource(R.color.colorBlack);
-            reportsClickRV.setBackgroundResource(R.color.colorBlack);
-            loansClickRV.setBackgroundResource(R.color.colorBlack);
-            savingsClickRV.setBackgroundResource(R.color.colorBlack);
-            reportsClickRV.setBackgroundResource(R.color.theme_dark);
-            profileClickRV.setBackgroundResource(R.color.colorBlack);
+            reportsTV.setTextColor(colorCode);
+            loansTV.setTextColor(getColor(R.color.text_color_black));
+
+            reportsIV.setColorFilter(colorCode);
+            loansIV.setColorFilter(getColor(R.color.colorBlack));
+            profileIV.setColorFilter(getColor(R.color.colorBlack));
+            clientIV.setColorFilter(getColor(R.color.colorBlack));
+            savingsIV.setColorFilter(getColor(R.color.colorBlack));
+
+            profileTV.setTextColor(getColor(R.color.text_color_black));
+            saavingsTV.setTextColor(getColor(R.color.text_color_black));
+            clientTV.setTextColor(getColor(R.color.text_color_black));
             replaceFragment(SAVINGS_FRAGMENT, null);
         } else if (view.getId() == R.id.profileClickRV) {
-            clientClickRV.setBackgroundResource(R.color.colorBlack);
-            profileClickRV.setBackgroundResource(R.color.colorBlack);
-            loansClickRV.setBackgroundResource(R.color.colorBlack);
-            savingsClickRV.setBackgroundResource(R.color.colorBlack);
-            reportsClickRV.setBackgroundResource(R.color.colorBlack);
-            profileClickRV.setBackgroundResource(R.color.theme_dark);
+            profileTV.setTextColor(colorCode);
+            loansTV.setTextColor(getColor(R.color.text_color_black));
+
+            profileIV.setColorFilter(colorCode);
+            loansIV.setColorFilter(getColor(R.color.colorBlack));
+            reportsIV.setColorFilter(getColor(R.color.colorBlack));
+            clientIV.setColorFilter(getColor(R.color.colorBlack));
+            savingsIV.setColorFilter(getColor(R.color.colorBlack));
+
+            reportsTV.setTextColor(getColor(R.color.text_color_black));
+            saavingsTV.setTextColor(getColor(R.color.text_color_black));
+            clientTV.setTextColor(getColor(R.color.text_color_black));
             replaceFragment(ONBOARD_FRAGMENT, null);
         } else if (view.getId() == R.id.adharScannerIV) {
             iOnHeaderItemsClickListener.onHeaderItemClick(SCAN);
@@ -359,13 +445,17 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                 case SAVINGS_FRAGMENT:
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
-                    headerTitleTV.setText("Collections");
+                    headerTitleTV.setText(getString(R.string.collections));
                     currentFragment = new PaymentsFragment();
                     addFragmentToContent(currentFragment, "Reports");
                     break;
                 case SHUFPTI_FRAGMENT:
-                    currentFragment = new ShufptiVerificationServicesFragment();
-                    addFragmentToContent(currentFragment, "Shufpti Pro");
+
+                    Intent intent = new Intent(this, ShufptiVerificationServicesActivity.class);
+                    startActivity(intent);
+
+                 /*   currentFragment = new ShufptiVerificationServicesFragment();
+                    addFragmentToContent(currentFragment, "Shufpti Pro");*/
                     break;
             }
         }
@@ -447,7 +537,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                     headerView.setVisibility(View.VISIBLE);
                     adharScannerIV.setVisibility(View.GONE);
                     imgSearch.setVisibility(View.VISIBLE);
-                    headerTitleTV.setText("Payments");
+                    headerTitleTV.setText(getString(R.string.payments));
                     currentFragment = new PaymentsFragment();
                     replaceFragmentToContent(currentFragment, "Payments");
                     break;
@@ -460,7 +550,7 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
                 case SHUFPTI_FRAGMENT:
                     headerView.setVisibility(View.GONE);
                     adharScannerIV.setVisibility(View.GONE);
-                    currentFragment = new ShufptiVerificationServicesFragment();
+                    //    currentFragment = new ShufptiVerificationServicesFragment();
                     replaceFragmentToContent(currentFragment, "Shufti Pro");
                     break;
                 case SEARCH_PROFILE_LIST_FRAGMENT:
@@ -516,9 +606,6 @@ public class DashboardActivity extends BaseActivity implements IOnFragmentChange
             }
 
             switch (CURRENT_FRAGMENT) {
-                case ADD_CLIENT_FRAGMENT:
-                    replaceFragment(ONBOARD_FRAGMENT, null);
-                    break;
                 case LOAN_COLLECTIONS_FRAGMENT:
                     replaceFragment(LOANS_FRAGMENT, null);
                     break;

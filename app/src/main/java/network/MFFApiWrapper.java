@@ -1,6 +1,6 @@
 package network;
 
-import com.odedtech.mff.mffapp.BuildConfig;
+import com.odedtech.mff.client.BuildConfig;
 
 import networking.UnsafeOkHttpClient;
 import okhttp3.OkHttpClient;

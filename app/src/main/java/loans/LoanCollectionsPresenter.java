@@ -1,11 +1,13 @@
 package loans;
 
+import static networking.WebServiceURLs.BASE_URL;
+
 import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,8 +30,6 @@ import loans.model.LoanCollection;
 import loans.model.ProfileCollection;
 import networking.WebService;
 import networking.WebServiceURLs;
-
-import static networking.WebServiceURLs.BASE_URL;
 
 public class LoanCollectionsPresenter {
 

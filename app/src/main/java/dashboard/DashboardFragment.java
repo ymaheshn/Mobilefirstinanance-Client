@@ -1,10 +1,10 @@
 package dashboard;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +13,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.internal.LinkedTreeMap;
-import com.odedtech.mff.mffapp.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.odedtech.mff.client.R;
 
 import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
@@ -29,49 +23,54 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import Utilities.AlertDialogUtils;
 import Utilities.PreferenceConnector;
+import Utilities.ProgressBar;
 import base.BaseFragment;
 import base.MFFResponseNew;
-import dashboard.models.DashboardCount;
+import dashboard.adapter.DashboardDetailsAdapter;
 import dashboard.models.GraphCount;
 import dashboard.models.ProfileCount;
+import interfaces.ApplyCardClickListener;
 import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
-import loans.model.CollectionPortfolio;
-import loans.model.CollectionPortfolioResponse;
 import loans.model.DashBoardGraphResponse;
 import network.MFFApiWrapper;
+import onboard.model.CardDetailsData;
+import onboard.model.CreditCardResponse;
+import onboard.model.ProfileDetailsResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DashboardFragment extends BaseFragment {
+public class DashboardFragment extends BaseFragment implements ApplyCardClickListener {
 
     private PieChartView chart;
-    private PieChartData data;
+    public PieChartData data;
 
-    private boolean hasLabels = false;
-    private boolean hasLabelsOutside = false;
-    private boolean hasCenterCircle = true;
-    private boolean hasCenterText1 = false;
-    private boolean hasCenterText2 = false;
-    private boolean isExploded = false;
-    private boolean hasLabelForSelected = false;
-    private DashboardDetailsAdapter detailsAdapter;
+    public boolean hasLabels = false;
+    public boolean hasLabelsOutside = false;
+    public boolean hasCenterCircle = true;
+    public boolean hasCenterText1 = false;
+    public boolean hasCenterText2 = false;
+    public boolean isExploded = false;
+    public boolean hasLabelForSelected = false;
+    public DashboardDetailsAdapter detailsAdapter;
     private TextView textTotalClients;
     private View graphProgress;
     private View dashProgress;
     private RecyclerView listDashboardDetails;
     private View textPar;
+    private ProfileDetailsResponse profileDetailsResponse;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
 
@@ -85,23 +84,36 @@ public class DashboardFragment extends BaseFragment {
         textPar = view.findViewById(R.id.text_par);
         graphProgress = view.findViewById(R.id.graph_progress);
         dashProgress = view.findViewById(R.id.dashboardProgress);
-        setUpRecyclerview(view);
+        listDashboardDetails = view.findViewById(R.id.list_dashboard_details);
+
         getProfileCount();
-        getDashboardDetailsCount();
+        getLinkProfileId();
+        getCardDetailsApi();
+        // getDashboardDetailsCount();
         getGraphDetails();
+
+
     }
 
-    private void setUpRecyclerview(View view) {
-        detailsAdapter = new DashboardDetailsAdapter(getActivity());
-        listDashboardDetails = view.findViewById(R.id.list_dashboard_details);
-        listDashboardDetails.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.HORIZONTAL));
-        listDashboardDetails.setLayoutManager(new LinearLayoutManager(getActivity(),
-                LinearLayoutManager.HORIZONTAL, false));
-        listDashboardDetails.setAdapter(detailsAdapter);
+    private void getLinkProfileId() {
+        String accessToken = PreferenceConnector.readString(getContext(), getString(R.string.accessToken), "");
+        MFFApiWrapper.getInstance().service.getLinkedProfileId(0, 10, accessToken).enqueue(new Callback<ProfileDetailsResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ProfileDetailsResponse> call, @NonNull Response<ProfileDetailsResponse> response) {
+                if (response.body() != null && response.code() == 200) {
+                    profileDetailsResponse = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ProfileDetailsResponse> call, @NonNull Throwable t) {
+
+            }
+        });
     }
 
     private void generateData(GraphCount body) {
-        List<SliceValue> values = new ArrayList<SliceValue>();
+        List<SliceValue> values = new ArrayList<>();
         SliceValue sliceValue30 = new SliceValue(body.value30);
         sliceValue30.setColor(Color.parseColor("#D73C2C"));
         values.add(sliceValue30);
@@ -156,12 +168,12 @@ public class DashboardFragment extends BaseFragment {
         chart.setCircleFillRatio(10);
     }
 
-    private void explodeChart() {
+ /*   private void explodeChart() {
         isExploded = !isExploded;
         generateData(null);
-    }
+    }*/
 
-    private void toggleLabelsOutside() {
+   /* private void toggleLabelsOutside() {
         // has labels have to be true:P
         hasLabelsOutside = !hasLabelsOutside;
         if (hasLabelsOutside) {
@@ -178,9 +190,9 @@ public class DashboardFragment extends BaseFragment {
 
         generateData(null);
 
-    }
+    }*/
 
-    private void toggleLabels() {
+   /* private void toggleLabels() {
         hasLabels = !hasLabels;
 
         if (hasLabels) {
@@ -195,9 +207,9 @@ public class DashboardFragment extends BaseFragment {
         }
 
         generateData(null);
-    }
+    }*/
 
-    private void toggleLabelForSelected() {
+   /* private void toggleLabelForSelected() {
         hasLabelForSelected = !hasLabelForSelected;
 
         chart.setValueSelectionEnabled(hasLabelForSelected);
@@ -214,18 +226,28 @@ public class DashboardFragment extends BaseFragment {
         }
 
         generateData(null);
-    }
+    }*/
 
     /**
      * method(don't confuse with View.animate()).
      */
-    private void prepareDataAnimation() {
+ /*   private void prepareDataAnimation() {
         for (SliceValue value : data.getValues()) {
             value.setTarget((float) Math.random() * 30 + 15);
         }
+    }*/
+
+    @Override
+    public void applyCardClicked() {
+        String linkedProfileId = profileDetailsResponse.getData().getProfiles().get(0).getLinkedProfileID();
+        Intent intent = new Intent(requireContext(), ApplyNewCardActivity.class);
+        intent.putExtra("linkedProfileId", linkedProfileId);
+        startActivity(intent);
+
+
     }
 
-    private class ValueTouchListener implements PieChartOnValueSelectListener {
+    private static class ValueTouchListener implements PieChartOnValueSelectListener {
 
         @Override
         public void onValueSelected(int arcIndex, SliceValue value) {
@@ -239,20 +261,62 @@ public class DashboardFragment extends BaseFragment {
         }
     }
 
+    private void getCardDetailsApi() {
+        ProgressBar.showProgressDialog(requireActivity());
+        dashProgress.setVisibility(View.VISIBLE);
+        String accessToken = PreferenceConnector.readString(requireContext(), getString(R.string.accessToken), "");
+        String status = "active";
+        try {
+            MFFApiWrapper.getInstance().service.getCardDetails(status, accessToken).enqueue(new Callback<CreditCardResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<CreditCardResponse> call, @NonNull Response<CreditCardResponse> response) {
+                    dashProgress.setVisibility(View.GONE);
+                    ProgressBar.dismissDialog();
+                    try {
+                        if (response.body() != null && response.code() == 200) {
+                            setToAdapter(response.body());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ProgressBar.dismissDialog();
+                        Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<CreditCardResponse> call, @NonNull Throwable t) {
+                    ProgressBar.dismissDialog();
+                    dashProgress.setVisibility(View.GONE);
+                    Toast.makeText(requireContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e("MaheshNaidu", t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            ProgressBar.dismissDialog();
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private void setToAdapter(CreditCardResponse creditCardResponse) {
+        CardDetailsData detailsList = creditCardResponse.getData();
+        detailsAdapter = new DashboardDetailsAdapter(requireContext(), detailsList, this);
+        listDashboardDetails.setAdapter(detailsAdapter);
+    }
 
     private void getGraphDetails() {
         graphProgress.setVisibility(View.VISIBLE);
         chart.setVisibility(View.GONE);
         textPar.setVisibility(View.GONE);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter =  new SimpleDateFormat("yyyy-MM-dd");
         String strDate = formatter.format(new Date());
-        String accessToken = PreferenceConnector.readString(getActivity(), getString(R.string.accessToken), "");
+        String accessToken = PreferenceConnector.readString(requireContext(), getString(R.string.accessToken), "");
         MFFApiWrapper.getInstance().service.getGraphDetails(strDate, accessToken).enqueue(new Callback<DashBoardGraphResponse>() {
             @Override
-            public void onResponse(Call<DashBoardGraphResponse> call, Response<DashBoardGraphResponse> response) {
+            public void onResponse(@NonNull Call<DashBoardGraphResponse> call, @NonNull Response<DashBoardGraphResponse> response) {
                 if (response.body() != null) {
-
-
                     DashBoardGraphResponse body = response.body();
                     GraphCount objCount = body.data.portfolio;
                     graphProgress.setVisibility(View.GONE);
@@ -270,7 +334,7 @@ public class DashboardFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(Call<DashBoardGraphResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<DashBoardGraphResponse> call, @NonNull Throwable t) {
                 graphProgress.setVisibility(View.GONE);
                 Toast.makeText(getActivity(),
                         getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
@@ -282,7 +346,7 @@ public class DashboardFragment extends BaseFragment {
         String accessToken = PreferenceConnector.readString(getActivity(), getString(R.string.accessToken), "");
         MFFApiWrapper.getInstance().service.getTotalClient(accessToken).enqueue(new Callback<MFFResponseNew<ProfileCount>>() {
             @Override
-            public void onResponse(Call<MFFResponseNew<ProfileCount>> call, Response<MFFResponseNew<ProfileCount>> response) {
+            public void onResponse(@NonNull Call<MFFResponseNew<ProfileCount>> call, @NonNull Response<MFFResponseNew<ProfileCount>> response) {
                 MFFResponseNew<ProfileCount> body = response.body();
                 if (body != null && body.status == HttpURLConnection.HTTP_OK) {
                     if (body.data != null) {
@@ -291,38 +355,12 @@ public class DashboardFragment extends BaseFragment {
                 } else {
                     Toast.makeText(getActivity(),
                             getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                    AlertDialogUtils.getAlertDialogUtils().showAlert(getActivity());
                 }
             }
 
             @Override
-            public void onFailure(Call<MFFResponseNew<ProfileCount>> call, Throwable t) {
-                Toast.makeText(getActivity(),
-                        getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void getDashboardDetailsCount() {
-        dashProgress.setVisibility(View.VISIBLE);
-        listDashboardDetails.setVisibility(View.INVISIBLE);
-        String accessToken = PreferenceConnector.readString(getActivity(), getString(R.string.accessToken), "");
-        MFFApiWrapper.getInstance().service.getOnBoardDetailsCount(accessToken).enqueue(new Callback<MFFResponseNew<DashboardCount>>() {
-            @Override
-            public void onResponse(Call<MFFResponseNew<DashboardCount>> call, Response<MFFResponseNew<DashboardCount>> response) {
-                dashProgress.setVisibility(View.GONE);
-                MFFResponseNew<DashboardCount> body = response.body();
-                if (body != null && body.status == HttpURLConnection.HTTP_OK) {
-                    listDashboardDetails.setVisibility(View.VISIBLE);
-                    detailsAdapter.setData(body.data.workflow);
-                } else {
-                    Toast.makeText(getActivity(),
-                            getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MFFResponseNew<DashboardCount>> call, Throwable t) {
-                dashProgress.setVisibility(View.GONE);
+            public void onFailure(@NonNull Call<MFFResponseNew<ProfileCount>> call, @NonNull Throwable t) {
                 Toast.makeText(getActivity(),
                         getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
             }

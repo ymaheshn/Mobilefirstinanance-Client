@@ -1,10 +1,7 @@
 package onboard;
 
-import Utilities.PreferenceConnector;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import Utilities.PreferenceConnector;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfilesListAdapter extends RecyclerView.Adapter<ProfilesListAdapter.ViewModel> {
 

@@ -13,7 +13,7 @@ import com.prowesspride.api.Setup;
 import bluetooth.evolute.BluetoothComm;
 
 /**
- * Created by gufran khan on 22-06-2018.
+ * Created by Mahesh naidu 6/12/2022.
  */
 
 public class MyApplication extends Application {

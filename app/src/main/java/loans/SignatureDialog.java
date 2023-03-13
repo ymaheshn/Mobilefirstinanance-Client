@@ -2,24 +2,33 @@ package loans;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
+
+import Utilities.PreferenceConnector;
 
 public class SignatureDialog extends Dialog {
 
+    int colorCode;
 
     public SignatureDialog(Context context) {
         super(context);
         setContentView(R.layout.alert_signature);
+
+        String colorTheme = PreferenceConnector.getThemeColor(getContext());
+        colorCode = Color.parseColor(colorTheme);
+        findViewById(R.id.btn_cancel).setBackgroundColor(colorCode);
+        findViewById(R.id.btn_submit).setBackgroundColor(colorCode);
         findViewById(R.id.btn_submit).setOnClickListener(view -> dismiss());
         findViewById(R.id.btn_cancel).setOnClickListener(view -> dismiss());
+
+
     }
 
     @Override

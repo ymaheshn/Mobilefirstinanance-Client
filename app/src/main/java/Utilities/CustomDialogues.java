@@ -3,7 +3,6 @@ package Utilities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,7 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.multilevelview.models.RecyclerViewItem;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import java.util.ArrayList;
 import java.util.List;

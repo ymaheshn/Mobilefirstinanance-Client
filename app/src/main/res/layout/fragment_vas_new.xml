@@ -1,221 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_services"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/_10dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView1"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10dp"
-            android:layout_weight="4"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_10dp"
-            app:contentPadding="@dimen/_15dp">
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardView_check_balance"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_margin="@dimen/_10dp"
+                android:layout_weight="4"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="@dimen/_10dp"
+                app:cardMaxElevation="@dimen/_10dp"
+                app:contentPadding="@dimen/_15dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:paddingHorizontal="@dimen/_10dp"
-                    android:src="@drawable/check_balance" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/text_product"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_5dp"
-                    android:text="Check Balance"
-                    android:textColor="@color/theme_dark"
-                    android:textSize="22sp" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/checkBalIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:paddingHorizontal="@dimen/_10dp"
+                        android:src="@drawable/check_balance" />
 
-            </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_checkBal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5dp"
+                        android:text="Check Bal"
+                        android:textColor="@color/theme_dark"
+                        android:textSize="16sp" />
 
-        </androidx.cardview.widget.CardView>
+                </LinearLayout>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10dp"
-            android:layout_weight="4"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_10dp"
-            app:contentPadding="@dimen/_15dp">
+            </com.google.android.material.card.MaterialCardView>
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_margin="@dimen/_10dp"
+                android:layout_weight="4"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="@dimen/_10dp"
+                app:cardMaxElevation="@dimen/_10dp"
+                app:contentPadding="@dimen/_15dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:src="@drawable/airtime" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_5dp"
-                    android:text="Airtime"
-                    android:textColor="@color/theme_dark"
-                    android:textSize="22sp" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/airTimeIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:src="@drawable/airtime" />
 
-            </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/airtime_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5dp"
+                        android:text="@string/airtime"
+                        android:textColor="@color/theme_dark"
+                        android:textSize="16sp" />
 
-        </androidx.cardview.widget.CardView>
+                </LinearLayout>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_transfer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10dp"
-            android:layout_weight="4"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_10dp"
-            app:contentPadding="@dimen/_15dp">
+            </com.google.android.material.card.MaterialCardView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:src="@drawable/ic_transfer" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_5dp"
-                    android:text="Transfer"
-                    android:textColor="@color/theme_dark"
-                    android:textSize="22sp" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10dp"
-            android:layout_weight="4"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_10dp"
-            app:contentPadding="@dimen/_15dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:src="@drawable/pay_bills" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_5dp"
-                    android:text="Pay Bills"
-                    android:textColor="@color/theme_dark"
-                    android:textSize="22sp" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10dp"
-            android:layout_weight="4"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_10dp"
-            app:contentPadding="@dimen/_15dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:src="@drawable/buy_data" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_5dp"
-                    android:text="Buy Data"
-                    android:textColor="@color/theme_dark"
-                    android:textSize="22sp" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_block"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10dp"
-            android:layout_weight="4"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_10dp"
-            app:contentPadding="@dimen/_15dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:src="@drawable/block_card" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_5dp"
-                    android:text="Block Card"
-                    android:textColor="@color/theme_dark"
-                    android:textSize="22sp" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_logout"
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/_10dp"
@@ -231,24 +111,176 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/buy_data_icon"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:src="@drawable/ic_round_logout_24" />
+                    android:layout_height="32dp"
+                    android:src="@drawable/buy_data" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/buy_data_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:padding="@dimen/_5dp"
-                    android:text="Logout"
+                    android:text="@string/buy_data"
                     android:textColor="@color/theme_dark"
-                    android:textSize="22sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_block"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_weight="4"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_10dp"
+            app:contentPadding="@dimen/_15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/block_cardIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:src="@drawable/block_card" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/block_card_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5dp"
+                    android:text="@string/block_card"
+                    android:textColor="@color/theme_dark"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_transfer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_10dp"
+                android:layout_weight="4"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="@dimen/_10dp"
+                app:cardMaxElevation="@dimen/_10dp"
+                app:contentPadding="@dimen/_15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/transferIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_transfer" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/transferText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5dp"
+                        android:text="@string/transfer_small"
+                        android:textColor="@color/theme_dark"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_10dp"
+                android:layout_weight="4"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="@dimen/_10dp"
+                app:cardMaxElevation="@dimen/_10dp"
+                app:contentPadding="@dimen/_15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/paybill_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:src="@drawable/pay_bills" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/paybillText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5dp"
+                        android:text="@string/pay_bills"
+                        android:textColor="@color/theme_dark"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_logout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_weight="4"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_10dp"
+            app:contentPadding="@dimen/_10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/logOutIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="6dp"
+                    android:src="@drawable/logout_button" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/logout_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5dp"
+                    android:text="@string/logout"
+                    android:textColor="@color/theme_dark"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/logout_button"
@@ -259,7 +291,7 @@
             android:background="@color/theme_dark"
             android:drawableStart="@drawable/logout_button"
             android:gravity="center"
-            android:text="Logout"
+            android:text="@string/logout"
             android:textColor="@color/white_color"
             android:textSize="@dimen/sp_16"
             android:visibility="gone" />

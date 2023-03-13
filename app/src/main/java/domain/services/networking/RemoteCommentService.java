@@ -4,11 +4,10 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import Utilities.PreferenceConnector;
 import loans.model.LoanCollection;

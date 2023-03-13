@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.models.RecyclerViewItem;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -107,10 +107,10 @@ public class LoansFragment extends BaseFragment implements LoansFragmentCallback
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        iOnFragmentChangeListener = (IOnFragmentChangeListener) getActivity();
+        iOnFragmentChangeListener = (IOnFragmentChangeListener) requireActivity();
         iOnFragmentChangeListener.onHeaderUpdate(Constants.LOANS_FRAGMENT, "Loans");
         getAllLoanCollections();
-        loansPresenter = new LoansPresenter(getActivity(), this);
+        loansPresenter = new LoansPresenter(requireActivity(), this);
         radioGroupContracts.setOnCheckedChangeListener(this);
 
       /*  LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);

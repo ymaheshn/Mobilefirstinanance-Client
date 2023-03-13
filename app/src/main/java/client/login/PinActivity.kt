@@ -7,7 +7,8 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import base.BaseActivity
-import com.odedtech.mff.mffapp.R
+import com.odedtech.mff.client.R
+
 import dashboard.DashboardActivity
 import kotlinx.android.synthetic.main.activity_pin.*
 import networking.WebService

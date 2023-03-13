@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,11 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.odedtech.mff.mffapp.R;
-import com.odedtech.mff.mffapp.databinding.FragmentCollectionsBinding;
+import com.odedtech.mff.client.R;
+import com.odedtech.mff.client.databinding.FragmentCollectionsBinding;
 
 import Utilities.Constants;
 import Utilities.PreferenceConnector;
+import Utilities.ProgressBar;
 import base.BaseFragment;
 import interfaces.IOnFragmentChangeListener;
 import loans.BusinessDocumentsActivity;
@@ -38,7 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /*Payments Fragment*/
-public class PaymentsFragment extends BaseFragment implements  MaterialSearchView.OnQueryTextListener,
+public class PaymentsFragment extends BaseFragment implements MaterialSearchView.OnQueryTextListener,
         MaterialSearchView.SearchViewListener, DisbursalsAdapter.ItemViewClickListener, View.OnClickListener {
 
 
@@ -47,7 +46,7 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
     private IOnFragmentChangeListener iOnFragmentChangeListener;
     private LoanCollectionPortfolioAdapter adapter;
     private String queryText;
-    private boolean isCollections = true;
+    private final boolean isCollections = true;
     ColorStateList def;
     private int search_selection = 1;
     private int pageIndex;
@@ -55,6 +54,7 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
     private int loansSearchPageIndex;
     private int loansPageIndex;
     private DisbursalsAdapter disbursalsAdapter;
+    private BaseFragment currentFragment;
 
     public PaymentsFragment() {
         // Required empty public constructor
@@ -75,7 +75,7 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCollectionsBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -86,7 +86,7 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
         super.onViewCreated(view, savedInstanceState);
         initViews();
         getCollectionPortfolio();
-        iOnFragmentChangeListener = (IOnFragmentChangeListener) getActivity();
+        iOnFragmentChangeListener = (IOnFragmentChangeListener) requireActivity();
         iOnFragmentChangeListener.onHeaderUpdate(Constants.LOANS_FRAGMENT, "Payments");
         setPagingListeners();
     }
@@ -135,19 +135,22 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
 
     public void getCollectionPortfolio() {
         if (pageIndex == 0) {
+            ProgressBar.showProgressDialog(requireActivity());
             showLoading();
         } else {
+
             binding.progressBar.setVisibility(View.VISIBLE);
         }
 
-        String accessToken = PreferenceConnector.readString(getActivity(),
-                getActivity().getString(R.string.accessToken), "");
+        String accessToken = PreferenceConnector.readString(requireActivity(),
+                requireActivity().getString(R.string.accessToken), "");
         MFFApiWrapper.getInstance().service.getCollections(accessToken,
                 pageIndex, 10).enqueue(new Callback<CollectionPortfolioResponse>() {
             @Override
             public void onResponse(@NonNull Call<CollectionPortfolioResponse> call,
                                    @NonNull Response<CollectionPortfolioResponse> response) {
                 dismissLoading();
+                ProgressBar.dismissDialog();
                 if (response.isSuccessful()) {
                     loadCollectionPortfolio(response.body());
                 } else {
@@ -158,6 +161,7 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
             @Override
             public void onFailure(@NonNull Call<CollectionPortfolioResponse> call, @NonNull Throwable t) {
                 dismissLoading();
+                ProgressBar.dismissDialog();
                 Toast.makeText(getActivity(),
                         getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
             }
@@ -171,7 +175,7 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
         } else {
             binding.progressBar.setVisibility(View.VISIBLE);
         }
-        String accessToken = PreferenceConnector.readString(getActivity(),
+        String accessToken = PreferenceConnector.readString(requireActivity(),
                 getActivity().getString(R.string.accessToken), "");
         if (search_selection == 1) {
             MFFApiWrapper.getInstance().service.searchCollectionUsingName(accessToken,
@@ -220,7 +224,7 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
                     search, loansSearchPageIndex, 10).enqueue(new Callback<CollectionPortfolioResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<CollectionPortfolioResponse> call,
-                                       Response<CollectionPortfolioResponse> response) {
+                                       @NonNull Response<CollectionPortfolioResponse> response) {
                     dismissLoading();
                     if (response.isSuccessful()) {
                         loadSearchedCollectionPortfolio(response.body());
@@ -264,7 +268,7 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
         binding.containerCollections.setVisibility(View.VISIBLE);
         isLoading = false;
         binding.progressBar.setVisibility(View.GONE);
-        if (response.data.portfolio == null && response.data.portfolio.size() == 0) {
+        if (response.data.portfolio == null) {
             binding.textNoDataCollections.setVisibility(View.VISIBLE);
             binding.rvCollections.setVisibility(View.GONE);
             return;
@@ -280,13 +284,13 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
         //  binding.containerCollections.setVisibility(View.GONE);
         // binding.containerDisbursals.setVisibility(View.VISIBLE);
         if (loansPageIndex == 0) {
-            if (response.data.portfolio == null && response.data.portfolio.size() == 0) {
+            if (response.data.portfolio == null) {
                 binding.textNoDataCollections.setVisibility(View.VISIBLE);
                 return;
             }
-            disbursalsAdapter = new DisbursalsAdapter(getActivity(), this, (items, loansPortfolio) -> {
+            disbursalsAdapter = new DisbursalsAdapter(requireActivity(), this, (items, loansPortfolio,position) -> {
 
-                Intent intent = new Intent(getActivity(), LoanCollectionActivity.class);
+                Intent intent = new Intent(requireActivity(), LoanCollectionActivity.class);
                 intent.putExtra("type", "2");
                 intent.putExtra(Constants.KeyExtras.CONTRACT_ID, loansPortfolio.contractuuid);
                 intent.putExtra(Constants.KeyExtras.LINKED_PROFILE, loansPortfolio);
@@ -366,7 +370,7 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
         // binding.containerCollections.setVisibility(View.VISIBLE);
         //binding.containerDisbursals.setVisibility(View.GONE);
         if (pageIndex == 0) {
-            if (response.data.portfolio == null && response.data.portfolio.size() == 0) {
+            if (response.data.portfolio == null) {
                 binding.textNoDataCollections.setVisibility(View.VISIBLE);
                 binding.rvCollections.setVisibility(View.GONE);
                 return;
@@ -394,9 +398,10 @@ public class PaymentsFragment extends BaseFragment implements  MaterialSearchVie
         } else {
             isLoading = false;
             binding.progressBar.setVisibility(View.GONE);
-            if (response.data.portfolio == null && response.data.portfolio.size() == 0) {
-                binding.textNoDataCollections.setVisibility(View.VISIBLE);
-                binding.rvCollections.setVisibility(View.GONE);
+            if (response.data.portfolio == null) {
+                Toast.makeText(getContext(), "Data not found", Toast.LENGTH_LONG).show();
+                //  binding.textNoDataCollections.setVisibility(View.VISIBLE);
+                // binding.rvCollections.setVisibility(View.GONE);
                 return;
             } else {
                 binding.textNoDataCollections.setVisibility(View.GONE);

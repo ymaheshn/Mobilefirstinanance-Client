@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import loans.SignatureDialog;
 import loans.model.Datum;

@@ -13,7 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.odedtech.mff.mffapp.R
+import com.odedtech.mff.client.R
 import kotlinx.android.synthetic.main.activity_client_login.*
 import networking.WebService
 import networking.WebServiceURLs
@@ -40,7 +40,7 @@ class ClientLoginActivity : BaseActivity(), WebService.OnServiceResponseListener
             } else if (jsonObject != null && jsonObject.has("message") && !TextUtils.isEmpty(jsonObject.getString("message"))) {
                 Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Could't start session.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Couldn't start session.", Toast.LENGTH_SHORT).show()
             }
         } catch (e: JSONException) {
             e.printStackTrace()

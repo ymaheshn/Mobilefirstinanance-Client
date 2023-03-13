@@ -1,9 +1,6 @@
 package Utilities;
 
-import java.util.ArrayList;
-
 import onboard.ClientDataDTO;
-import onboard.TabDto;
 import onboard.WorkFlowTemplateDto;
 
 /**
@@ -40,7 +37,6 @@ public class Constants {
     public static final String PROFILE_DETAILS = "ProfileDetails";
 
 
-
     /*header items*/
     public static final String SCAN = "SCAN";
     public static final String SEARCH = "SEARCH";
@@ -73,5 +69,6 @@ public class Constants {
     }
 
     public static final String FLAVOR_CLIENT = "client";
-    public static final String FLAVOR_AGENT = "agent";
+    public static String SHUFTI_RESULT = null;
+
 }

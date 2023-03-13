@@ -1,12 +1,14 @@
 package networking;
 
-import com.odedtech.mff.mffapp.BuildConfig;
+
+import com.odedtech.mff.client.BuildConfig;
 
 /**
  * Created by gufran khan on 22-06-2018.
  */
 
 public class WebServiceURLs {
+
 
     public static String BASE_URL = BuildConfig.BASE_URL;
     public static String LOGIN_URL = BASE_URL + ":5052/login";
@@ -24,7 +26,9 @@ public class WebServiceURLs {
     public static String SEARCH_PROFILES_URL_IDENTIFIER = "/ProfileService/searchProfiles?identifier=IDENTIFIER&access_token=";
     public static String GET_LINKED_PORTFOLIO_URL = "/PortfolioService/getLinkedportfolio?access_token=";
     public static String GET_EVENTS_BY_CONTRACTUUID_URL = "/PortfolioService/geteventsBycontractUUID?access_token=";
-    public static String PROFILE_LINK_STATUS_URL = "/WorkflowService/mobileApp/PROFILE_ID?access_token=";
+    //public static String PROFILE_LINK_STATUS_URL = "/WorkflowService/mobileApp/PROFILE_ID?access_token=";
+    //add {workflowID} after profile ID
+    public static String PROFILE_LINK_STATUS_URL = "/WorkflowService/workflowByprofile/PROFILE_ID/workFlowID?access_token=";
     public static String CREDIT_BUREAU_POST_URL = "/WorkflowService/workflowTemplateDetails?access_token=";
     public static String CASH_FLOW_POST_URL = "/WorkflowService/workflowTemplateDetails?access_token=";
     public static String CASH_FLOW_UPDATE_URL = "/WorkflowService/workflowTemplateDetails/WORKFLOW_PROFILE_ID?access_token=";
@@ -39,18 +43,19 @@ public class WebServiceURLs {
     public static String SAVE_CONTRACT_DATA_NEW = "/PortfolioService/savePortfolioRepayment?access_token=";
     public static String HIERARCHY_SEARCH = "/PortfolioService/hierarchySearch?access_token=";
 
-/*    public static String VERIFY_WORKFLOW = "/ProfileService/workflowTemplateDetails/verify?access_token=";
-    public static String VERIFY_WORKFLOW = "/WorkflowService/workflowTemplateDetails/verify?access_token=";
-    public static String VERIFY_BRANCHES = "/BranchService/branches/treeLevel?access_token=";
-    public static String SAVE_CONTRACT_DATA_NEW = "/PortfolioService/savePortfolioRepayment?access_token=";
-    public static String HIERARCHY_SEARCH = "/PortfolioService/hierarchySearch?access_token=";*/
+    /*    public static String VERIFY_WORKFLOW = "/ProfileService/workflowTemplateDetails/verify?access_token=";
+        public static String VERIFY_WORKFLOW = "/WorkflowService/workflowTemplateDetails/verify?access_token=";
+        public static String VERIFY_BRANCHES = "/BranchService/branches/treeLevel?access_token=";
+        public static String SAVE_CONTRACT_DATA_NEW = "/PortfolioService/savePortfolioRepayment?access_token=";
+        public static String HIERARCHY_SEARCH = "/PortfolioService/hierarchySearch?access_token=";*/
     public static String PROFILES_SEARCH = "/ProfileService/searchProfiles?access_token=";
-
 
 
     // Client
     public static String CLIENT_LOGIN_URL = BASE_URL + ":5059/client/login";
     public static String CLIENT_USER_CREATION_URL = BASE_URL + ":7190/mff/api/users";
     public static String CLIENT_VERIFY_PHONE = BASE_URL + ":5059/client/verify";
+
+    public static String USER_SIGN_UP_VALIDATION = "https://dev.mobilefirstfinance.com:7190/mff/api/userValidation";
 
 }

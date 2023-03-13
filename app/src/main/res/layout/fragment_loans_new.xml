@@ -169,7 +169,7 @@
         android:orientation="vertical">
 
         <FrameLayout
-            android:id="@+id/container_disbursals"
+            android:id="@+id/container_disbursals_accounts"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -177,6 +177,7 @@
                 android:id="@+id/rv_loans"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_disbursals" />
 
             <TextView
@@ -185,7 +186,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="No Disbursals Available"
+                android:text="@string/no_disbursals_available"
                 android:textColor="@android:color/black"
                 android:visibility="gone" />
         </FrameLayout>

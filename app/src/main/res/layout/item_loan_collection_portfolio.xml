@@ -82,6 +82,7 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/next_arrow"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_gravity="center"

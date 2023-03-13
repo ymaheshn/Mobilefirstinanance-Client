@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import interfaces.IOnKeyBoardDownListener;
 

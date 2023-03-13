@@ -14,6 +14,7 @@ public interface IOnBoardFragmentCallback extends BasePresenterCallback {
 
     void profileLinkStatusFromApi(boolean status, WorkFlowTemplateDto workFlowTemplateDto);
 
+
    // void loadSearchedRecyclerView(ArrayList<Profile> searchedClients, boolean isFromSearch);
 
 }

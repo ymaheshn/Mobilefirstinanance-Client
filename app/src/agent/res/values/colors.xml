@@ -3,5 +3,5 @@
     <!-- Dashboard Page Color-->
     <color name="colorFooter">#080A0E</color>
 
-    <color name="colorText">#FFFFFF</color>
+    <color name="colorText">#000000</color>
 </resources>

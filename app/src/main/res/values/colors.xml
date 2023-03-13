@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#080A0E</color>
+    <color name="colorPrimaryDark">#D3D3D3</color>
+    <color name="colorAccent">#108b4c</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorDarkPink">#ff0080</color>
     <color name="colorBlack">#000000</color>
     <color name="colorGray">#D3D3D3</color>
+    <color name="colorProfileLink">#EDEDED</color>
     <color name="colorGray_BB">#BBBBBB</color>
+
+    <color name="colorBottomBar">#f2f2f2</color>
 
     <color name="colorLiteGray">#EEEEEE</color>
 
@@ -19,6 +22,7 @@
 
     <!--Credit Bureau-->
     <color name="colorTabSelected">#d62246</color>
+    <color name="colorButtonVerify">#E80C0C</color>
 
     <color name="transparent">#00000000</color>
     <color name="semi_trans">#80000000</color>
@@ -38,6 +42,54 @@
 
     <color name="theme">#619A92</color>
     <color name="theme_dark">#3D6E67</color>
-    <color name="text_color">#02B17A</color>
-    <color name="text_color_black">#101010</color>
+
+    <color name="red">#FF1807</color>
+    <color name="text_color">#178f98</color>
+    <color name="button_color">#84d3c8</color>
+    <color name="text_color_black">#2d2e2f</color>
+    <color name="light_blue">#2292EB</color>
+    <color name="white_color">#FFFFFF</color>
+
+    <!--Design colors-->
+    <color name="shadow">#d0d8dc</color>
+    <color name="red_dark">#F06423</color>
+    <color name="red_dark2">#D85A1B</color>
+    <color name="cyan_light">#c9ebee</color>
+    <color name="cyan">#b5e3e7</color>
+    <color name="cyan_dark">#70BDC6</color>
+    <color name="navy_blue">#214258</color>
+    <color name="navy_blue_dark">#1C3A4E</color>
+    <color name="light_green">#78DC96</color>
+    <color name="blue_black_dark">#13171d</color>
+    <color name="blue_black_light">#516179</color>
+    <color name="blue_grey_light">#A5B4C8</color>
+    <color name="orange">#FFA500</color>
+    <color name="yellow">#fff44f</color>
+
+    <!--Credit Card view-->
+    <color name="green_continue">#1fc055</color>
+    <color name="chip_color">#d4edfa</color>
+    <color name="chip_inner_color">#e0e4e4</color>
+    <color name="chip_yellow_color">#fbe191</color>
+    <color name="chip_yellow_inner_color">#eed280</color>
+
+    <color name="purple_color">#5515a9</color>
+    <color name="purple_color_gradient">#651dc4</color>
+    <color name="semi_white">#ECECED</color>
+
+    <color name="green_color">#108b4c</color>
+    <color name="textThemeColor">#108b4c</color>
+    <color name="green_color_gradient">#1caf57</color>
+
+    <color name="blue_color">#5D8BF2</color>
+    <color name="blue_color_gradient">#3545AE</color>
+
+    <color name="pink_color">#d04c84</color>
+    <color name="pink_color_gradient">#d04882</color>
+
+    <color name="default_color">#363434</color>
+    <color name="default_color_gradient">#434141</color>
+
+    <color name="brown_color">#800000</color>
+    <color name="brown_color_gradient">#A52A2A</color>
 </resources>

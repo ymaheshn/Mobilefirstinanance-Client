@@ -1,7 +1,6 @@
 package loans;
 
 import android.content.Context;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +12,13 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Utilities.PreferenceConnector;
-import de.hdodenhof.circleimageview.CircleImageView;
 import loans.model.ContractCodes;
 import loans.model.Datum;
-import loans.model.LinkedProfilesResponse;
-import onboard.ClientDataDTO;
 
 public class LoansAdapter extends RecyclerView.Adapter<LoansAdapter.ViewModel> implements Filterable {
 

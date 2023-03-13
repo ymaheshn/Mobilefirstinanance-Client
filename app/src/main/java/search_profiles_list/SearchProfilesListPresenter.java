@@ -4,7 +4,7 @@ import Utilities.PreferenceConnector;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 import networking.WebService;
 import networking.WebServiceURLs;
 import onboard.*;

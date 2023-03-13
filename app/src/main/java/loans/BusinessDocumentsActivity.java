@@ -8,8 +8,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.odedtech.mff.mffapp.R;
-import com.odedtech.mff.mffapp.databinding.FragmentBusinessDocumentsBinding;
+import com.odedtech.mff.client.R;
+import com.odedtech.mff.client.databinding.FragmentBusinessDocumentsBinding;
 
 import java.util.List;
 

@@ -8,50 +8,57 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 
-import com.odedtech.mff.mffapp.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.hbb20.CountryCodePicker;
+import com.mukesh.OtpView;
+import com.odedtech.mff.client.R;
 
 import java.net.HttpURLConnection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Objects;
 
 import Utilities.PreferenceConnector;
 import base.MFFResponse;
 import base.MFFResponseNew;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import client.login.ClientOtpScrren;
 import dashboard.DashboardActivity;
 import login.model.EntityResponse;
 import login.model.LoginRequest;
 import login.model.LoginResponse;
+import login.model.MobileOTPResponse;
+import login.model.PayloadOTPResponse;
 import network.MFFApiWrapper;
-import networking.WebService;
-import networking.WebServiceURLs;
-import otp.OTPActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import signup.SignUpEmailAndMobileActivity;
 
-public class LoginActivity extends AppCompatActivity implements WebService.OnServiceResponseListener {
+public class LoginActivity extends AppCompatActivity {
 
-
-    @BindView(R.id.numberET)
-    EditText numberET;
 
     @BindView(R.id.etPassword)
-    EditText etPassword;
+    OtpView etPassword;
 
-    @BindView(R.id.etUserName)
-    EditText etUserName;
+    @BindView(R.id.etUserName_login)
+    AppCompatEditText etUserName;
+
+    @BindView(R.id.numberETLogin)
+    AppCompatEditText numberETLogin;
+
+    @BindView(R.id.country_code_picker_login)
+    CountryCodePicker countryCodePicker;
+
+    @BindView(R.id.signUpText)
+    TextView signUpText;
 
     @BindView(R.id.view_switcher)
     ViewSwitcher viewSwitcher;
@@ -59,19 +66,39 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
     @BindView(R.id.loginWithMobileNumber)
     TextView loginWithMobileNumber;
 
+    private ArrayList<String> lableList;
+    private String firstName;
+    private String lastName;
+    private String mobileNumber;
+    private String linkBranches;
+    private String linkedBranchesName;
+    private String email;
+    private PayloadOTPResponse payloadOTPResponse;
+    private String countryCode;
+    public MobileOTPResponse mobileOTPResponse;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setting theme of the application
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login_with_username);
         ButterKnife.bind(LoginActivity.this);
+
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("lableList", lableList);
+        bundle.putString("lastName", lastName);
+        bundle.putString("firstName", firstName);
+        bundle.putString("mobileNumber", mobileNumber);
+        bundle.putString("linkedBranches", linkedBranchesName);
+        bundle.putString("email", email);
+
         // Example of a call to a native method
-        String phoneNumber = PreferenceConnector.readString(this, getString(R.string.phoneNumber), "");
+        /*String phoneNumber = PreferenceConnector.readString(this, getString(R.string.phoneNumber), "");
         if (!TextUtils.isEmpty(phoneNumber)) {
             numberET.setText(phoneNumber);
             numberET.setSelection(phoneNumber.length());
-        }
+        }*/
 
         loginWithMobileNumber.setOnClickListener(v -> {
             if (loginWithMobileNumber.getText().toString().equals("Login with Mobile Number")) {
@@ -80,6 +107,10 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
                 loginWithMobileNumber.setText("Login with Mobile Number");
             }
             viewSwitcher.showNext();
+        });
+        signUpText.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, SignUpEmailAndMobileActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -90,9 +121,9 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
 
     public void nextBtnClicked(View view) {
         if (viewSwitcher.getCurrentView().getId() == R.id.containerUsername) {
-            loginApiCall(numberET.getText().toString());
+            loginApiCall(Objects.requireNonNull(numberETLogin.getText()).toString());
         } else {
-            loginApiCallWithUsername(etUserName.getText().toString(), etPassword.getText().toString());
+            loginApiCallWithUsername(String.valueOf(etUserName.getText()), String.valueOf(etPassword.getText()));
         }
     }
 
@@ -114,7 +145,7 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
 
         MFFApiWrapper.getInstance().service.login(loginRequest).enqueue(new Callback<MFFResponse<LoginResponse>>() {
             @Override
-            public void onResponse(Call<MFFResponse<LoginResponse>> call, Response<MFFResponse<LoginResponse>> response) {
+            public void onResponse(@NonNull Call<MFFResponse<LoginResponse>> call, @NonNull Response<MFFResponse<LoginResponse>> response) {
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
@@ -126,13 +157,15 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
                     PreferenceConnector.writeBoolean(getApplicationContext(), getString(R.string.loginStatus), true);
                     getEntityDetails();
                 } else {
+                    etUserName.setError("Invalid");
+                    etPassword.setError("Invalid");
                     Toast.makeText(LoginActivity.this,
-                            getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                            getString(R.string.valid_credentials), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<MFFResponse<LoginResponse>> call, Throwable t) {
+            public void onFailure(@NonNull Call<MFFResponse<LoginResponse>> call, @NonNull Throwable t) {
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
@@ -142,7 +175,6 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
         });
     }
 
-
     private void getEntityDetails() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");
@@ -150,7 +182,7 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
         String accessToken = PreferenceConnector.readString(this, getString(R.string.accessToken), "");
         MFFApiWrapper.getInstance().service.getEntityDetails(accessToken).enqueue(new Callback<MFFResponseNew<EntityResponse>>() {
             @Override
-            public void onResponse(Call<MFFResponseNew<EntityResponse>> call, Response<MFFResponseNew<EntityResponse>> response) {
+            public void onResponse(@NonNull Call<MFFResponseNew<EntityResponse>> call, @NonNull Response<MFFResponseNew<EntityResponse>> response) {
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
@@ -159,7 +191,11 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
                 if (body.status == HttpURLConnection.HTTP_OK) {
                     PreferenceConnector.writeString(getApplicationContext(), getString(R.string.entityname),
                             body.data.users.get(0).profileDetails.entityName);
+
+                    PreferenceConnector.themeColor(getApplicationContext(), body.data.users.get(0).profileDetails.themecolor);
+
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                             | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -171,7 +207,7 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
             }
 
             @Override
-            public void onFailure(Call<MFFResponseNew<EntityResponse>> call, Throwable t) {
+            public void onFailure(@NonNull Call<MFFResponseNew<EntityResponse>> call, @NonNull Throwable t) {
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
@@ -185,12 +221,35 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
-        Map<String, String> params = new HashMap<String, String>();
+      /*  Map<String, String> params = new HashMap<String, String>();
         params.put("mobileNumber", phoneNumber);
-        WebService.getInstance().apiPostRequestCall(WebServiceURLs.LOGIN_URL, params, this);
+        WebService.getInstance().apiPostRequestCall(WebServiceURLs.LOGIN_URL, params, this);*/
+        countryCode = countryCodePicker.getSelectedCountryCode();
+        MFFApiWrapper.getInstance().service.sendOtpToUser(countryCode + phoneNumber).enqueue(new Callback<MobileOTPResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<MobileOTPResponse> call, @NonNull Response<MobileOTPResponse> response) {
+                progressDialog.dismiss();
+                if (response.code() == 200 && response.body() != null) {
+                    mobileOTPResponse = response.body();
+                    Intent intent = new Intent(LoginActivity.this, ClientOtpScrren.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putString("number",mobileOTPResponse.to);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MobileOTPResponse> call, @NonNull Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    @Override
+    /*@Override
     public void onApiCallResponseSuccess(String url, String object) {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
@@ -225,7 +284,7 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
         }
         Toast.makeText(this, "Something went wrong. Please try after some time.", Toast.LENGTH_SHORT).show();
     }
-
+*/
     public void supportClick(View view) {
         Uri webpage = Uri.parse(CONTACT_URL);
         Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
@@ -234,4 +293,9 @@ public class LoginActivity extends AppCompatActivity implements WebService.OnSer
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

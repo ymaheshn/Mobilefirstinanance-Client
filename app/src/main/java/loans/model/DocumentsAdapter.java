@@ -1,18 +1,12 @@
 package loans.model;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 
 
-import android.content.Intent;
-import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -20,11 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.downloader.OnDownloadListener;
-import com.downloader.PRDownloader;
 import com.github.barteksc.pdfviewer.PDFView;
-import com.odedtech.mff.mffapp.R;
-import com.squareup.picasso.Picasso;
+import com.odedtech.mff.client.R;
 
 import org.jetbrains.annotations.NotNull;
 

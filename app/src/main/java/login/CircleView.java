@@ -10,7 +10,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 public class CircleView extends View {
     private static final int DEFAULT_CIRCLE_COLOR = Color.RED;

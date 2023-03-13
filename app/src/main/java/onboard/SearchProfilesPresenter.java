@@ -1,22 +1,22 @@
 package onboard;
 
-import Utilities.PreferenceConnector;
-import Utilities.UtilityMethods;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import com.odedtech.mff.mffapp.R;
-import loans.model.SearchData;
-import networking.WebService;
-import networking.WebServiceURLs;
+
+import com.odedtech.mff.client.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import Utilities.PreferenceConnector;
+import loans.model.SearchData;
+import networking.WebService;
+import networking.WebServiceURLs;
 
 public class SearchProfilesPresenter {
 

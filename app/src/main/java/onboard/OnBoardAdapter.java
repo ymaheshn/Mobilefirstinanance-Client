@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +32,8 @@ public class OnBoardAdapter extends RecyclerView.Adapter<OnBoardAdapter.ViewMode
         this.mContext = mContext;
         this.clients = clients;
         filteredList = clients;
-        this.iOnItemClickListener = iOnItemClickListener;
         this.iOnNoDataFiltered = iOnNoDataFiltered;
+        this.iOnItemClickListener = iOnItemClickListener;
     }
 
     @Override

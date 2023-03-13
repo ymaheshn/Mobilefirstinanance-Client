@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -29,162 +30,204 @@
             android:textColor="@color/colorWhite"
             android:textSize="12sp" />
 
+        <!--   <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:baselineAligned="false"
+               android:orientation="horizontal"
+               android:weightSum="2">
+
+               <LinearLayout
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="0"
+                   android:orientation="vertical">
+
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="end"
+                       android:padding="4dp"
+                       android:text="Client ID: "
+                       android:textColor="#619A92" />
+
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="end"
+                       android:padding="4dp"
+                       android:text="Client Name: "
+                       android:textColor="#619A92" />
+
+
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="end"
+                       android:padding="4dp"
+                       android:text="National ID: "
+                       android:textColor="#619A92" />
+
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="end"
+                       android:padding="4dp"
+                       android:text="Contract ID: "
+                       android:textColor="#619A92" />
+
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="end"
+                       android:padding="4dp"
+                       android:text="Branch Name: "
+                       android:textColor="#619A92" />
+
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="end"
+                       android:padding="4dp"
+                       android:text="Hierarchy Name: "
+                       android:textColor="#619A92" />
+
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="end"
+                       android:padding="4dp"
+                       android:text="Status: "
+                       android:textColor="#619A92" />
+
+
+               </LinearLayout>
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1.7"
+                   android:orientation="vertical">
+
+                   <TextView
+                       android:id="@+id/tv_client_id"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:padding="4dp"
+                       android:text=""
+                       android:textColor="@color/colorBlack" />
+
+                   <TextView
+                       android:id="@+id/tv_client_name"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:padding="4dp"
+                       android:text=""
+                       android:textColor="@color/colorBlack" />
+
+                   <TextView
+                       android:id="@+id/tv_nat_id"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:padding="4dp"
+                       android:text=""
+                       android:textColor="@color/colorBlack" />
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal"
+                       android:weightSum="2">
+
+                       <TextView
+                           android:id="@+id/tv_contract_id"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1.9"
+                           android:padding="4dp"
+                           android:text=""
+                           android:textColor="@color/colorBlack" />
+
+                       <ImageView
+                           android:layout_width="24dp"
+                           android:layout_height="24dp"
+                           android:layout_gravity="center"
+                           android:layout_marginEnd="@dimen/_10dp"
+                           android:layout_weight="0.1"
+                           android:gravity="end"
+                           android:padding="4dp"
+                           android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                           app:tint="#619A92" />
+                   </LinearLayout>
+
+                   <TextView
+                       android:id="@+id/tv_branch_name"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:padding="4dp"
+                       android:text=""
+                       android:textColor="@color/colorBlack" />
+
+                   <TextView
+                       android:id="@+id/tv_hierarchy_name"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="center"
+                       android:padding="4dp"
+                       android:text=""
+                       android:textColor="@color/colorBlack" />
+
+                   <TextView
+                       android:id="@+id/tv_status"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:padding="4dp"
+                       android:text=""
+                       android:textColor="@color/colorBlack" />
+               </LinearLayout>
+
+           </LinearLayout>-->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false"
+            android:layout_marginTop="@dimen/_10dp"
             android:orientation="horizontal"
             android:weightSum="2">
 
             <LinearLayout
+                android:id="@+id/cash_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.9"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/balance_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_bold"
+                    android:textColor="@color/green_color"
+                    android:textSize="@dimen/sp_22"
+                    tools:text="Mahesh" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_contract_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textSize="@dimen/sp_16"
+                    tools:text="Mahesh" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/next_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:text="Client ID: "
-                    android:textColor="#619A92" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:text="Client Name: "
-                    android:textColor="#619A92" />
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:text="National ID: "
-                    android:textColor="#619A92" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:text="Contract ID: "
-                    android:textColor="#619A92" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:text="Branch Name: "
-                    android:textColor="#619A92" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:text="Hierarchy Name: "
-                    android:textColor="#619A92" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:text="Status: "
-                    android:textColor="#619A92" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.7"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_client_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text=""
-                    android:textColor="@color/colorBlack" />
-
-                <TextView
-                    android:id="@+id/tv_client_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text=""
-                    android:textColor="@color/colorBlack" />
-
-                <TextView
-                    android:id="@+id/tv_nat_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text=""
-                    android:textColor="@color/colorBlack" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                    <TextView
-                        android:id="@+id/tv_contract_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.9"
-                        android:padding="4dp"
-                        android:text=""
-                        android:textColor="@color/colorBlack" />
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="@dimen/_10dp"
-                        android:layout_weight="0.1"
-                        android:gravity="end"
-                        android:padding="4dp"
-                        android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-                        app:tint="#619A92" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_branch_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text=""
-                    android:textColor="@color/colorBlack" />
-
-                <TextView
-                    android:id="@+id/tv_hierarchy_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="4dp"
-                    android:text=""
-                    android:textColor="@color/colorBlack" />
-
-                <TextView
-                    android:id="@+id/tv_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text=""
-                    android:textColor="@color/colorBlack" />
-            </LinearLayout>
-
+                android:layout_gravity="center|end"
+                android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
         </LinearLayout>
 
         <LinearLayout
@@ -199,16 +242,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10dp"
-                android:text="View"
+                android:text="@string/view"
                 android:textColor="@color/colorBlack"
-                android:textSize="@dimen/sp_16" />
+                android:textSize="@dimen/sp_16"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/text_sign"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10dp"
-                android:text="Sign"
+                android:text="@string/sign"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/sp_16" />
 
@@ -217,7 +261,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10dp"
-                android:text="Terms"
+                android:text="@string/terms"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/sp_16" />
 
@@ -225,7 +269,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10dp"
-                android:text="Pay"
+                android:text="@string/pay"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/sp_16"
                 android:visibility="gone" />

@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import base.BaseFragment;
 

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.odedtech.mff.mffapp.R
+import com.odedtech.mff.client.R
 
 class ClientOTPActivity : AppCompatActivity() {
 

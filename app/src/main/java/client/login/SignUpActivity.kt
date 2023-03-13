@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import base.BaseActivity
-import com.odedtech.mff.mffapp.R
+import com.odedtech.mff.client.R
 import kotlinx.android.synthetic.main.activity_client_login.*
 import kotlinx.android.synthetic.main.activity_registration.*
 import networking.WebService

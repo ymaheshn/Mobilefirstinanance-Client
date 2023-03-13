@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 import com.prowesspride.api.Setup;
 
 import loans.model.*;
@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import Utilities.AlertDialogUtils;
 import Utilities.Constants;

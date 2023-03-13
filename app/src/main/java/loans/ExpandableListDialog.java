@@ -28,9 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.multilevelview.MultiLevelAdapter;
-import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.models.RecyclerViewItem;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,10 +40,6 @@ import java.util.List;
 
 import Utilities.PreferenceConnector;
 import Utilities.UtilityMethods;
-import base.BaseActivity;
-import base.BaseFragment;
-import interfaces.IOnFragmentChangeListener;
-import kyc.KycFragment;
 import kyc.dto.BranchTree;
 import loans.model.SearchData;
 import networking.WebService;

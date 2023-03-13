@@ -23,5 +23,11 @@ public class ClientDataDTO implements Serializable {
     public String identifier;
     public String formLabel;
 
+    public int getFormId() {
+        return formId;
+    }
 
+    public void setFormId(int formId) {
+        this.formId = formId;
+    }
 }

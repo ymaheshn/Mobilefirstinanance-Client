@@ -18,12 +18,12 @@
             android:id="@+id/text_load_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableRight="@drawable/calendar"
             android:drawablePadding="@dimen/_5dp"
             android:gravity="center_vertical"
             android:padding="@dimen/_10dp"
             android:text="12-25-2019"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorWhite"
+            app:drawableRightCompat="@drawable/calendar" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_pending"
@@ -104,7 +104,6 @@
         android:id="@+id/noClientsTV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
         android:gravity="center"
         android:text="No Collections Available"
         android:textColor="@android:color/black"

@@ -1,14 +1,9 @@
 package onboard;
 
 import android.content.Context;
-
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,17 +13,12 @@ import org.json.JSONTokener;
 import java.util.ArrayList;
 
 import Utilities.PreferenceConnector;
-import network.MFFApiWrapper;
 import networking.WebService;
 import networking.WebServiceURLs;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class OnBoardPresenter implements WebService.OnServiceResponseListener {
-    private Context context;
-    private IOnBoardFragmentCallback iOnBoardFragmentCallback;
-    private int SearchClientPageIndex;
+    private final Context context;
+    private final IOnBoardFragmentCallback iOnBoardFragmentCallback;
 
     public OnBoardPresenter(Context context, IOnBoardFragmentCallback iOnBoardFragmentCallback) {
         this.context = context;
@@ -180,64 +170,6 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
 
     }
 
-    /*public void getSearch(String searchQuery) {
-        if (TextUtils.isEmpty(searchQuery)) {
-            return;
-        }
-        iOnBoardFragmentCallback.showProgressBar();
-        String accessToken = PreferenceConnector.readString(context,
-                context.getString(R.string.accessToken), "");
-        //   if (search_selection == 1) {
-        MFFApiWrapper.getInstance().service.getProfileDetailsByName(accessToken,
-                SearchClientPageIndex, 10, searchQuery).enqueue(new Callback<ClientDataDTO>() {
-            @Override
-            public void onResponse(@NonNull Call<ClientDataDTO> call,
-                                   @NonNull Response<ClientDataDTO> response) {
-                 iOnBoardFragmentCallback.hideProgressBar();
-                if (response.isSuccessful()) {
-                    ClientDataDTO clients = response.body();
-                    ArrayList<ClientDataDTO> clientDataDTOS = new ArrayList<>();
-                    clientDataDTOS.add(clients);
-                    iOnBoardFragmentCallback.loadRecyclerView(clientDataDTOS, true, true);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ClientDataDTO> call, @NonNull Throwable t) {
-                iOnBoardFragmentCallback.hideProgressBar();
-                if (t.getMessage().contains("AuthFailureError")) {
-                    iOnBoardFragmentCallback.showLogoutAlert();
-                } else {
-                    iOnBoardFragmentCallback.showMessage(t.getMessage());
-                }
-            }
-        });
-       *//* String url = WebServiceURLs.BASE_URL +
-                WebServiceURLs.SEARCH_PROFILES_URL +
-                PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");
-        url = url.replaceAll("Name", "" + searchQuery);
-        WebService.getInstance().apiGetRequestCall(url,
-                new WebService.OnServiceResponseListener() {
-                    @Override
-                    public void onApiCallResponseSuccess(String url, String object) {
-                        iOnBoardFragmentCallback.hideProgressBar();
-                        ArrayList<ClientDataDTO> clients = getParseSearchResults(object);
-                        iOnBoardFragmentCallback.loadRecyclerView(clients, true, true);
-                    }
-
-                    @Override
-                    public void onApiCallResponseFailure(String errorMessage) {
-                        iOnBoardFragmentCallback.hideProgressBar();
-                        if (errorMessage.contains("AuthFailureError")) {
-                            iOnBoardFragmentCallback.showLogoutAlert();
-                        } else {
-                            iOnBoardFragmentCallback.showMessage(errorMessage);
-                        }
-                    }
-                });*//*
-    }*/
-
-
     private ArrayList<ClientDataDTO> getAndParseAllClients(String object) {
         ArrayList<ClientDataDTO> clientDataDTOS = new ArrayList<>();
         try {
@@ -286,7 +218,6 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
         }
         return clientDataDTOS;
     }
-
 
     private ArrayList<ClientDataDTO> getParseSearchResults(String object) {
         ArrayList<ClientDataDTO> clientDataDTOS = new ArrayList<>();
@@ -339,7 +270,6 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
         return clientDataDTOS;
     }
 
-
     @Override
     public void onApiCallResponseSuccess(String url, String object) {
 
@@ -350,9 +280,11 @@ public class OnBoardPresenter implements WebService.OnServiceResponseListener {
 
     }
 
-    public void getIsLinkedStatusAPI(String profileId) {
+    public void getIsLinkedStatusAPI(String profileId,String workFlowID) {
         iOnBoardFragmentCallback.showProgressBar();
-        String updatedStatusUrl = WebServiceURLs.PROFILE_LINK_STATUS_URL.replace("PROFILE_ID", profileId);
+
+        //Pass workflow Id as well with profile ID
+        String updatedStatusUrl = WebServiceURLs.PROFILE_LINK_STATUS_URL.replace("PROFILE_ID", profileId).replace("workFlowID",workFlowID);
         String url = WebServiceURLs.BASE_URL +
                 updatedStatusUrl +
                 PreferenceConnector.readString(context, context.getString(R.string.accessToken), "");

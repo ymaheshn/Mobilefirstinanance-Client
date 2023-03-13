@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import dashboard.models.EventJSON;
+
 
 public class LoansPortfolio implements Parcelable {
 
@@ -69,11 +71,9 @@ public class LoansPortfolio implements Parcelable {
     @Expose
     public LoanContractCodes loanContractCodes;
 
-
-
-    /*@SerializedName("profilejson")
+    @SerializedName("eventjson")
     @Expose
-    public Profilejson profilejson;*/
+    public EventJSON eventJSON;
 
     protected LoansPortfolio(Parcel in) {
         userid = in.readString();
@@ -91,7 +91,6 @@ public class LoansPortfolio implements Parcelable {
         event_time = in.readString();
         sync_date = in.readString();
         loanContractCodes = in.readParcelable(LoanContractCodes.class.getClassLoader());
-        //  profilejson = in.readParcelable(Profilejson.class.getClassLoader());
     }
 
     public static final Creator<LoansPortfolio> CREATOR = new Creator<LoansPortfolio>() {
@@ -128,7 +127,13 @@ public class LoansPortfolio implements Parcelable {
         dest.writeString(event_time);
         dest.writeString(sync_date);
         dest.writeParcelable(loanContractCodes, flags);
-        //  dest.writeParcelable(profilejson, flags);
-
     }
+
+
+
+    /*@SerializedName("profilejson")
+    @Expose
+    public Profilejson profilejson;*/
+
+
 }

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorWhite"
     android:orientation="vertical">
 
@@ -55,27 +56,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:textColor="@color/colorBlack"
+            tools:text="9505663342"
+            android:fontFamily="@font/opensans_regular"
             android:gravity="center"
             android:textSize="18sp"
             android:textStyle="normal" />
 
         <com.mukesh.OtpView
-            android:id="@+id/otp_view"
+            android:id="@+id/otp_mobile_view_login"
             style="@style/OtpWidget.OtpView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="30dp"
             android:inputType="number"
             android:itemBackground="@drawable/login_code_btn_selector"
             android:textColor="@android:color/black"
-            app:itemCount="4"
-            app:itemHeight="60dp"
-            app:itemSpacing="@dimen/_15dp"
-            app:itemWidth="60dp"
-            app:lineColor="@color/colorBlack"
-            app:viewType="none" />
+            android:windowSoftInputMode="stateVisible"
+            app:itemCount="6"
+            app:itemHeight="50dp"
+            app:itemSpacing="@dimen/_10dp"
+            app:itemWidth="50dp"
+            app:lineColor="@color/colorGray_BB"
+            app:viewType="rectangle" />
 
         <TextView
             android:layout_width="match_parent"

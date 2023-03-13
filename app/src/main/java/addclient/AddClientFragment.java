@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import Utilities.Constants;
 import adapters.AddClientViewPagerAdapter;

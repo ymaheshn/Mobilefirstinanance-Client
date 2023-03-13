@@ -1,6 +1,7 @@
 package loans;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,8 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 
-import com.odedtech.mff.mffapp.R;
+import com.odedtech.mff.client.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,7 @@ public class TermsLoanActivity extends BaseActivity {
     private ArrayList<Terms> terms;
     private TermsDataDTO termsDataDTO;
     private ProgressBar progressBar;
+    private AppCompatTextView toolBarTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,12 @@ public class TermsLoanActivity extends BaseActivity {
         interestDate = findViewById(R.id.interest_date_text);
         termsBackImage = findViewById(R.id.back_terms_image);
         progressBar = findViewById(R.id.progress_bar);
+        toolBarTextView = findViewById(R.id.tv_title);
+
+        String colorTheme = PreferenceConnector.getThemeColor(getApplicationContext());
+        int colorCode = Color.parseColor(colorTheme);
+        termsBackImage.setColorFilter(colorCode);
+        toolBarTextView.setTextColor(colorCode);
 
         Intent intent = getIntent();
         contractUUID = intent.getStringExtra("contractUUID");

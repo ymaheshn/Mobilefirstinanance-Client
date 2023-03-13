@@ -1,10 +1,8 @@
 package networking;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -22,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -336,9 +333,80 @@ public class WebService {
         MyApplication.getInstance().addToRequestQueue(multipartRequest);
     }
 
+    public void apiPostRequestObjectCall(final String url, final Map<String, Object> params, final OnServiceResponseListener onServiceResponseListener) {
+        apiPostRequestObjectCallJSON(url, new JSONObject(params), onServiceResponseListener);
+    }
+
+    public void apiPostRequestObjectCallJSON(final String url, final JSONObject params, final OnServiceResponseListener onServiceResponseListener) {
+        HttpsTrustManager.allowAllSSL();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("VOLLEY", response.toString());
+                onServiceResponseListener.onApiCallResponseSuccess(url, response.toString());
+            }
+        }, error -> {
+            Log.e("VOLLEY", error.toString());
+            String message = VolleyErrorHelper
+                    .getMessage(error, MyApplication.getInstance());
+            if (TextUtils.isEmpty(message)) {
+                message = "";
+            }
+            onServiceResponseListener.onApiCallResponseFailure(message);
+        }) {
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(jsonObjectRequest);
+    }
+
+
     public interface OnServiceResponseListener {
         void onApiCallResponseSuccess(String url, String object);
 
         void onApiCallResponseFailure(String errorMessage);
+    }
+
+    public void apiPostUserSignUpRequestCall(final String url, final Map<String, String> params, final OnServiceResponseListener onServiceResponseListener) {
+        apiPostRequestCallUserSignUpJSON(url,new JSONObject(params), onServiceResponseListener);
+    }
+
+    public void apiPostRequestCallUserSignUpJSON(final String url, final JSONObject params, final OnServiceResponseListener onServiceResponseListener) {
+        HttpsTrustManager.allowAllSSL();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, params, response -> {
+            Log.i("VOLLEY", response.toString());
+            onServiceResponseListener.onApiCallResponseSuccess(url, response.toString());
+        }, error -> {
+            Log.e("VOLLEY", error.toString());
+            String message = VolleyErrorHelper
+                    .getMessage(error, MyApplication.getInstance());
+
+            if (TextUtils.isEmpty(message)) {
+                message = "";
+            }
+            onServiceResponseListener.onApiCallResponseFailure(message);
+        }) {
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 }

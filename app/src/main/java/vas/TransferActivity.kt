@@ -16,7 +16,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
-import com.odedtech.mff.mffapp.R
+import com.odedtech.mff.client.R
 import kotlinx.android.synthetic.main.activity_transfer.*
 
 

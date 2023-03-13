@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:orientation="vertical">
 
@@ -12,26 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:background="@color/toolbar_color">
+        android:background="@color/colorBottomBar">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            tools:text="Contract events"
-            android:textColor="@color/white_color"
+            android:textColor="@color/textThemeColor"
             android:textSize="@dimen/toolbar_title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Contract events" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_back"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
-            android:paddingStart="@dimen/_10dp"
+            android:layout_marginStart="@dimen/_10dp"
             android:src="@drawable/ic_back" />
     </RelativeLayout>
 
